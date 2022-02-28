@@ -12,7 +12,7 @@ class Event extends Model
     protected $fillable = [
         'name',
         'slug',
-        'type',
+        'type_id',
         'begins_at',
         'ends_at',
         'zip',
