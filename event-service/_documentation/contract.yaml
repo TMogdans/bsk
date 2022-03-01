@@ -1,0 +1,243 @@
+openapi: 3.0.1
+info:
+  title: event-service
+  version: '1.0'
+  license:
+    name: MIT
+servers:
+  - url: 'http://localhost:8080'
+    description: event-service
+paths:
+  /api/events:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+              examples:
+                List of offline events:
+                  value:
+                    - id: 1
+                      name: Mein erstes Event
+                      slug: mein-erstes-event
+                      type:
+                        id: 1
+                        name: convention
+                        translated: Convention
+                      beginsAt: '2022-09-01 10:00:00'
+                      endsAt: '2022-09-01 20:00:00'
+                      zip: '98765'
+                      location: Musterhausen
+                      country: Mustercountry
+                      street: Mustergasse 42b
+                      description: lorem ipsum dolor
+                      barrierFree: true
+                      entryFree: true
+                      onlineEvent: false
+                      published: true
+                      event_url: 'https://event.url'
+                      createdAt: '2022-02-28 21:40:00'
+                      updatedAt: '2022-02-28 21:40:00'
+                      deletedAt: null
+                      createdBy: 1
+                      meta:
+                        url: /events/mein-erstes-event
+                List of online events:
+                  value:
+                    - id: 2
+                      name: Mein online Event
+                      slug: mein-online-event
+                      type:
+                        id: 1
+                        name: convention
+                        translated: Convention
+                      beginsAt: '2022-09-01 10:00:00'
+                      endsAt: '2022-09-01 20:00:00'
+                      zip: null
+                      location: null
+                      country: de
+                      street: null
+                      description: lorem ipsum dolor
+                      barrierFree: true
+                      entryFree: true
+                      onlineEvent: true
+                      published: true
+                      event_url: 'https://event.url'
+                      createdAt: '2022-02-28 21:40:00'
+                      updatedAt: '2022-02-28 21:40:00'
+                      deletedAt: null
+                      createdBy: 1
+                      meta:
+                        url: /events/mein-online-event
+        '400':
+          description: Bad Request
+      operationId: get-events
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: 'Accept: application/json'
+          required: true
+      description: Gibt eine Liste an Events zurück.
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-api-events
+      responses:
+        '201':
+          description: Created
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+              examples:
+                created offline event return:
+                  value:
+                    id: 1
+                    name: Mein erstes Event
+                    slug: mein-erstes-event
+                    type:
+                      id: 1
+                      name: convention
+                      translated: Convention
+                    beginsAt: '2022-09-01 10:00:00'
+                    endsAt: '2022-09-01 20:00:00'
+                    zip: '98765'
+                    location: Musterhausen
+                    country: Mustercountry
+                    street: Mustergasse 42b
+                    description: lorem ipsum dolor
+                    barrierFree: true
+                    entryFree: true
+                    onlineEvent: false
+                    published: true
+                    event_url: 'https://event.url'
+                    createdAt: '2022-02-28 21:40:00'
+                    updatedAt: '2022-02-28 21:40:00'
+                    deletedAt: null
+                    createdBy: 1
+                    meta:
+                      url: /events/mein-erstes-event
+        '400':
+          description: Bad Request
+      description: Neues Event hinzufügen
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: 'Content-Type: application/json'
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: 'Accept: application/json'
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+            examples:
+              Create offline event:
+                value:
+                  name: Mein erstes Event
+                  type:
+                    name: convention
+                  beginsAt: '2022-09-01 10:00:00'
+                  endsAt: '2022-09-01 20:00:00'
+                  zip: '98765'
+                  location: Musterhausen
+                  country: Mustercountry
+                  street: Mustergasse 42b
+                  description: lorem ipsum dolor
+                  barrierFree: true
+                  entryFree: true
+                  onlineEvent: false
+                  event_url: 'https://event.url'
+        description: ''
+components:
+  schemas:
+    Event:
+      title: Event
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        type:
+          $ref: '#/components/schemas/Type'
+        beginsAt:
+          type: string
+        endsAt:
+          type: string
+        zip:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        country:
+          type: string
+        street:
+          type: string
+          nullable: true
+        description:
+          type: string
+        barrierFree:
+          type: boolean
+        entryFree:
+          type: boolean
+        onlineEvent:
+          type: boolean
+        published:
+          type: boolean
+        event_url:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        deletedAt:
+          type: string
+          nullable: true
+        createdBy:
+          type: integer
+        meta:
+          $ref: '#/components/schemas/Meta'
+      required:
+        - name
+        - type
+        - beginsAt
+        - endsAt
+        - country
+        - description
+    Type:
+      title: Type
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        translated:
+          type: string
+      required:
+        - name
+    Meta:
+      title: Meta
+      type: object
+      properties:
+        url:
+          type: string
+      description: Metainformationen
