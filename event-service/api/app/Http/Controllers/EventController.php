@@ -20,4 +20,11 @@ class EventController extends Controller
 
         return new JsonResponse($events);
     }
+
+    public function show(string $slug): JsonResponse
+    {
+        $event = $this->eventService->getEventBySlug($slug);
+
+        return new JsonResponse($event);
+    }
 }
