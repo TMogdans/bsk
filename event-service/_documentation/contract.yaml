@@ -10,7 +10,7 @@ servers:
 paths:
   /api/events:
     get:
-      summary: Your GET endpoint
+      summary: GET events
       tags: []
       responses:
         '200':
