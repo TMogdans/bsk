@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EventResource;
 use App\Services\EventService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventController extends Controller
 {
@@ -14,17 +15,17 @@ class EventController extends Controller
     ) {
     }
 
-    public function index(): JsonResponse
+    public function index(): JsonResource
     {
         $events = $this->eventService->getAllFuturePublishedEvents();
 
-        return new JsonResponse($events);
+        return EventResource::collection($events);
     }
 
-    public function show(string $slug): JsonResponse
+    public function show(string $slug): JsonResource
     {
         $event = $this->eventService->getEventBySlug($slug);
 
-        return new JsonResponse($event);
+        return new EventResource($event);
     }
 }
