@@ -35,7 +35,7 @@ paths:
                       endsAt: '2022-09-01 20:00:00'
                       zip: '98765'
                       location: Musterhausen
-                      country: Mustercountry
+                      country: de
                       street: Mustergasse 42b
                       description: lorem ipsum dolor
                       barrierFree: true
@@ -112,7 +112,7 @@ paths:
                     endsAt: '2022-09-01 20:00:00'
                     zip: '98765'
                     location: Musterhausen
-                    country: Mustercountry
+                    country: de
                     street: Mustergasse 42b
                     description: lorem ipsum dolor
                     barrierFree: true
@@ -144,18 +144,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Event'
+              $ref: '#/components/schemas/PostEvent'
             examples:
               Create offline event:
                 value:
                   name: Mein erstes Event
-                  type:
-                    name: convention
+                  type: convention
                   beginsAt: '2022-09-01 10:00:00'
                   endsAt: '2022-09-01 20:00:00'
                   zip: '98765'
                   location: Musterhausen
-                  country: Mustercountry
+                  country: de
                   street: Mustergasse 42b
                   description: lorem ipsum dolor
                   barrierFree: true
@@ -198,7 +197,7 @@ paths:
                     endsAt: '2022-09-01 20:00:00'
                     zip: '98765'
                     location: Musterhausen
-                    country: Mustercountry
+                    country: de
                     street: Mustergasse 42b
                     description: lorem ipsum dolor
                     barrierFree: true
@@ -237,7 +236,8 @@ paths:
                     minLength: 1
                   country:
                     type: string
-                    minLength: 1
+                    minLength: 2
+                    maxLength: 2
                   street:
                     type: string
                     minLength: 1
@@ -303,7 +303,7 @@ paths:
                     endsAt: '2022-09-01 20:00:00'
                     zip: '98765'
                     location: Musterhausen
-                    country: Mustercountry
+                    country: de
                     street: Mustergasse 42b
                     description: lorem ipsum dolor
                     barrierFree: true
@@ -353,6 +353,8 @@ components:
           nullable: true
         country:
           type: string
+          minLength: 2
+          maxLength: 2
         street:
           type: string
           nullable: true
@@ -386,6 +388,52 @@ components:
         - endsAt
         - country
         - description
+    PostEvent:
+      title: PostEventBody
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        beginsAt:
+          type: string
+        endsAt:
+          type: string
+        zip:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+        street:
+          type: string
+          nullable: true
+        description:
+          type: string
+        barrierFree:
+          type: boolean
+        entryFree:
+          type: boolean
+        onlineEvent:
+          type: boolean
+        eventUrl:
+          type: string
+      required:
+        - name
+        - type
+        - beginsAt
+        - endsAt
+        - country
+        - description
+        - barrierFree
+        - entryFree
+        - onlineEvent
+        - eventUrl
     Type:
       title: Type
       type: object
