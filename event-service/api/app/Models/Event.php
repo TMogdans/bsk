@@ -7,10 +7,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Event extends Model
 {
     use SoftDeletes;
+    use HasSlug;
 
     protected $fillable = [
         'name',
@@ -42,5 +45,12 @@ class Event extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 }

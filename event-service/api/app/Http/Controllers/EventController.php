@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\EventResource;
 use App\Services\EventService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventController extends Controller
@@ -25,6 +26,13 @@ class EventController extends Controller
     public function show(string $slug): JsonResource
     {
         $event = $this->eventService->getEventBySlug($slug);
+
+        return new EventResource($event);
+    }
+
+    public function create(Request $request): JsonResource
+    {
+        $event = $this->eventService->create($request);
 
         return new EventResource($event);
     }
