@@ -20,6 +20,26 @@ services:
     networks:
       - bsk-network
 
+  bsk-db-test:
+    image: mysql:5.7.22
+    container_name: bsk-db-test
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_DATABASE: ${DB2_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB2_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    command: --init-file /data/application/init.sql
+    volumes:
+      - ./mysql/init.sql:/data/application/init.sql
+      - dbdata2:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - bsk-network
+
   event-service:
     build:
       args:
@@ -66,3 +86,4 @@ networks:
 
 volumes:
   dbdata:
+  dbdata2:

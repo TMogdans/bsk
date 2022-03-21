@@ -43,7 +43,7 @@ class EventsTest extends TestCase
 
     public function test_it_returns_single_event_on_event_url(): void
     {
-        $slug = "dolor-laudantium-magnam-saepe-aut-quo";
+        $slug = 'testevent';
 
         $this->json('GET', sprintf('/api/events/%s', $slug), [], [
             'Accept' => 'application/json'

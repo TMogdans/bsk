@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Event;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Seeder;
 

@@ -91,7 +91,9 @@ $app->configure('app');
 |
 */
 
-$app->configure('tinker');
+collect(scandir(__DIR__ . '/../app/Config'))->each(function ($item) use ($app) {
+    $app->configure(basename($item, '.php'));
+});
 
 $app->register(\Laravel\Tinker\TinkerServiceProvider::class);
 

@@ -68,8 +68,9 @@ class EventService
             throw new \InvalidArgumentException($message);
         }
 
+        $type = Type::where('name', $request->get('type'))->first();
+
         try {
-            $type = Type::where('name', $request->get('type'))->first();
 
             $eventData = [];
             foreach ($request->all() as $key => $item) {
