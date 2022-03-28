@@ -20,10 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('type_id');
             $table->timestamp('begins_at')->default(new \Carbon\Carbon());
             $table->timestamp('ends_at')->default(new \Carbon\Carbon());
-            $table->string('zip');
-            $table->string('location');
+            $table->string('zip')->nullable();
+            $table->string('location')->nullable();
             $table->string('country');
-            $table->string('street');
+            $table->string('street')->nullable();
             $table->text('description');
             $table->boolean('barrier_free')->default(false);
             $table->boolean('entry_free')->default(false);

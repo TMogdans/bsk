@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class EventsTest extends TestCase
 {
-    private const EVENT_RESPONSE_BODY = [
+    private const EVENT_OFFLINE_RESPONSE_BODY = [
         'name',
         'type',
         'beginsAt',
@@ -29,6 +29,21 @@ class EventsTest extends TestCase
         ]
     ];
 
+    private const EVENT_ONLINE_RESPONSE_BODY = [
+        'name',
+        'type',
+        'beginsAt',
+        'endsAt',
+        'country',
+        'description',
+        'entryFree',
+        'onlineEvent',
+        'eventUrl',
+        'meta' => [
+            'url'
+        ]
+    ];
+
     public function test_it_returns_a_list_of_events(): void
     {
         $this->json('GET', '/api/events', [], [
@@ -37,7 +52,7 @@ class EventsTest extends TestCase
             ->seeHeader('Content-Type', 'application/json')
             ->seeStatusCode(Response::HTTP_OK)
             ->seeJsonStructure([
-                '*' => self::EVENT_RESPONSE_BODY
+                '*' => self::EVENT_OFFLINE_RESPONSE_BODY
             ]);
     }
 
@@ -50,7 +65,7 @@ class EventsTest extends TestCase
         ])
             ->seeStatusCode(Response::HTTP_OK)
             ->seeHeader('Content-Type', 'application/json')
-            ->seeJsonStructure(self::EVENT_RESPONSE_BODY);
+            ->seeJsonStructure(self::EVENT_OFFLINE_RESPONSE_BODY);
     }
 
     public function test_it_throws_exception_on_missing_event(): void
@@ -85,6 +100,49 @@ class EventsTest extends TestCase
         ])
             ->seeStatusCode(Response::HTTP_CREATED)
             ->seeHeader('Content-Type', 'application/json')
-            ->seeJsonStructure(self::EVENT_RESPONSE_BODY);
+            ->seeJsonStructure(self::EVENT_OFFLINE_RESPONSE_BODY);
+    }
+
+    public function test_it_creates_online_event_from_request(): void
+    {
+        $this->json('POST', '/api/events', [
+            'name' => 'Testevent',
+            'type' => 'convention',
+            'beginsAt' => '2022-07-12',
+            'endsAt' => '2022-07-13',
+            'country' => 'de',
+            'description' => Lorem::text(),
+            'entryFree' => true,
+            'onlineEvent' => true,
+            'eventUrl' => 'https://some_url.com',
+        ], [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])
+            ->seeStatusCode(Response::HTTP_CREATED)
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeJsonStructure(self::EVENT_ONLINE_RESPONSE_BODY);
+    }
+
+    public function test_it_responds_with_400_on_missing_argument(): void
+    {
+        $this->json('POST', '/api/events', [
+            'name' => 'Testevent',
+            'type' => 'convention',
+            'endsAt' => '2022-07-13',
+            'zip' => '99999',
+            'location' => 'Teststadt',
+            'country' => 'de',
+            'street' => 'Teststraße 42a',
+            'description' => Lorem::text(),
+            'barrierFree' => true,
+            'entryFree' => true,
+            'onlineEvent' => false,
+            'eventUrl' => 'https://some_url.com',
+        ], [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])
+            ->seeStatusCode(Response::HTTP_BAD_REQUEST);
     }
 }
