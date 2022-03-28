@@ -21,4 +21,6 @@ $router->group(['prefix' => 'api'], function() use ($router) {
     $router->get('events', 'EventController@index');
     $router->get('events/{slug}', 'EventController@show');
     $router->post('events', 'EventController@create');
+
+    $router->get('types', 'TypeController@index');
 });

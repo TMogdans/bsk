@@ -327,6 +327,36 @@ paths:
           in: header
           name: Accept
           required: true
+  /api/types:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Type'
+              examples:
+                example-1:
+                  value:
+                    - id: 1
+                      name: fair
+                      translated: Messe
+      operationId: get-api-types
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Accept
+          required: true
 components:
   schemas:
     Event:
