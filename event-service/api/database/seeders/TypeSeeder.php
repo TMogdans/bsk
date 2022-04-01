@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Type;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -13,14 +14,52 @@ class TypeSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            ['name' => 'convention'],
-            ['name' => 'fair'],
-            ['name' => 'tournament'],
-            ['name' => 'release'],
-            ['name' => 'award'],
-            ['name' => 'other']
+            [
+                'name' => 'convention',
+                'translation' => [
+                    'en' => 'Convention',
+                    'de' => 'Kongress'
+                ]
+            ],
+            [
+                'name' => 'fair',
+                'translation' => [
+                    'en' => 'Fair',
+                    'de' => 'Messe'
+                ]
+            ],
+            [
+                'name' => 'tournament',
+                'translation' => [
+                    'en' => 'Tournament',
+                    'de' => 'Turnier'
+                ]
+            ],
+            [
+                'name' => 'release',
+                'translation' => [
+                    'en' => 'Release',
+                    'de' => 'Veröffentlichung'
+                ]
+            ],
+            [
+                'name' => 'award',
+                'translation' => [
+                    'en' => 'Award',
+                    'de' => 'Preisverleihung'
+                ]
+            ],
+            [
+                'name' => 'other',
+                'translation' => [
+                    'en' => 'Other',
+                    'de' => 'Anderes'
+                ]
+            ],
         ];
 
-        DB::table('types')->insert($types);
+        foreach ($types as $type) {
+            Type::create($type);
+        }
     }
 }

@@ -12,7 +12,7 @@ class EventResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'type' => $this->type,
+            'type' => new TypeResource($this->type),
             'beginsAt' => $this->begins_at,
             'endsAt' => $this->ends_at,
             'zip' => $this->zip,
