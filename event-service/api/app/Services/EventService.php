@@ -6,32 +6,27 @@ namespace App\Services;
 
 use App\Models\Event;
 use App\Models\Type;
+use App\Services\EventFilter\BarrierFreeFilter;
+use App\Services\EventFilter\EntryFreeFilter;
+use App\Services\EventFilter\PresenceFilter;
+use App\Services\EventFilter\TypeFilter;
+use App\Validators\EventValidator;
+use App\Validators\FilterValidator;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventService
 {
+
     public function getAllFuturePublishedEvents(Request $request): Collection
     {
 
-        $validator = Validator::make($request->query(), [
-            'presence' => [
-                Rule::in(['online', 'offline']),
-            ],
-            'type' => 'exists:types,name',
-            'barrierFree' => [
-                Rule::in(['true', 'false']),
-            ],
-            'entryFree' => [
-                Rule::in(['true', 'false']),
-            ]
-        ]);
+        $validator = (new FilterValidator())->getValidator($request);
 
         if ($validator->fails()) {
             $message = sprintf("Validator fails: %s", $validator->errors());
@@ -45,28 +40,7 @@ class EventService
             ->whereDate('ends_at', '>=', Carbon::now())
             ->orderBy('begins_at', 'ASC');
 
-        if ($request->has('presence'))
-        {
-            $presence = $request->query('presence') === 'online';
-
-            $query->where('online_event', $presence);
-        }
-
-        if ($request->has('type')) {
-            $type = $request->query('type');
-
-            $query->whereHas('type', function ($q) use ($type) {
-                $q->where('name', $type);
-            });
-        }
-
-        if ($request->has('barrierFree')) {
-            $query->where('barrier_free', filter_var($request->query('barrierFree'), FILTER_VALIDATE_BOOLEAN));
-        }
-
-        if ($request->has('entryFree')) {
-            $query->where('entry_free', filter_var($request->query('entryFree'), FILTER_VALIDATE_BOOLEAN));
-        }
+        $this->applyFilter($request, $query);
 
         return $query->get();
     }
@@ -91,21 +65,7 @@ class EventService
 
     public function create(Request $request): Event
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'type' => 'required|string|exists:types,name',
-            'beginsAt' => 'required|date_format:Y-m-d',
-            'endsAt' => 'required|date_format:Y-m-d',
-            'zip' => 'string|required_if:onlineEvent,false',
-            'location' => 'string|required_if:onlineEvent,false',
-            'country' => 'required|string|size:2',
-            'street' => 'string|required_if:onlineEvent,false',
-            'description' => 'required|string',
-            'barrierFree' => 'boolean|required_if:onlineEvent,false',
-            'entryFree' => 'required|boolean',
-            'onlineEvent' => 'required|boolean',
-            'eventUrl' => 'required|url'
-        ]);
+        $validator = (new EventValidator())->getValidator($request);
 
         if ($validator->fails()) {
             $message = sprintf("Validator fails: %s", $validator->errors());
@@ -132,5 +92,24 @@ class EventService
         }
 
         return $event;
+    }
+
+    private function applyFilter(Request $request, Builder $query): void
+    {
+        if ($request->has('presence')) {
+            (new PresenceFilter())->apply($query, $request);
+        }
+
+        if ($request->has('type')) {
+            (new TypeFilter())->apply($query, $request);
+        }
+
+        if ($request->has('barrierFree')) {
+            (new BarrierFreeFilter())->apply($query, $request);
+        }
+
+        if ($request->has('entryFree')) {
+            (new EntryFreeFilter())->apply($query, $request);
+        }
     }
 }
