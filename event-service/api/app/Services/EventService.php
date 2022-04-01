@@ -12,17 +12,63 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventService
 {
-    public function getAllFuturePublishedEvents(): Collection
+    public function getAllFuturePublishedEvents(Request $request): Collection
     {
-        return Event::with('type')
+
+        $validator = Validator::make($request->query(), [
+            'presence' => [
+                Rule::in(['online', 'offline']),
+            ],
+            'type' => 'exists:types,name',
+            'barrierFree' => [
+                Rule::in(['true', 'false']),
+            ],
+            'entryFree' => [
+                Rule::in(['true', 'false']),
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            $message = sprintf("Validator fails: %s", $validator->errors());
+
+            Log::error($message);
+            throw new \InvalidArgumentException($message);
+        }
+
+        $query = Event::with('type')
             ->where('published', true)
             ->whereDate('ends_at', '>=', Carbon::now())
-            ->orderBy('begins_at', 'ASC')
-            ->get();
+            ->orderBy('begins_at', 'ASC');
+
+        if ($request->has('presence'))
+        {
+            $presence = $request->query('presence') === 'online';
+
+            $query->where('online_event', $presence);
+        }
+
+        if ($request->has('type')) {
+            $type = $request->query('type');
+
+            $query->whereHas('type', function ($q) use ($type) {
+                $q->where('name', $type);
+            });
+        }
+
+        if ($request->has('barrierFree')) {
+            $query->where('barrier_free', filter_var($request->query('barrierFree'), FILTER_VALIDATE_BOOLEAN));
+        }
+
+        if ($request->has('entryFree')) {
+            $query->where('entry_free', filter_var($request->query('entryFree'), FILTER_VALIDATE_BOOLEAN));
+        }
+
+        return $query->get();
     }
 
     public function getEventBySlug(string $slug): Event

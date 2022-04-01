@@ -16,9 +16,9 @@ class EventController extends Controller
     ) {
     }
 
-    public function index(): JsonResource
+    public function index(Request $request): JsonResource
     {
-        $events = $this->eventService->getAllFuturePublishedEvents();
+        $events = $this->eventService->getAllFuturePublishedEvents($request);
 
         return EventResource::collection($events);
     }
