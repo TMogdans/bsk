@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Features;
 
 use Faker\Provider\Lorem;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -144,5 +145,111 @@ class EventsTest extends TestCase
             'Content-Type' => 'application/json'
         ])
             ->seeStatusCode(Response::HTTP_BAD_REQUEST);
+    }
+
+    public function test_it_responds_offline_events_for_presence_filter_offline(): void
+    {
+        $this->json('GET', '/api/events?presence=offline', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                    'onlineEvent' => true
+                ]);
+    }
+
+    public function test_it_responds_online_events_for_presence_filter_online(): void
+    {
+        $this->json('GET', '/api/events?presence=online', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                'onlineEvent' => false
+            ]);
+    }
+
+    public function test_it_responds_convention_type_events_for_type_filter_convention(): void
+    {
+        $this->json('GET', '/api/events?type=convention', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                'type' => [
+                    "name" => "fair"
+                ]
+            ])
+            ->seeJsonDoesntContains([
+                'type' => [
+                    "name" => "tournament"
+                ]
+            ])
+            ->seeJsonDoesntContains([
+                'type' => [
+                    "name" => "release"
+                ]
+            ])
+            ->seeJsonDoesntContains([
+                'type' => [
+                    "name" => "award"
+                ]
+            ])
+            ->seeJsonDoesntContains([
+                'type' => [
+                    "name" => "other"
+                ]
+            ]);
+    }
+
+    public function test_it_responds_barrier_free_events_for_barrier_free_filter_true(): void
+    {
+        $this->json('GET', '/api/events?barrierFree=true', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                'barrierFree' => false
+            ]);
+    }
+
+    public function test_it_responds_not_barrier_free_events_for_barrier_free_filter_false(): void
+    {
+        $this->json('GET', '/api/events?barrierFree=false', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                'barrierFree' => true
+            ]);
+    }
+
+    public function test_it_responds_entry_free_events_for_entry_free_filter_true(): void
+    {
+        $this->json('GET', '/api/events?entryFree=true', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                'entryFree' => false
+            ]);
+    }
+
+    public function test_it_responds_not_entry_free_events_for_entry_free_filter_false(): void
+    {
+        $this->json('GET', '/api/events?entryFree=false', [], [
+            'Accept' => 'application/json'
+        ])
+            ->seeHeader('Content-Type', 'application/json')
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeJsonDoesntContains([
+                'entryFree' => true
+            ]);
     }
 }
