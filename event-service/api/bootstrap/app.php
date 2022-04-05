@@ -72,9 +72,9 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+     App\Http\Middleware\LocaleMiddleware::class
+ ]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
@@ -91,13 +91,9 @@ $app->configure('app');
 |
 */
 
-collect(scandir(__DIR__ . '/../app/Config'))->each(function ($item) use ($app) {
-    $app->configure(basename($item, '.php'));
-});
-
 $app->register(\Laravel\Tinker\TinkerServiceProvider::class);
-
 $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\ConfigServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
@@ -117,5 +113,7 @@ $app->router->group([
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });
+
+app('translator')->setLocale('de');
 
 return $app;
