@@ -24,7 +24,11 @@
           "host": [
             "http://nginx:80"
           ],
-          "extra_config": {},
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "event-service"
+            }
+          },
           "is_collection": true,
           "mapping": {
             "collection": "types"
@@ -53,7 +57,11 @@
           "host": [
             "http://nginx:80"
           ],
-          "extra_config": {},
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "event-service"
+            }
+          },
           "is_collection": true,
           "mapping": {
             "collection": "events"
@@ -76,7 +84,11 @@
           "host": [
             "http://nginx:80"
           ],
-          "extra_config": {}
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "event-service"
+            }
+          }
         }
       ]
     },
@@ -96,7 +108,11 @@
           "host": [
             "http://nginx:80"
           ],
-          "extra_config": {}
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "event-service"
+            }
+          }
         }
       ]
     }

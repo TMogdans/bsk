@@ -19,6 +19,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use TMogdans\JsonApiProblemResponder\Exceptions\BadRequestException;
+use TMogdans\JsonApiProblemResponder\Exceptions\NotFoundException;
+use TMogdans\JsonApiProblemResponder\Exceptions\UnprocessableEntity;
 
 class EventService
 {
@@ -32,7 +35,7 @@ class EventService
             $message = sprintf("Validator fails: %s", $validator->errors());
 
             Log::error($message);
-            throw new \InvalidArgumentException($message);
+            throw new BadRequestException($message, 'Invalid Argument');
         }
 
         $query = Event::with('type')
@@ -57,7 +60,7 @@ class EventService
             $message = sprintf("No event found for slug %s", $slug);
 
             Log::info($message);
-            throw new NotFoundHttpException($message);
+            throw new NotFoundException($message);
         }
 
         return $event;
@@ -71,7 +74,7 @@ class EventService
             $message = sprintf("Validator fails: %s", $validator->errors());
 
             Log::error($message);
-            throw new \InvalidArgumentException($message);
+            throw new BadRequestException($message);
         }
 
         $type = Type::where('name', $request->get('type'))->first();
@@ -89,6 +92,7 @@ class EventService
             $event = Event::create($eventData);
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
+            throw new UnprocessableEntity($exception->getMessage());
         }
 
         return $event;
