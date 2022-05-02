@@ -8,7 +8,9 @@ type Props = {
 }
 
 export const Nav = ({items}: Props) => {
-    return <ul className={style.container}>
-        {items && items.map((item, index) => <NavItem item={item} key={index} />)}
-    </ul>
+    return <nav>
+        <ul className={style.container}>
+            {items && items.map((item, index) => <NavItem item={item} key={index} />)}
+        </ul>
+    </nav>
 }
