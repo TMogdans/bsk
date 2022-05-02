@@ -58,8 +58,11 @@ services:
     environment:
       SERVICE_NAME: bsk_frontend
       SERVICE_TAGS: dev
+    ports:
+      - "3000:3000"
+      - "6006:6006"
     volumes:
-      - ./frontend/build:/web/build
+      - ./frontend:/frontend
     networks:
       - bsk-network
 
