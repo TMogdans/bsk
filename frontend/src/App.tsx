@@ -1,11 +1,13 @@
 import React from 'react';
-import {Nav} from "./Components/Molekules/Nav";
-import items from "./Utils/navItems.json";
+import style from "./App.module.css";
+import {Header} from "./Components/Organisms/Header";
 
 function App() {
   return (
-    <div>
-      <Nav items={items} />
+    <div className={style.container}>
+        <div className={style.wrapper}>
+            <Header />
+        </div>
     </div>
   );
 }

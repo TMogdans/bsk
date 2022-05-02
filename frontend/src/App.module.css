@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
+    border: 1px solid grey;
+    width: 100%;
+}
+
+@media screen and (min-width: 480px) {
+    .wrapper {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .wrapper {
+        max-width: 900px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .wrapper {
+        max-width: 1200px
+    }
+}
