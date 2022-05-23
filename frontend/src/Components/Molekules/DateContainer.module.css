@@ -1,0 +1,25 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50px;
+    margin: 10px 0;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.container > * {
+    text-align: center;
+}
+
+.dash {
+    display: block;
+    border-bottom: 3px solid grey;
+    margin: 12px auto;
+    width: 10px;
+}

@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.day {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.month {
+    font-size: 18px;
+}
