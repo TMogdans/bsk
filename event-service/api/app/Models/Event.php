@@ -39,7 +39,9 @@ class Event extends Model
         'barrier_free' => 'boolean',
         'entry_free' => 'boolean',
         'online_event' => 'boolean',
-        'published' => 'boolean'
+        'published' => 'boolean',
+        'begins_at' => 'date',
+        'ends_at' => 'date'
     ];
 
     public function type(): BelongsTo
