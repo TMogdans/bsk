@@ -1,0 +1,34 @@
+.wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    border: 1px solid grey;
+    margin-bottom: 20px;
+}
+
+.wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.eventData {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.eventData > * {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.locationWrapper {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+.locationWrapper > .country {
+    text-transform: uppercase;
+}
