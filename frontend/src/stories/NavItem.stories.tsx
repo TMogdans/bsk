@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import {NavItem} from "../Components/Atoms/NavItem";
 
 export default {
-    title: 'Atom/Nav Item',
+    title: 'Atoms/Nav Item',
     component: NavItem,
 } as ComponentMeta<typeof NavItem>
 
