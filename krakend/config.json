@@ -61,10 +61,6 @@
             "backend/http": {
               "return_error_details": "event-service"
             }
-          },
-          "is_collection": true,
-          "mapping": {
-            "collection": "events"
           }
         }
       ]

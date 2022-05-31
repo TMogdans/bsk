@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DataObjects\EventList;
+use App\DataObjects\Month;
 use App\Models\Event;
 use App\Models\Type;
 use App\Services\EventFilter\BarrierFreeFilter;
@@ -18,7 +20,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use TMogdans\JsonApiProblemResponder\Exceptions\BadRequestException;
 use TMogdans\JsonApiProblemResponder\Exceptions\NotFoundException;
 use TMogdans\JsonApiProblemResponder\Exceptions\UnprocessableEntity;
@@ -26,9 +27,9 @@ use TMogdans\JsonApiProblemResponder\Exceptions\UnprocessableEntity;
 class EventService
 {
 
-    public function getAllFuturePublishedEvents(Request $request): Collection
+    public function getAllFuturePublishedEvents(Request $request): EventList
     {
-
+        $year = 2022;
         $validator = (new FilterValidator())->getValidator($request);
 
         if ($validator->fails()) {
@@ -45,7 +46,10 @@ class EventService
 
         $this->applyFilter($request, $query);
 
-        return $query->get();
+        return new EventList(
+            sprintf("Termine %d", $year),
+            $this->getMonths($query->get(), $year)
+        );
     }
 
     public function getEventBySlug(string $slug): Event
@@ -115,5 +119,35 @@ class EventService
         if ($request->has('entryFree')) {
             (new EntryFreeFilter())->apply($query, $request);
         }
+    }
+
+    private function getMonths(Collection $result, int $year): Collection
+    {
+
+        $month = $result->first()->begins_at->month;
+        $name = sprintf(
+            "%s %d",
+            $result->first()->begins_at->locale('de')->monthName,
+            $year
+        );
+        $monthObject = new Month($name);
+        $months = collect();
+
+        foreach ($result as $event) {
+            if ($event->begins_at->month !== $month) {
+                $months->add($monthObject);
+                $name = sprintf(
+                    "%s %d",
+                    $event->begins_at->locale('de')->monthName,
+                    $year
+                );
+                $monthObject = new Month($event->begins_at->locale('de')->monthName);
+                $month = $event->begins_at->month;
+            }
+            $monthObject->addEvent($event);
+        }
+        $months->add($monthObject);
+
+        return $months;
     }
 }

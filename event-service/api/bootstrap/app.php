@@ -72,9 +72,9 @@ $app->configure('app');
 |
 */
 
- $app->middleware([
-     App\Http\Middleware\LocaleMiddleware::class
- ]);
+ //$app->middleware([
+ //    App\Http\Middleware\LocaleMiddleware::class
+ //]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,

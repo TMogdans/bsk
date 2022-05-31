@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
-use TMogdans\JsonApiProblemResponder\Handler as ExceptionHandler;
+//use TMogdans\JsonApiProblemResponder\Handler as ExceptionHandler;
+use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler

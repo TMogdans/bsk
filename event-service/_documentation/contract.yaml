@@ -4,6 +4,11 @@ info:
   version: '1.0'
   license:
     name: MIT
+  contact:
+    name: Tobias Mogdans
+    email: tobias@mogdans.net
+    url: tobias.mogdans.net
+  description: API for brettspielkalender.net
 servers:
   - url: 'http://localhost:8080'
     description: event-service
@@ -18,64 +23,82 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
+                type: object
+                properties:
+                  heading:
+                    type: string
+                  months:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        heading:
+                          type: string
+                        events:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Event'
+                      required:
+                        - heading
+                        - events
+                required:
+                  - heading
+                  - months
               examples:
-                List of offline events:
+                upcoming events:
                   value:
-                    - id: 1
-                      name: Mein erstes Event
-                      slug: mein-erstes-event
-                      type:
-                        id: 1
-                        name: convention
-                        translated: Convention
-                      beginsAt: '2022-09-01 10:00:00'
-                      endsAt: '2022-09-01 20:00:00'
-                      zip: '98765'
-                      location: Musterhausen
-                      country: de
-                      street: Mustergasse 42b
-                      description: lorem ipsum dolor
-                      barrierFree: true
-                      entryFree: true
-                      onlineEvent: false
-                      published: true
-                      eventUrl: 'https://event.url'
-                      createdAt: '2022-02-28 21:40:00'
-                      updatedAt: '2022-02-28 21:40:00'
-                      deletedAt: null
-                      createdBy: 1
-                      meta:
-                        url: /events/mein-erstes-event
-                List of online events:
-                  value:
-                    - id: 2
-                      name: Mein online Event
-                      slug: mein-online-event
-                      type:
-                        id: 1
-                        name: convention
-                        translated: Convention
-                      beginsAt: '2022-09-01 10:00:00'
-                      endsAt: '2022-09-01 20:00:00'
-                      zip: null
-                      location: null
-                      country: de
-                      street: null
-                      description: lorem ipsum dolor
-                      barrierFree: true
-                      entryFree: true
-                      onlineEvent: true
-                      published: true
-                      eventUrl: 'https://event.url'
-                      createdAt: '2022-02-28 21:40:00'
-                      updatedAt: '2022-02-28 21:40:00'
-                      deletedAt: null
-                      createdBy: 1
-                      meta:
-                        url: /events/mein-online-event
+                    heading: Termine 2022
+                    months:
+                      - events:
+                          - barrierFree: true
+                            beginsAt: '2022-06-01T00:00:00.000000Z'
+                            country: de
+                            description: Irgendein Text
+                            endsAt: '2022-06-01T00:00:00.000000Z'
+                            entryFree: true
+                            eventUrl: 'https://some.url'
+                            location: Musterstadt
+                            meta:
+                              url: /events/testevent
+                            name: Testevent
+                            onlineEvent: false
+                            street: Mustergasse 42b
+                            type:
+                              name: convention
+                              translation: Kongress
+                            zip: '98765'
+                          - barrierFree: true
+                            beginsAt: '2022-06-01T00:00:00.000000Z'
+                            country: de
+                            description: Irgendein Text
+                            endsAt: '2022-06-01T00:00:00.000000Z'
+                            entryFree: true
+                            eventUrl: 'https://some.url'
+                            location: Musterstadt
+                            meta:
+                              url: /events/testevent-offline
+                            name: Testevent Offline
+                            onlineEvent: false
+                            street: Mustergasse 42b
+                            type:
+                              name: fair
+                              translation: Messe
+                            zip: '98765'
+                          - barrierFree: false
+                            beginsAt: '2022-06-01T00:00:00.000000Z'
+                            country: de
+                            description: Irgendein Text
+                            endsAt: '2022-06-01T00:00:00.000000Z'
+                            entryFree: false
+                            eventUrl: 'https://some.url'
+                            meta:
+                              url: /events/testevent-online
+                            name: Testevent online
+                            onlineEvent: true
+                            type:
+                              name: tournament
+                              translation: Turnier
+                        heading: Juni 2022
         '400':
           description: Bad Request
       operationId: get-events
@@ -319,7 +342,7 @@ paths:
                       url: /events/mein-erstes-event
         '404':
           description: Not Found
-      operationId: get single event
+      operationId: get-single-event
       description: Receive single event by its slug.
       parameters:
         - schema:

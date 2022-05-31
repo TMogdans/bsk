@@ -75,6 +75,8 @@ services:
     volumes:
       - ./event-service/api:/var/www/html/event-service
       - ./nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8081:80"
     networks:
       - bsk-network
     depends_on:
