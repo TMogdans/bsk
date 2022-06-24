@@ -1,101 +1,141 @@
 version: "3.7"
 services:
+#  bsk-db:
+#    image: mysql:5.7.22
+#    container_name: bsk-db
+#    restart: unless-stopped
+#    tty: true
+#    ports:
+#      - "3308:3306"
+#    environment:
+#      MYSQL_DATABASE: ${DB_DATABASE}
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+#      SERVICE_TAGS: dev
+#      SERVICE_NAME: mysql
+#    command: --init-file /data/application/init.sql
+#    volumes:
+#      - ./mysql/init.sql:/data/application/init.sql
+#      - dbdata:/var/lib/mysql
+#      - ./mysql/my.cnf:/etc/mysql/my.cnf
+#    networks:
+#      - bsk-network
+
   bsk-db:
-    image: mysql:5.7.22
     container_name: bsk-db
-    restart: unless-stopped
-    tty: true
+    image: bsk-db
+    restart: always
+    env_file:
+      - .env
+    build:
+      context: ./db
     ports:
-      - "3308:3306"
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    command: --init-file /data/application/init.sql
+      - '5432:5432'
     volumes:
-      - ./mysql/init.sql:/data/application/init.sql
-      - dbdata:/var/lib/mysql
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - dbdata2:/var/lib/postgresql/data
     networks:
       - bsk-network
 
-  event-service:
+  graphql:
+    container_name: graphql-test
+    restart: always
+    image: graphql-test
     build:
-      args:
-        user: ${USER}
-        uid: ${UID}
-      context: ./event-service
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    container_name: event-service
-    environment:
-      SERVICE_NAME: event-service
-      SERVICE_TAGS: dev
-      APP_KEY: ${APP_KEY}
-      APP_ENV: ${APP_ENV}
-      APP_DEBUG: ${APP_DEBUG}
-      DB_CONNECTION: ${DB_CONNECTION}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      PHP_IDE_CONFIG: "serverName=localhost.local"
-    volumes:
-      - ./event-service/api:/var/www/html/event-service
-      - ./event-service/docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - ./event-service/docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
-    working_dir: /var/www/html/event-service
-    networks:
-      - bsk-network
+      context: ./graphql
+    env_file:
+      - ./.env
     depends_on:
       - bsk-db
-
-  bsk_frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: bsk_frontend
-    restart: unless-stopped
-    environment:
-      SERVICE_NAME: bsk_frontend
-      SERVICE_TAGS: dev
-    ports:
-      - "3000:3000"
-      - "6006:6006"
-    volumes:
-      - ./frontend:/frontend
     networks:
       - bsk-network
-
-  nginx:
-    image: nginx:stable-alpine
-    container_name: event-nginx
-    volumes:
-      - ./event-service/api:/var/www/html/event-service
-      - ./nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "8081:80"
-    networks:
-      - bsk-network
-    depends_on:
-      - event-service
+      - "5433:5433"
+    command:
+      [
+        "--connection",
+        "${DATABASE_URL}",
+        "--port",
+        "5433",
+        "--schema",
+        "public",
+        "--append-plugins",
+        "postgraphile-plugin-connection-filter,custom-plugin"
+      ]
 
-  krakend_ce:
-    image: devopsfaith/krakend
-    volumes:
-      - ./krakend:/etc/krakend
-    ports:
-      - "1234:1234"
-      - "8080:8080"
-      - "8090:8090"
-    command: [ "run", "-d", "-c", "/etc/krakend/config.json" ]
-    networks:
-      - bsk-network
-    depends_on:
-      - event-service
-      - nginx
+#  event-service:
+#    build:
+#      args:
+#        user: ${USER}
+#        uid: ${UID}
+#      context: ./event-service
+#      dockerfile: Dockerfile
+#    restart: unless-stopped
+#    container_name: event-service
+#    environment:
+#      SERVICE_NAME: event-service
+#      SERVICE_TAGS: dev
+#      APP_KEY: ${APP_KEY}
+#      APP_ENV: ${APP_ENV}
+#      APP_DEBUG: ${APP_DEBUG}
+#      DB_CONNECTION: ${DB_CONNECTION}
+#      DB_HOST: ${DB_HOST}
+#      DB_PORT: ${DB_PORT}
+#      DB_DATABASE: ${DB_DATABASE}
+#      DB_USERNAME: ${DB_USERNAME}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#      PHP_IDE_CONFIG: "serverName=localhost.local"
+#    volumes:
+#      - ./event-service/api:/var/www/html/event-service
+#      - ./event-service/docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#      - ./event-service/docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+#    working_dir: /var/www/html/event-service
+#    networks:
+#      - bsk-network
+#    depends_on:
+#      - bsk-db
+
+#  bsk_frontend:
+#    build:
+#      context: ./frontend
+#    container_name: bsk_frontend
+#    restart: unless-stopped
+#    environment:
+#      SERVICE_NAME: bsk_frontend
+#      SERVICE_TAGS: dev
+#    ports:
+#      - "3000:3000"
+#      - "6006:6006"
+#    volumes:
+#      - ./frontend:/frontend
+#    networks:
+#      - bsk-network
+
+#  nginx:
+#    image: nginx:stable-alpine
+#    container_name: event-nginx
+#    volumes:
+#      - ./event-service/api:/var/www/html/event-service
+#      - ./nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf
+#    ports:
+#      - "8081:80"
+#    networks:
+#      - bsk-network
+#    depends_on:
+#      - event-service
+
+#  krakend_ce:
+#    image: devopsfaith/krakend
+#    volumes:
+#      - ./krakend:/etc/krakend
+#    ports:
+#      - "1234:1234"
+#      - "8080:8080"
+#      - "8090:8090"
+#    command: [ "run", "-d", "-c", "/etc/krakend/config.json" ]
+#    networks:
+#      - bsk-network
+#    depends_on:
+#      - event-service
+#      - nginx
 
 networks:
   bsk-network:
