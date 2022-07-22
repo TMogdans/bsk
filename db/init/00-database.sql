@@ -96,6 +96,8 @@ CREATE TABLE public.events (
     deleted_at TIMESTAMP DEFAULT NULL
 );
 
+CREATE UNIQUE INDEX idx_slug ON public.events (slug);
+
 COMMENT ON TABLE public.events IS 'Boardgame event.';
 
 CREATE TRIGGER "trg_slug_insert" BEFORE INSERT ON "events"

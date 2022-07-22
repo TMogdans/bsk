@@ -15,6 +15,10 @@ VALUES ('Testevent', 1, now(), now(), '98765', 'Musterstadt', 'de', 'Mustergasse
        ('Testevent Offline', 2, now(), now(), '12345', 'Musterstadt', 'de', 'Mustergasse 122b', 'lorem ipsum', true,
         true, false, true, 'https://some.url', null, 1),
        ('Testevent online', 3, now(), now(), null, null, 'de', null, 'lorem ipsum', false,
+        false, true, true, 'https://some.url', null, 1),
+       ('Event August', 5, '2022-08-06', '2022-08-06', null, null, 'de', null, 'lorem ipsum', false,
+        false, true, true, 'https://some.url', null, 1),
+       ('Event Juli', 4, '2022-07-06', '2022-07-06', null, null, 'de', null, 'lorem ipsum', false,
         false, true, true, 'https://some.url', null, 1);
 
 
