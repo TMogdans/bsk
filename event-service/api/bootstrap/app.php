@@ -23,6 +23,12 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
+$app->extend(\Psr\Log\LoggerInterface::class, function ($logger) {
+    $logger->popHandler();
+    $logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
+    return $logger;
+});
+
 $app->withFacades();
 
 $app->withEloquent();
