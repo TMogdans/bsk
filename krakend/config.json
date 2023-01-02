@@ -4,7 +4,7 @@
   "timeout": "3000ms",
   "cache_ttl": "300s",
   "host": [
-    "http://nginx:80"
+    "http://event-nginx:80"
   ],
   "output_encoding": "json",
   "name": "MyTest",
@@ -13,7 +13,8 @@
       "endpoint": "/v1/types",
       "method": "GET",
       "input_headers": [
-        "Accept"
+        "Accept",
+        "Accept-Language"
       ],
       "output_encoding": "json",
       "extra_config": {},
@@ -22,7 +23,7 @@
           "url_pattern": "/api/types",
           "method": "GET",
           "host": [
-            "http://nginx:80"
+            "http://event-nginx:80"
           ],
           "extra_config": {
             "backend/http": {
@@ -46,7 +47,8 @@
         "entryFree"
       ],
       "input_headers": [
-        "Accept"
+        "Accept",
+        "Accept-Language"
       ],
       "output_encoding": "json",
       "extra_config": {},
@@ -55,7 +57,7 @@
           "url_pattern": "/api/events",
           "method": "GET",
           "host": [
-            "http://nginx:80"
+            "http://event-nginx:80"
           ],
           "extra_config": {
             "backend/http": {
@@ -69,7 +71,8 @@
       "endpoint": "/v1/events/{slug}",
       "method": "GET",
       "input_headers": [
-        "Accept"
+        "Accept",
+        "Accept-Language"
       ],
       "output_encoding": "json",
       "extra_config": {},
@@ -78,7 +81,7 @@
           "url_pattern": "/api/events/{slug}",
           "method": "GET",
           "host": [
-            "http://nginx:80"
+            "http://event-nginx:80"
           ],
           "extra_config": {
             "backend/http": {
@@ -93,7 +96,8 @@
       "method": "POST",
       "input_headers": [
         "Accept",
-        "Content-Type"
+        "Content-Type",
+        "Accept-Language"
       ],
       "output_encoding": "json",
       "extra_config": {},
@@ -102,7 +106,7 @@
           "url_pattern": "/api/events",
           "method": "POST",
           "host": [
-            "http://nginx:80"
+            "http://event-nginx:80"
           ],
           "extra_config": {
             "backend/http": {
