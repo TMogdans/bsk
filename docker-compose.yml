@@ -69,7 +69,7 @@ services:
     networks:
       - bsk-network
 
-  nginx:
+  event-nginx:
     image: nginx:stable-alpine
     container_name: event-nginx
     volumes:
@@ -95,7 +95,7 @@ services:
       - bsk-network
     depends_on:
       - event-service
-      - nginx
+      - event-nginx
 
 networks:
   bsk-network:
