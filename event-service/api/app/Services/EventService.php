@@ -29,7 +29,7 @@ class EventService
 
     public function getAllFuturePublishedEvents(Request $request): EventList
     {
-        $year = 2022;
+        $year = Carbon::now()->year;
         $validator = (new FilterValidator())->getValidator($request);
 
         if ($validator->fails()) {
@@ -84,7 +84,6 @@ class EventService
         $type = Type::where('name', $request->get('type'))->first();
 
         try {
-
             $eventData = [];
             foreach ($request->all() as $key => $item) {
                 $eventData[Str::of($key)->snake()->toString()] = $item;
@@ -123,6 +122,9 @@ class EventService
 
     private function getMonths(Collection $result, int $year): Collection
     {
+        if ($result->count() === 0) {
+            return collect();
+        }
 
         $month = $result->first()->begins_at->month;
         $name = sprintf(
