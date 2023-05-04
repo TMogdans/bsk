@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 ARG user
 ARG uid
@@ -10,13 +10,14 @@ RUN apk add --no-cache $PHPIZE_DEPT \
     curl \
     libpng-dev \
     libxml2-dev \
+    linux-headers \
     icu-dev \
     zip \
     unzip \
     autoconf \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install pdo_mysql exif pcntl bcmath gd intl \
-    && pecl install xdebug-3.1.5 \
+    && pecl install xdebug \
     && docker-php-ext-enable xdebug
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
