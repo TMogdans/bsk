@@ -98,6 +98,24 @@ services:
       - event-service
       - event-nginx
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/config:/etc/prometheus
+      - ./prometheus/data:/prometheus
+    ports:
+      - "9090:9090"
+      
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/config:/etc/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
 networks:
   bsk-network:
     driver: bridge
