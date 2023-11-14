@@ -2,6 +2,7 @@ package entity
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Mechanic struct {
@@ -10,4 +11,21 @@ type Mechanic struct {
 	Slug string `gorm:"type:varchar(255);not null;unique;"`
 	Description string `gorm:"type:text;not null;"`
 	BoardGames *Boardgame `gorm:"many2many:boardgame_mechanics;"`
+}
+
+func (m *Mechanic) BeforeCreate(tx *gorm.DB) (err error) {
+  m.ID = uuid.New()
+
+  return
+}
+
+type CreateMechanicRequest struct {
+	Name string `json:"name" binding:"required"`
+	Slug string `json:"slug" binding:"required"`
+	Description string `json:"description" binding:"required"`
+}
+
+type UpdateMechanicRequest struct {
+	Name string `json:"name"`
+	Description string `json:"description"`
 }
