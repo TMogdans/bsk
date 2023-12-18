@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/TMogdans/bsk/boardgame-service/controllers"
 	"log"
 	"net/http"
 
@@ -24,6 +25,13 @@ func init() {
 	server = gin.Default()
 }
 
+const (
+	apiEndpoint         = "/api"
+	metricsEndpoint     = "/metrics"
+	healthcheckEndpoint = "/healthcheck"
+	mechanicsEndpoint   = "/mechanics"
+)
+
 func main() {
 	config, err := initializers.LoadConfig()
 	if err != nil {
@@ -31,15 +39,34 @@ func main() {
 	}
 
 	router := server.Group("/")
-	api := server.Group("/api")
+	api := server.Group(apiEndpoint)
 
 	metrics := ginmetrics.GetMonitor()
-	metrics.SetMetricPath("/metrics")
+	metrics.SetMetricPath(metricsEndpoint)
 	metrics.SetSlowTime(100)
 	metrics.SetDuration([]float64{0.1, 0.3, 1.2, 5, 10})
 	metrics.Use(router)
 
-	api.GET("/healthcheck", func(ctx *gin.Context) {
+	api.GET(healthcheckEndpoint, func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "OK",
+		})
+	})
+
+	mechanicsController := controllers.NewMechanicController(initializers.DB)
+
+	api.GET(mechanicsEndpoint, func(ctx *gin.Context) {
+		mechanicsController.GetAllMechanics(ctx)
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "OK",
+		})
+	})
+	api.POST(mechanicsEndpoint, func(ctx *gin.Context) {
+		mechanicsController.CreateMechanic(ctx)
+
 		ctx.JSON(http.StatusOK, gin.H{
 			"status":  "success",
 			"message": "OK",
