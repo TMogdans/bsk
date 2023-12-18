@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.2.1",
     "@types/node": "^18.11.9",
@@ -64,6 +63,7 @@
     "@storybook/preset-create-react-app": "^4.1.0",
     "@storybook/react": "^6.1.21",
     "@storybook/testing-library": "^0.0.13",
+    "@testing-library/react": "^14.1.2",
     "webpack": "^5.72.0"
   }
 }
