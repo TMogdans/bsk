@@ -7,10 +7,10 @@ import (
 
 type Mechanic struct {
 	ID          uuid.UUID    `gorm:"type:char(36);primary_key;" json:"-"`
-	Name        string       `gorm:"type:varchar(255);not null;"`
-	Slug        string       `gorm:"type:varchar(255);not null;unique;"`
-	Description string       `gorm:"type:text;not null;"`
-	BoardGames  []*Boardgame `gorm:"many2many:boardgame_mechanics;"`
+	Name        string       `gorm:"type:varchar(255);not null;" json:"name"`
+	Slug        string       `gorm:"type:varchar(255);not null;unique;" json:"slug"`
+	Description string       `gorm:"type:text;not null;" json:"description"`
+	BoardGames  []*Boardgame `gorm:"many2many:boardgame_mechanics;" json:"boardgames"`
 }
 
 func (m *Mechanic) BeforeCreate(tx *gorm.DB) (err error) {

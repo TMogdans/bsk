@@ -56,22 +56,10 @@ func main() {
 
 	mechanicsController := controllers.NewMechanicController(initializers.DB)
 
-	api.GET(mechanicsEndpoint, func(ctx *gin.Context) {
-		mechanicsController.GetAllMechanics(ctx)
-
-		ctx.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "OK",
-		})
-	})
-	api.POST(mechanicsEndpoint, func(ctx *gin.Context) {
-		mechanicsController.CreateMechanic(ctx)
-
-		ctx.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "OK",
-		})
-	})
+	api.GET(mechanicsEndpoint, mechanicsController.GetAllMechanics)
+	api.GET(mechanicsEndpoint+"/:slug", mechanicsController.GetMechanicBySlug)
+	api.POST(mechanicsEndpoint, mechanicsController.CreateMechanic)
+	api.PUT(mechanicsEndpoint+"/:slug", mechanicsController.UpdateMechanic)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -24,7 +25,8 @@ func (pc *MechanicController) CreateMechanic(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&payload)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		log.Println("Error binding JSON:", err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid request payload"})
 		return
 	}
 
@@ -36,11 +38,13 @@ func (pc *MechanicController) CreateMechanic(ctx *gin.Context) {
 
 	result := pc.DB.Create(&newMechanic)
 	if result.Error != nil {
-		if strings.Contains(result.Error.Error(), "duplicate key") {
+		if strings.Contains(result.Error.Error(), "Duplicate entry") {
+			log.Println("Error creating mechanic:", result.Error)
 			ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "Mechanic with that slug already exists"})
 			return
 		}
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
+		log.Println("Error creating mechanic:", result.Error)
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Failed to create mechanic"})
 		return
 	}
 
@@ -50,11 +54,58 @@ func (pc *MechanicController) CreateMechanic(ctx *gin.Context) {
 func (pc *MechanicController) GetAllMechanics(ctx *gin.Context) {
 	var mechanics []entity.Mechanic
 
-	result := pc.DB.Find(&mechanics)
+	page := 1
+	limit := 10
+	offset := (page - 1) * limit
+
+	result := pc.DB.Offset(offset).Limit(limit).Find(&mechanics)
 	if result.Error != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": mechanics})
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": mechanics, "page": page, "limit": limit})
+}
+
+func (pc *MechanicController) GetMechanicBySlug(ctx *gin.Context) {
+	var mechanic entity.Mechanic
+
+	result := pc.DB.Where("slug = ?", ctx.Param("slug")).First(&mechanic)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Mechanic not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": mechanic})
+}
+
+func (pc *MechanicController) UpdateMechanic(ctx *gin.Context) {
+	var payload *entity.UpdateMechanicRequest
+
+	err := ctx.ShouldBindJSON(&payload)
+	if err != nil {
+		log.Println("Error binding JSON:", err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	var mechanic entity.Mechanic
+
+	result := pc.DB.Where("slug = ?", ctx.Param("slug")).First(&mechanic)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Mechanic not found"})
+		return
+	}
+
+	mechanic.Name = payload.Name
+	mechanic.Description = payload.Description
+
+	result = pc.DB.Save(&mechanic)
+	if result.Error != nil {
+		log.Println("Error updating mechanic:", result.Error)
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": mechanic})
 }
