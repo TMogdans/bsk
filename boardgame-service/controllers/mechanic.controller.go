@@ -98,6 +98,7 @@ func (mc *MechanicController) UpdateMechanic(ctx *gin.Context) {
 	}
 
 	mechanic.Name = payload.Name
+	mechanic.Slug = slug.MakeLang(payload.Name, "de")
 	mechanic.Description = payload.Description
 
 	result = mc.DB.Save(&mechanic)
