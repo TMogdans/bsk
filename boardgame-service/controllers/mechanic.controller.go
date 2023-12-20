@@ -70,7 +70,7 @@ func (pc *MechanicController) GetAllMechanics(ctx *gin.Context) {
 func (pc *MechanicController) GetMechanicBySlug(ctx *gin.Context) {
 	var mechanic entity.Mechanic
 
-	result := pc.DB.Where("slug = ?", ctx.Param("slug")).First(&mechanic)
+	result := pc.DB.Where("slug = ?", ctx.Param("slug")).Preload("Boardgames").First(&mechanic)
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "Mechanic not found"})
 		return

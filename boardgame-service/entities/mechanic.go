@@ -10,7 +10,7 @@ type Mechanic struct {
 	Name        string       `gorm:"type:varchar(255);not null;" json:"name"`
 	Slug        string       `gorm:"type:varchar(255);not null;unique;" json:"slug"`
 	Description string       `gorm:"type:text;not null;" json:"description"`
-	BoardGames  []*Boardgame `gorm:"many2many:boardgame_mechanics;" json:"boardgames"`
+	Boardgames  []*Boardgame `gorm:"many2many:boardgames_mechanics;" json:"boardgames"`
 }
 
 func (m *Mechanic) BeforeCreate(tx *gorm.DB) (err error) {

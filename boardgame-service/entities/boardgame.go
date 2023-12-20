@@ -18,5 +18,5 @@ type Boardgame struct {
 	MaxNumberOfPlayers uint8       `gorm:"type:tinyint unsigned;not null;"`
 	CreatedAt          time.Time   `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
 	UpdatedAt          time.Time   `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
-	Mechanics          []*Mechanic `gorm:"many2many:boardgame_mechanics;"`
+	Mechanics          []*Mechanic `gorm:"many2many:boardgames_mechanics;"`
 }
