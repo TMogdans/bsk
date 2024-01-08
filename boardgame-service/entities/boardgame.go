@@ -20,6 +20,10 @@ type Boardgame struct {
 	CreatedAt          time.Time   `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;" json:"createdAt"`
 	UpdatedAt          time.Time   `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;" json:"updatedAt"`
 	Mechanics          []*Mechanic `gorm:"many2many:boardgames_mechanics;" json:"mechanics"`
+	Authors            []*Person   `gorm:"many2many:boardgames_authors;" json:"authors"`
+	Artists            []*Person   `gorm:"many2many:boardgames_artists;" json:"artists"`
+	Publishers         []*Person   `gorm:"many2many:boardgames_publishers;" json:"publishers"`
+	Links              []*Link     `gorm:"many2many:boardgames_links;" json:"links"`
 }
 
 func (b *Boardgame) BeforeCreate(db *gorm.DB) (err error) {
