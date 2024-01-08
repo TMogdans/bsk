@@ -58,7 +58,7 @@ func (mc *MechanicController) GetAllMechanics(ctx *gin.Context) {
 	limit := 10
 	offset := (page - 1) * limit
 
-	result := mc.DB.Offset(offset).Limit(limit).Find(&mechanics)
+	result := mc.DB.Offset(offset).Limit(limit).Order("Name ASC").Find(&mechanics)
 	if result.Error != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
 		return

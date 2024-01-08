@@ -57,7 +57,7 @@ func (pc *PersonController) GetAllPersons(ctx *gin.Context) {
 	limit := 10
 	offset := (page - 1) * limit
 
-	result := pc.DB.Preload("Boardgames").Preload("Links").Limit(limit).Offset(offset).Find(&persons)
+	result := pc.DB.Preload("Boardgames").Preload("Links").Limit(limit).Offset(offset).Order("last_name ASC").Find(&persons)
 	if result.Error != nil {
 		log.Println("Error fetching persons:", result.Error)
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Failed to fetch persons"})

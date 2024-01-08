@@ -61,7 +61,7 @@ func (bc *BoardgameController) GetAllBoardgames(ctx *gin.Context) {
 	limit := 10
 	offset := (page - 1) * limit
 
-	result := bc.DB.Preload("Mechanics").Offset(offset).Limit(limit).Find(&boardgames)
+	result := bc.DB.Preload("Mechanics").Offset(offset).Limit(limit).Order("Name ASC").Find(&boardgames)
 	if result.Error != nil {
 		log.Println("Error fetching boardgames:", result.Error)
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Failed to fetch boardgames"})
