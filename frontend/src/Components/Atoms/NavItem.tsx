@@ -7,5 +7,19 @@ type Props = {
 }
 
 export const NavItem = ({item}: Props) => {
-    return <li className={style.container}>{item.name}</li>
+    const target = isValidURL(item.target) ? item.target : 'fallback-url';
+    return (
+        <li className={style.container}>
+            <a href={target}>{item.name}</a>
+        </li>
+    );
+}
+
+function isValidURL(url: string): boolean {
+    try {
+        new URL(url);
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
