@@ -20,5 +20,7 @@ func init() {
 func main() {
 	initializers.DB.AutoMigrate(&entity.Mechanic{})
 	initializers.DB.AutoMigrate(&entity.Boardgame{})
+	initializers.DB.AutoMigrate(&entity.Person{})
+	initializers.DB.AutoMigrate(&entity.Link{})
 	fmt.Println("? Migrations completed")
 }

@@ -2,6 +2,7 @@ package entity
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Mechanic struct {
@@ -12,7 +13,7 @@ type Mechanic struct {
 	Boardgames  []*Boardgame `gorm:"many2many:boardgames_mechanics;" json:"boardgames"`
 }
 
-func (m *Mechanic) BeforeCreate() (err error) {
+func (m *Mechanic) BeforeCreate(db *gorm.DB) (err error) {
 	m.ID = uuid.New()
 
 	return

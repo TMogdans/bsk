@@ -31,6 +31,7 @@ const (
 	healthcheckEndpoint = "/healthcheck"
 	mechanicsEndpoint   = "/mechanics"
 	boardgamesEndpoint  = "/boardgames"
+	personsEndpoint     = "/persons"
 )
 
 func main() {
@@ -68,6 +69,13 @@ func main() {
 	api.GET(boardgamesEndpoint+"/:slug", boardgamesController.GetBoardgameBySlug)
 	api.POST(boardgamesEndpoint, boardgamesController.CreateBoardgame)
 	api.PUT(boardgamesEndpoint+"/:slug", boardgamesController.UpdateBoardgame)
+
+	personsController := controllers.NewPersonController(initializers.DB)
+
+	api.GET(personsEndpoint, personsController.GetAllPersons)
+	api.GET(personsEndpoint+"/:slug", personsController.GetPersonBySlug)
+	api.POST(personsEndpoint, personsController.CreatePerson)
+	api.PUT(personsEndpoint+"/:slug", personsController.UpdatePersonBySlug)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 }
