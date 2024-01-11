@@ -63,7 +63,7 @@ services:
       SERVICE_NAME: bsk_frontend
       SERVICE_TAGS: dev
     ports:
-      - "3000:3000"
+      - "3001:3000"
       - "6006:6006"
     volumes:
       - ./frontend:/frontend
@@ -105,7 +105,7 @@ services:
       - ./prometheus/data:/prometheus
     ports:
       - "9090:9090"
-      
+
   grafana:
     image: grafana/grafana:latest
     volumes:
@@ -115,6 +115,23 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: ${KEYCLOAK_VENDOR}
+      DB_ADDR: ${KEYCLOAK_HOST}
+      DB_DATABASE: ${KEYCLOAK_DATABASE}
+      DB_USER: ${KEYCLOAK_DB_USER}
+      DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+    ports:
+      - 8088:8080
+    depends_on:
+      - bsk-db
 
 networks:
   bsk-network:
