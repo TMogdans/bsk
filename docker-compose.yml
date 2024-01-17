@@ -118,18 +118,23 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
     environment:
-      DB_VENDOR: ${KEYCLOAK_VENDOR}
-      DB_ADDR: ${KEYCLOAK_HOST}
-      DB_DATABASE: ${KEYCLOAK_DATABASE}
+      DB_ADDR: ${KEYCLOAK_ADDR}
       DB_USER: ${KEYCLOAK_DB_USER}
       DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      DB_PORT: ${KEYCLOAK_DB_PORT}
+      DB_DATABASE: ${KEYCLOAK_DATABASE}
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command:
       - start-dev
+    volumes:
+      - ./keycloak:/tmp
     ports:
       - 8088:8080
+    networks:
+      - bsk-network
     depends_on:
       - bsk-db
 

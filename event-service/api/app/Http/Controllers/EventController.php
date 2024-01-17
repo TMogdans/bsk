@@ -10,6 +10,8 @@ use App\Services\EventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
+use TMogdans\JsonApiProblemResponder\Exceptions\MethodNotAllowedException;
 
 class EventController extends Controller
 {
@@ -27,6 +29,10 @@ class EventController extends Controller
 
     public function show(string $slug): JsonResource
     {
+        if (Gate::denies('event-service', 'show-single-event')) {
+            throw new MethodNotAllowedException("GATEKEEPER!");
+        }
+
         $event = $this->eventService->getEventBySlug($slug);
 
         return new EventResource($event);

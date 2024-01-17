@@ -46,7 +46,8 @@ $app->withEloquent();
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class
+    //App\Exceptions\Handler::class
+    TMogdans\JsonApiProblemResponder\Handler::class
 );
 
 $app->singleton(
@@ -101,7 +102,6 @@ $app->configure('languages');
 $app->register(\Laravel\Tinker\TinkerServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\ConfigServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
