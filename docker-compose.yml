@@ -133,6 +133,18 @@ services:
     depends_on:
       - bsk-db
 
+  nats:
+    image: nats
+    command: "-c /etc/nats/nats.conf --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
+    volumes:
+      - ./nats/config/:/etc/nats
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    networks:
+      - bsk-network
+
 networks:
   bsk-network:
     driver: bridge
