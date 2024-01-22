@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-environment-config-map
+  namespace: bsk
+data:
+  APP_NAME: "event-service"
+  APP_ENV: "prod"
+  APP_KEY: "YXNkZmFzZGZhc2RmZHNhZHNmYXNkZmFzZmFzZGZhc2RmYXF0emhqenppODd1ejZ0cmdmaA=="
+  APP_DEBUG: "false"
+  APP_URL: "http://localhost"
+  APP_TIMEZONE: "UTC"
+  APP_LOCALE: "de"
+  CACHE_DRIVER: "file"
+  QUEUE_CONNECTION: "sync"
+  KEYCLOAK_BASE_URL: ""
+  KEYCLOAK_REALM: "Brettspielkalender"
+  KEYCLOAK_REALM_PUBLIC_KEY: ""
+  KEYCLOAK_CLIENT_ID: "event-service"

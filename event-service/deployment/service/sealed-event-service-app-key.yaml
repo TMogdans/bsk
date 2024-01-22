@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: event-service-app-key
+  namespace: bsk
+spec:
+  encryptedData:
+    password: AgBqHbYjdNJHgTmF27GtWs+lqzaDxwEzFGb3bEbuCv9NfoaTU4pTqFf+UYnpNKAKdfS5QCRbCjhgoQ+rL+44n1BGthWnPbNLanYOjPdGkSvTGPXzGYQVDPM1kVOQ6ksDwyM6d/6tah+01mMGTMatsMxJIt8Q+lMrxsziF+9IEP6ehdpruKQV8PbLIw9izuWYALJBGONQk4l/FC/HZ0O4Tt/JHoirh/00UpYtePV2RjWeiVmlNvBVnByrEwO405UrjTh8METKPUXfI9uQ9uobh2Vzh+g2obNLhd76yaW3QGzK/I2LyLHXqg+RQRmD6D3w0N96D2cVvT1UmTs6r+B8PVF6BnAmPPEUt5XbgbDLNcgbVnu6LvFEsp5bD+kxTWnfivCHU8IHKNnFs5muskxVtyU00o6DtOXKjxrWrVn8PH/wmko9YmJ9qS6b6ltsCW9XhHk65/mxIMjDU5YY5Saxi4M8PI9M8EpEx4PJNcyqLzi0iHkS3bTFjnfbF+mLXGwOHJ2lStBxPM2yGopBS8haBbs7IirVmHI2C/fECT6BNVrI59T0gpRtPuShr5PWINBSJ6K4Yie3GZpa1PT9xjD8Yi/7E12USaT79NZUwd+LX8HhJA3HwC6H3fyZR8q8Vm7qML4xyDnq7LiuovjvGqdWU9XdjdQHYnY6Xa5uD95LZXkM4Dn9b8QAc1bCbM4ANiZ9BTsMim4t+nup+N0xg6tIjfopYL3mdKpo/eQBUG25n6wo25ZgDozw+11Vo2QnaTKuOflzBF2TTHFTjMCKafZgsLsLZvn5iSxxSfM=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: event-service-app-key
+      namespace: bsk
+    type: Opaque

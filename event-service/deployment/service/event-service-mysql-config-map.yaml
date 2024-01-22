@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-mysql-config-map
+  namespace: bsk
+data:
+  DB_CONNECTION: "mysql"
+  DB_HOST: "event-service-db-np"
+  DB_PORT: "3306"
+  DB_DATABASE: "event-service"
+  DB_USERNAME: "event-service-user"
