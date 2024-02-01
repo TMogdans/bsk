@@ -1,0 +1,26 @@
+{
+  "name": "rating-service",
+  "version": "1.0.0",
+  "description": "This service is for rating other bsk elements",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "serve": "node dist/index.js",
+    "test": "test",
+    "check_style": "npx prettier . --check",
+    "fix_style": "npx prettier . --write"
+  },
+  "author": "Tobias Mogdans",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "prettier": "3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@types/node": "^20.11.16",
+    "express": "^4.18.2",
+    "ts-node": "^10.9.2"
+  }
+}
