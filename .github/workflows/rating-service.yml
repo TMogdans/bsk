@@ -48,7 +48,6 @@ jobs:
     env:
       REGISTRY: ghcr.io
       IMAGE_NAME: rating-service
-      WORKING-DIRECTORY: ./rating-service
 
     permissions:
       contents: read
@@ -67,7 +66,6 @@ jobs:
 
       - name: Build rating-service Image
         uses: docker/build-push-action@v4
-        working-directory: ${{ env.WORKING_DIRECTORY }}
         with:
           context: .
           file: ./deployment/production/Dockerfile
