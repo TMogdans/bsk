@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 21
 
@@ -48,7 +48,7 @@ jobs:
     env:
       REGISTRY: ghcr.io
       IMAGE_NAME: rating-service
-      WORKING-DIRECTORY: ./rating-service/deployment
+      WORKING-DIRECTORY: ./rating-service/deployment/production
 
     permissions:
       contents: read
@@ -68,5 +68,5 @@ jobs:
       - name: Build rating-service Image
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          docker build . -f ./production/Dockerfile --tag ${{ env.REGISTRY }}/tmogdans/bsk/${{ env.IMAGE_NAME }}:latest
+          docker build . --tag ${{ env.REGISTRY }}/tmogdans/bsk/${{ env.IMAGE_NAME }}:latest
           docker push ${{ env.REGISTRY }}/tmogdans/bsk/${{ env.IMAGE_NAME }}:latest
