@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "check_style": "npx prettier . --check",
     "fix_style": "npx prettier . --write"
   },
