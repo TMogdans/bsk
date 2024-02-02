@@ -17,6 +17,8 @@ jobs:
   build_test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      working-directory: ./rating-service/api
 
     steps:
       - uses: actions/checkout@v3
