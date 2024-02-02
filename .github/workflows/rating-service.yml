@@ -1,0 +1,37 @@
+name: rating-service CI
+
+on:
+  push:
+    paths:
+      - 'rating-service/**'
+    branches:
+      - rating-service
+  pull_request:
+    paths:
+      - 'rating-service/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 21
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build App
+        run: npm run build
+
+      - name: Test App
+        run: npm run test

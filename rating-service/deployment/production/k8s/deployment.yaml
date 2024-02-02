@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rating-service
+  namespace: bsk
+  labels:
+    app: rating-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rating-service
+  template:
+    metadata:
+      labels:
+        app: rating-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "rating-service"
+        dapr.io/app-port: "3000"
+    spec:
+      containers:
+        - name: rating-service
+          image: ghcr.io/tmogdans/bsk/rating-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+      restartPolicy: Always
