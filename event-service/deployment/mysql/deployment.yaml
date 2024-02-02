@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-service-db
+  namespace: bsk
+spec:
+  selector:
+    matchLabels:
+      app: event-service-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: event-service-mysql
+    spec:
+      containers:
+        - image: mysql:8.3
+          name: event-service-db
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: event-service-db-password
+                  key: password
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: event-service-mysql-pv-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: event-service-mysql-pv-volume
+          persistentVolumeClaim:
+            claimName: event-service-mysql-pv-claim
