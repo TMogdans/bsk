@@ -3,12 +3,12 @@ name: rating-service CI
 on:
   push:
     paths:
-      - 'rating-service/**'
+      - 'rating-service/api/**'
     branches:
       - rating-service
   pull_request:
     paths:
-      - 'rating-service/**'
+      - 'rating-service/api/**'
     branches:
       - main
   workflow_dispatch:
