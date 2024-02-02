@@ -68,6 +68,7 @@ jobs:
       - name: Build rating-service Image
         uses: docker/build-push-action@v4
         with:
+          context: ./rating-service
           file: ./rating-service/deployment/production/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/tmogdans/bsk/${{ env.IMAGE_NAME }}:latest
