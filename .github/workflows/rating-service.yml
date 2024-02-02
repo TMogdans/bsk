@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      WORKING-DIRECTORY: ./rating-service/deployment
+      WORKING-DIRECTORY: ./rating-service/api
 
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
     env:
       REGISTRY: ghcr.io
       IMAGE_NAME: rating-service
-      WORKING-DIRECTORY: ./rating-service/api
+      WORKING-DIRECTORY: ./rating-service/deployment
 
     permissions:
       contents: read
