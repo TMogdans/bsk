@@ -65,5 +65,5 @@ jobs:
 
       - name: Build rating-service Image
         run: |
-          docker build . --tag ${{ REGISTRY }}/tmogdans/bsk/${{ IMAGE_NAME }}:latest
+          docker build . -f deployment/production/Dockerfile --tag ${{ REGISTRY }}/tmogdans/bsk/${{ IMAGE_NAME }}:latest
           docker push ${{ REGISTRY }}/tmogdans/bsk/${{ IMAGE_NAME }}:latest
