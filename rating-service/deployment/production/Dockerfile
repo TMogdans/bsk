@@ -3,7 +3,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
 WORKDIR /usr/src/app
 COPY ../../api/package*.json /usr/src/app/
 RUN npm ci --only=production
-USER node
-COPY --chown=node:node ../../api /usr/src/app
+COPY ../../api /usr/src/app
 RUN npm run build
+
+FROM node:21.6-bullseye-slim
+ENV NODE_ENV production
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+USER node
+WORKDIR /usr/src/app
+COPY --chown=node:node --from=build /usr/src/app/package*.json /usr/src/app/
+COPY --chown=node:node --from=build /usr/src/app/dist /usr/src/app/dist
+COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
 CMD ["dumb-init", "node", "src/index.js"]
