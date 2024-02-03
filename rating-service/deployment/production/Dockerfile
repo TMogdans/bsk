@@ -1,17 +1,39 @@
-FROM node:latest AS build
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
-WORKDIR /usr/src/app
-COPY ../../api/package*.json /usr/src/app/
-RUN npm ci --only=production
-COPY ../../api /usr/src/app
+FROM node:21-alpine as node
+
+FROM node AS builder
+
+WORKDIR /app
+
+COPY ../../api/package*.json ./
+
+RUN npm i
+
+COPY ../../api .
+
 RUN npm run build
 
-FROM node:21.6-bullseye-slim
-ENV NODE_ENV production
-COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+EXPOSE 3000
+
+ENTRYPOINT ["npm", "run", "dev"]
+
+FROM node AS production
+
+RUN apk --no-cache -U upgrade
+
+RUN mkdir -p /home/node/app/dist && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+
+RUN npm i -g pm2
+
+COPY --chown=node:node ../../api/package*.json ./
+
 USER node
-WORKDIR /usr/src/app
-COPY --chown=node:node --from=build /usr/src/app/package*.json /usr/src/app/
-COPY --chown=node:node --from=build /usr/src/app/dist /usr/src/app/dist
-COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
-CMD ["dumb-init", "node", "src/index.js"]
+
+RUN npm i --only=production
+
+COPY --chown=node:node --from=builder /app/dist ./dist
+
+EXPOSE 3000
+
+ENTRYPOINT ["pm2-runtime", "./process.yml"]
