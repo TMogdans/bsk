@@ -26,7 +26,7 @@ WORKDIR /home/node/app
 
 RUN npm i -g pm2
 
-COPY --chown=node:node ../../api/package*.json ../..api/process.yml ./
+COPY --chown=node:node ../../api/package*.json ../../api/process.yml ./
 
 USER node
 
