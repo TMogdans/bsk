@@ -12,5 +12,5 @@ USER node
 WORKDIR /usr/src/app
 COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --chown=node:node ../../api /usr/src/app
-RUN tsc
+RUN npm run build
 CMD ["dumb-init", "node", "src/index.js"]
