@@ -71,7 +71,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./rating-service/api:/usr/src/app
+      - ./rating-service/api:/app
     networks:
       - bsk-network
 

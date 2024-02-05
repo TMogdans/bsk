@@ -4,7 +4,7 @@
   "description": "This service is for rating other bsk elements",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node --loader ts-node/esm src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
     "test": "jest --passWithNoTests",
@@ -14,6 +14,7 @@
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
+  "type": "module",
   "author": "Tobias Mogdans",
   "license": "MIT",
   "devDependencies": {
@@ -27,6 +28,7 @@
     "@prisma/client": "^5.9.1",
     "@types/node": "^20.11.16",
     "express": "^4.18.2",
+    "nats": "^2.19.0",
     "ts-node": "^10.9.2"
   }
 }
