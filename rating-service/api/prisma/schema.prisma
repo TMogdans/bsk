@@ -2,18 +2,16 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  extensions = [pgcrypto]
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Config {
-  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id      String   @id @default(uuid())
   name    String   @unique
   weight  Float    @default(1.0)
   order   Int      @db.SmallInt
@@ -21,8 +19,8 @@ model Config {
 }
 
 model Rating {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  configId  String   @db.Uuid
+  id        String   @id @default(uuid())
+  configId  String
   config    Config   @relation(fields: [configId], references: [id])
   userId    String
   objectId  String
