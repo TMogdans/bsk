@@ -11,6 +11,9 @@
     "check_style": "npx prettier . --check",
     "fix_style": "npx prettier . --write"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "author": "Tobias Mogdans",
   "license": "MIT",
   "devDependencies": {
