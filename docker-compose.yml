@@ -53,6 +53,28 @@ services:
     depends_on:
       - bsk-db
 
+  rating-service:
+    build:
+      context: ./rating-service
+      dockerfile: deployment/development/Dockerfile
+    container_name: rating-service
+    restart: unless-stopped
+    environment:
+      SERVICE_NAME: rating-service
+      SERVICE_TAGS: dev
+      DB_CONNECTION: ${EVENT_DB_CONNECTION}
+      DB_HOST: ${EVENT_DB_HOST}
+      DB_PORT: ${EVENT_DB_PORT}
+      DB_DATABASE: ${RATING_DB_DATABASE}
+      DB_USERNAME: ${EVENT_DB_USERNAME}
+      DB_PASSWORD: ""
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./rating-service/api:/usr/src/app
+    networks:
+      - bsk-network
+
   bsk_frontend:
     build:
       context: ./frontend
@@ -112,7 +134,7 @@ services:
       - ./grafana/data:/var/lib/grafana
       - ./grafana/config:/etc/grafana
     ports:
-      - "3000:3000"
+      - "3333:3000"
     depends_on:
       - prometheus
 
