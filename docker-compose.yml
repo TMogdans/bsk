@@ -59,6 +59,9 @@ services:
       dockerfile: deployment/development/Dockerfile
     container_name: rating-service
     restart: unless-stopped
+    depends_on:
+      - nats
+      - bsk-db
     environment:
       SERVICE_NAME: rating-service
       SERVICE_TAGS: dev
