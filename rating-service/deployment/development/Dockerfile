@@ -6,9 +6,9 @@ COPY ../../api/package*.json ./
 
 RUN npm i
 
-#COPY ../../api .
+COPY ../../api .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["node", "dist/src/index.js"]
 
