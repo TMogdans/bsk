@@ -1,8 +1,8 @@
 import { RatingMessage, Config } from "../types/rating";
 import { connect, JSONCodec } from "nats";
-import { PrismaClient, Prisma } from "@prisma/client";
 import { object, string } from "yup";
 import { RatingCreated } from "../generated/rating-created";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const natsServer = process.env.NATS_SERVER || "nats:4222";
 const prisma = new PrismaClient();
