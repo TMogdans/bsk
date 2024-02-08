@@ -2,6 +2,7 @@ import { RatingMessage, Config } from "../types/rating";
 import { connect, JSONCodec } from "nats";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { object, string } from "yup";
+import { RatingCreated } from "../generated/rating-created";
 
 const natsServer = process.env.NATS_SERVER || "nats:4222";
 const prisma = new PrismaClient();
@@ -58,7 +59,7 @@ const generateCreationData = (
 export const natsClient = async () => {
   const nc = await connect({ servers: natsServer });
   const codec = JSONCodec();
-  const subject = "ratings";
+  const subject = "frontend";
   const sub = nc.subscribe(subject);
 
   for await (const m of sub) {
@@ -88,6 +89,14 @@ export const natsClient = async () => {
       });
 
       console.log(`rating created`);
+
+      const ratingCreated = RatingCreated.fromJSON({
+        objectId: receivedMessage.payload.object_id,
+        userId: receivedMessage.payload.user_id,
+      });
+      const bytes = RatingCreated.encode(ratingCreated).finish();
+
+        nc.publish("ratings", bytes);
     } catch (e) {
       console.error(e);
     }
