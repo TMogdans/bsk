@@ -36,7 +36,7 @@ const generateCreationData = (
   for (const c of config) {
     configMap.set(c.name, c);
   }
-  console.log(configMap);
+
   let creationArray = [];
   for (const [key, value] of Object.entries(payload)) {
     const result = configMap.get(key);
