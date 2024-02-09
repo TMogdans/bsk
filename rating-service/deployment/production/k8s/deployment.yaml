@@ -25,4 +25,25 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-environment-config-map
+                  key: PORT
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-environment-config-map
+                  key: APP_NAME
+            - name: NATS_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-environment-config-map
+                  key: NATS_SERVER
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rating-service-db-url
+                  key: url
       restartPolicy: Always
