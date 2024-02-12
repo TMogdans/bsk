@@ -34,7 +34,7 @@ COPY --chown=node:node ../../api/package*.json ../../api/process.yml ./
 
 RUN npm i --only=production
 
-COPY --chown=node:node --from=builder /app ./
+COPY --chown=node:node --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
