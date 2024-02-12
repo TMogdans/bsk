@@ -38,4 +38,6 @@ COPY --chown=node:node --from=builder /app/dist ./
 
 EXPOSE 3000
 
+RUN npx prisma generate
+
 ENTRYPOINT ["pm2-runtime", "./process.yml"]
