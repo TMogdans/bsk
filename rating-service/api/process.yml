@@ -1,5 +1,5 @@
 apps:
   - name: express-typescript-api
-    script: ./dist/index.js
+    script: ./dist/src/index.js
     exec_mode: cluster
     instances: max
