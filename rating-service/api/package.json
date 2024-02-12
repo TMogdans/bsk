@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/src/index.js",
-    "build": "tsc",
+    "build": "tsc --build src",
     "serve": "node dist/src/index.js",
     "test": "jest --passWithNoTests --coverage",
     "test:watch": "jest --watch",
