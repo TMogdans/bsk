@@ -36,6 +36,8 @@ RUN npm i --only=production
 
 COPY --chown=node:node --from=builder /app/dist ./
 
+COPY --chown=node:node --from=builder /app/prisma ./prisma
+
 EXPOSE 3000
 
 RUN npx prisma generate
