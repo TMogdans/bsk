@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rating-read-service
+  name: rating-write-service
   namespace: bsk
   labels:
-    app: rating-read-service
+    app: rating-write-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: rating-read-service
+      app: rating-write-service
   template:
     metadata:
       labels:
-        app: rating-read-service
+        app: rating-write-service
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "rating-read-service"
+        dapr.io/app-id: "rating-write-service"
         dapr.io/app-port: "3000"
     spec:
       containers:
-        - name: rating-read-service
-          image: ghcr.io/tmogdans/bsk/rating-read-service:latest
+        - name: rating-write-service
+          image: ghcr.io/tmogdans/bsk/rating-write-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -29,22 +29,22 @@ spec:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: rating-write-service-environment-config-map
+                  name: rating-service-environment-config-map
                   key: PORT
             - name: APP_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: rating-write-service-environment-config-map
+                  name: rating-service-environment-config-map
                   key: APP_NAME
             - name: NATS_SERVER
               valueFrom:
                 configMapKeyRef:
-                  name: rating-write-service-environment-config-map
+                  name: rating-service-environment-config-map
                   key: NATS_SERVER
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: rating-read-service-db-url
+                  name: rating-service-db-url
                   key: url
           resources:
             requests:

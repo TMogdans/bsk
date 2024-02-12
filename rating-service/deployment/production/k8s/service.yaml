@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rating-read-service
+  name: rating-write-service
 spec:
   type: NodePort
   selector:
-    app: rating-read-service
+    app: rating-write-service
   ports:
     - port: 80
       name: http
