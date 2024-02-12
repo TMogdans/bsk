@@ -34,9 +34,7 @@ COPY --chown=node:node ../../api/package*.json ../../api/process.yml ./
 
 RUN npm i --only=production
 
-RUN npx prisma generate
-
-COPY --chown=node:node --from=builder /app/dist/src ./dist
+COPY --chown=node:node --from=builder /app/dist ./
 
 EXPOSE 3000
 
