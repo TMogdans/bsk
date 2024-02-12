@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rating-write-service-postgres-configmap
+  namespace: bsk
+  labels:
+    app: rating-write-service-postgres
+data:
+  POSTGRES_DB: "rating-write-service"
+  POSTGRES_USER: "postgres"

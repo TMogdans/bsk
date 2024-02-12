@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rating-write-service-db
+  namespace: bsk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rating-write-service-db
+  template:
+    metadata:
+      labels:
+        app: rating-write-service-db
+    spec:
+      containers:
+        - image: postgres:13.3
+          name: rating-write-service-db
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-postgres-configmap
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                  configMapKeyRef:
+                    name: rating-write-service-postgres-configmap
+                    key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rating-write-service-db-password
+                  key: password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: rating-write-service-postgres-pv-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+          - name: rating-write-service-postgres-pv-volume
+            persistentVolumeClaim:
+              claimName: rating-write-service-postgres-pv-claim
