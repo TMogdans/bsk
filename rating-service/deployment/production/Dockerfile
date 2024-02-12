@@ -8,7 +8,9 @@ COPY ../../api/package*.json ./
 
 RUN npm i
 
-COPY ../../api .
+COPY ../../api ./
+
+RUN npx prisma generate
 
 RUN npm run build
 
@@ -26,13 +28,15 @@ WORKDIR /home/node/app
 
 RUN npm i -g pm2
 
-COPY --chown=node:node ../../api/package*.json ../../api/process.yml ./
-
 USER node
+
+COPY --chown=node:node ../../api/package*.json ../../api/process.yml ./
 
 RUN npm i --only=production
 
-COPY --chown=node:node --from=builder /app/dist ./dist
+RUN npx prisma generate
+
+COPY --chown=node:node --from=builder /app/dist/src ./dist
 
 EXPOSE 3000
 

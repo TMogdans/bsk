@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: rating-service-db-url
+  namespace: bsk
+spec:
+  encryptedData:
+    url: AgAqCwMN/N8Rt2ZTNk6OgEey0Js5pBZwhoDKdYPxcHVdOt+dXZWt+wu5tSAT1uYy6TMk3APgXGIZGjMKXsjYoMHTnZmwA7QDb2NRF7K8WqtpUmYt44Z2Fn5o0779dmHMu51x/B0vfHKaf6qkJ+XJRW93WrzyY3BXK4FQRq6qPKyZdxI+S/bzkpsftjq9+5TEMuxc6sMMsQLSqcdTbomPiMe+58ESSKIXWI5cadqZA9r6ASld7ySuB1T24e17Bqz6D9WGFbWKNXCAnCgJmb834/uSkQLh/Kz3NcrL812gx/WLc6hUoSSM9lK5//8oo/ZKrpBw9t38CCz1lp3DmfyEMeBeFlnoj6HutYwlYC6Z1cNmQaOQZC3wPca7BglrnxSXTAMXG1fv/2rHEWDOrTl/33NM+vprHjxrdIf4RUYAl9NSQKB5pEotkEsDi5giPqHz9ThYt56j8J5Ev43aFIOwIwF6sp3p4VtPKUXGERNFyNz2UYCZR9ZLP5uyEMHCqkYjuNqQCSuOYRz2vwppZZLvSL1bfO2okI3gTURDHfZ9VSXNyn486fmwrTMO+WDBbu1JtKEGVWYrxc/ctm+2ZvIyj4UD8sqeExZqWdIDXf5uEVaQRzIHmok7IB0GB/66Hcn9RNvigzFLIGRGXpfsOWWlhy3bdbI9un4cCmlxU0dDKizlaEZAr8RZfbZHkUcgz5Kv48NBu9DWWeio7aDIG35iwVry2mRnMdop39uE2xHczCAFEl3+R8ijZmes
+  template:
+    metadata:
+      creationTimestamp: null
+      name: rating-service-db-url
+      namespace: bsk
+    type: Opaque

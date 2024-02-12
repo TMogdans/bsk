@@ -1,4 +1,4 @@
-name: rating-service CI
+name: rating-write-service CI
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - 'rating-service/api/**'
     branches:
       - rating-service
+      - main
   pull_request:
     paths:
       - 'rating-service/api/**'
@@ -48,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: rating-service
+      IMAGE_NAME: rating-write-service
 
     permissions:
       contents: read

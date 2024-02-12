@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["debian-openssl-3.0.x", "native"]
+  output        = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Config {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  weight  Float    @default(1.0)
+  order   Int      @db.SmallInt
+  ratings Rating[]
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  configId  String
+  config    Config   @relation(fields: [configId], references: [id])
+  userId    String
+  objectId  String
+  value     Int      @db.SmallInt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([configId, userId, objectId])
+}

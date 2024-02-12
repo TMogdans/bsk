@@ -4,26 +4,44 @@
   "description": "This service is for rating other bsk elements",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node dist/src/index.js",
     "build": "tsc",
-    "serve": "node dist/index.js",
-    "test": "jest --passWithNoTests",
+    "serve": "node dist/src/index.js",
+    "test": "jest --passWithNoTests --coverage",
+    "test:watch": "jest --watch",
     "check_style": "npx prettier . --check",
     "fix_style": "npx prettier . --write"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "author": "Tobias Mogdans",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-typescript": "^7.23.3",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
+    "babel-jest": "^29.7.0",
+    "i": "^0.3.7",
     "jest": "^29.7.0",
+    "npm": "^10.4.0",
+    "or": "^0.2.0",
     "prettier": "3.2.4",
     "prisma": "^5.9.1",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@prisma/client": "^5.9.1",
     "@types/node": "^20.11.16",
     "express": "^4.18.2",
-    "ts-node": "^10.9.2"
+    "nats": "^2.19.0",
+    "ts-proto": "^1.167.3",
+    "tsx": "^4.7.0",
+    "yup": "^1.3.3"
   }
 }
