@@ -7,8 +7,8 @@ spec:
   type: pubsub.jetstream
   version: v1
   metadata:
-  - name: connectionString
-    value: nats://nats:4222
+  - name: natsURL
+    value: "nats://nats:4222"
   - name: name
     value: "rating-pub-sub"
   - name: streamName

@@ -15,9 +15,11 @@ spec:
       labels:
         app: rating-write-service
       annotations:
-        dapr.io/enabled: "true"
+        dapr.io/enabled: "false"
         dapr.io/app-id: "rating-write-service"
-        dapr.io/app-port: "3500"
+        dapr.io/app-port: "3000"
+        dapr.io/log-level: "debug"
+        dapr.io/enable-api-logging: "true"
     spec:
       containers:
         - name: rating-write-service
@@ -36,11 +38,11 @@ spec:
                 configMapKeyRef:
                   name: rating-write-service-environment-config-map
                   key: APP_NAME
-            - name: NATS_SERVER
+            - name: DAPR_HTTP_PORT
               valueFrom:
                 configMapKeyRef:
                   name: rating-write-service-environment-config-map
-                  key: NATS_SERVER
+                  key: DAPR_HTTP_PORT
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:

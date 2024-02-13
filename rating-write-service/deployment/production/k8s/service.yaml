@@ -4,10 +4,10 @@ metadata:
   name: rating-write-service
   namespace: bsk
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: rating-write-service
   ports:
-    - port: 80
-      name: http
+    - protocol: TCP
+      port: 80
       targetPort: 3000
