@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
-import { natsClient } from "./pubsub/client.js";
+import { client } from "./pubsub/daprClient";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-natsClient().then(() => console.log("NATS client started"));
+client().then(() => console.log("dapr client started"));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, rating-service! 11515");

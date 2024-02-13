@@ -1,11 +1,14 @@
-import { RatingMessage, Config } from "../types/rating";
-import { connect, JSONCodec } from "nats";
+import { Config, RatingMessage } from "../types/rating";
 import { object, string } from "yup";
 import { RatingCreated } from "../generated/rating-created";
 import { Prisma, PrismaClient } from "@prisma/client";
+import {CommunicationProtocolEnum, DaprClient, DaprServer} from "@dapr/dapr";
 
-const natsServer = process.env.NATS_SERVER || "nats:4222";
 const prisma = new PrismaClient();
+
+const daprHost = "127.0.0.1";
+const serverHost = "127.0.0.1";
+const serverPort = "3000";
 
 const ratingMessageSchema = object({
   meta: object({
@@ -56,29 +59,31 @@ const generateCreationData = (
 
   return creationArray as unknown as Prisma.RatingCreateManyInput;
 };
-export const natsClient = async () => {
-  const nc = await connect({ servers: natsServer });
-  const codec = JSONCodec();
-  const subject = "frontend";
-  const sub = nc.subscribe(subject);
 
-  for await (const m of sub) {
-    const receivedMessage = codec.decode(m.data) as unknown as RatingMessage;
+export async function client() {
+  const server = new DaprServer({
+    serverHost,
+    serverPort,
+    communicationProtocol: CommunicationProtocolEnum.HTTP,
+    clientOptions: {
+      daprHost,
+      daprPort: process.env.DAPR_HTTP_PORT || "3000",
+    }
+  });
 
+  await server.pubsub.subscribe("rating-pub-sub", "frontend", async (receivedMessage) => {
     if (receivedMessage.meta.version !== "1.0.0") {
       console.error("Unsupported version");
-      continue;
     }
 
     try {
       await ratingMessageSchema.validate(receivedMessage);
     } catch (e) {
       console.error(e);
-      continue;
     }
 
     console.log(
-      `[${sub.getProcessed()}]: ${JSON.stringify(receivedMessage.payload)}`,
+        `${JSON.stringify(receivedMessage.payload)}`,
     );
 
     try {
@@ -94,12 +99,22 @@ export const natsClient = async () => {
         objectId: receivedMessage.payload.object_id,
         userId: receivedMessage.payload.user_id,
       });
-      const bytes = RatingCreated.encode(ratingCreated).finish();
-
-        nc.publish("ratings", bytes);
+      await sendRatingCreated(ratingCreated);
     } catch (e) {
       console.error(e);
     }
-  }
-  console.log("subscription closed");
-};
+  });
+}
+
+async function sendRatingCreated(message: RatingCreated) {
+  const PUBSUB_NAME = "rating-pub-sub";
+  const TOPIC_NAME = "ratings";
+  const client = new DaprClient({
+    daprHost,
+    daprPort: process.env.DAPR_HTTP_PORT || "3000",
+  });
+
+  console.log("Published data: " + message);
+
+  await client.pubsub.publish(PUBSUB_NAME, TOPIC_NAME, message);
+}
