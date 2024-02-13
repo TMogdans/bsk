@@ -2,7 +2,7 @@ import { Config, RatingMessage } from "../types/rating";
 import { object, string } from "yup";
 import { RatingCreated } from "../generated/rating-created";
 import { Prisma, PrismaClient } from "@prisma/client";
-import {CommunicationProtocolEnum, DaprClient, DaprServer} from "@dapr/dapr";
+import { CommunicationProtocolEnum, DaprClient, DaprServer } from "@dapr/dapr";
 
 const prisma = new PrismaClient();
 
@@ -68,42 +68,44 @@ export async function client() {
     clientOptions: {
       daprHost,
       daprPort: process.env.DAPR_HTTP_PORT || "3000",
-    }
+    },
   });
 
-  await server.pubsub.subscribe("rating-pub-sub", "frontend", async (receivedMessage) => {
-    if (receivedMessage.meta.version !== "1.0.0") {
-      console.error("Unsupported version");
-    }
+  await server.pubsub.subscribe(
+    "rating-pub-sub",
+    "frontend",
+    async (receivedMessage) => {
+      if (receivedMessage.meta.version !== "1.0.0") {
+        console.error("Unsupported version");
+      }
 
-    try {
-      await ratingMessageSchema.validate(receivedMessage);
-    } catch (e) {
-      console.error(e);
-    }
+      try {
+        await ratingMessageSchema.validate(receivedMessage);
+      } catch (e) {
+        console.error(e);
+      }
 
-    console.log(
-        `${JSON.stringify(receivedMessage.payload)}`,
-    );
+      console.log(`${JSON.stringify(receivedMessage.payload)}`);
 
-    try {
-      const config = await prisma.config.findMany();
+      try {
+        const config = await prisma.config.findMany();
 
-      await prisma.rating.createMany({
-        data: generateCreationData(receivedMessage, config),
-      });
+        await prisma.rating.createMany({
+          data: generateCreationData(receivedMessage, config),
+        });
 
-      console.log(`rating created`);
+        console.log(`rating created`);
 
-      const ratingCreated = RatingCreated.fromJSON({
-        objectId: receivedMessage.payload.object_id,
-        userId: receivedMessage.payload.user_id,
-      });
-      await sendRatingCreated(ratingCreated);
-    } catch (e) {
-      console.error(e);
-    }
-  });
+        const ratingCreated = RatingCreated.fromJSON({
+          objectId: receivedMessage.payload.object_id,
+          userId: receivedMessage.payload.user_id,
+        });
+        await sendRatingCreated(ratingCreated);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  );
 }
 
 async function sendRatingCreated(message: RatingCreated) {

@@ -1,3 +1,3 @@
-it('should return true', async () => {
-    expect(true).toBeTruthy();
+it("should return true", async () => {
+  expect(true).toBeTruthy();
 });
