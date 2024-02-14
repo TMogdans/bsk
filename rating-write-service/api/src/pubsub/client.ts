@@ -1,7 +1,6 @@
 import { RatingMessage, Config } from "../types/rating";
 import { connect, JSONCodec } from "nats";
 import { object, string } from "yup";
-import { RatingCreated } from "../generated/rating-created";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 const natsServer = process.env.NATS_SERVER || "nats:4222";
@@ -26,8 +25,8 @@ const ratingMessageSchema = object({
 });
 
 const generateCreationData = (
-    receivedMessage: RatingMessage,
-    config: Config[],
+  receivedMessage: RatingMessage,
+  config: Config[],
 ): Prisma.RatingCreateManyInput => {
   const objectId = receivedMessage.payload.object_id;
   const userId = receivedMessage.payload.user_id;
@@ -78,7 +77,7 @@ export const client = async () => {
     }
 
     console.log(
-        `[${sub.getProcessed()}]: ${JSON.stringify(receivedMessage.payload)}`,
+      `[${sub.getProcessed()}]: ${JSON.stringify(receivedMessage.payload)}`,
     );
 
     try {
@@ -90,12 +89,13 @@ export const client = async () => {
 
       console.log(`rating created`);
 
-      const ratingCreated = RatingCreated.fromJSON({
-        objectId: receivedMessage.payload.object_id,
-        userId: receivedMessage.payload.user_id,
-      });
-
-      nc.publish("ratings", codec.encode(ratingCreated));
+      nc.publish(
+        "ratings",
+        codec.encode({
+          objectId: receivedMessage.payload.object_id,
+          userId: receivedMessage.payload.user_id,
+        }),
+      );
     } catch (e) {
       console.error(e);
     }
