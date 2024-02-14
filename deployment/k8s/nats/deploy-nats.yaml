@@ -4,11 +4,6 @@ natsBox:
 config:
   jetstream:
     enabled: true
-
-    memoryStore:
-      enabled: true
-      maxSize: 256Mi
-
     memoryStore:
       enabled: true
       pvc:

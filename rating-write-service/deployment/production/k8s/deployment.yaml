@@ -48,11 +48,4 @@ spec:
                 secretKeyRef:
                   name: rating-write-service-db-url
                   key: url
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "250m"
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
       restartPolicy: Always
