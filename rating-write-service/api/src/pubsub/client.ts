@@ -94,9 +94,8 @@ export const client = async () => {
         objectId: receivedMessage.payload.object_id,
         userId: receivedMessage.payload.user_id,
       });
-      const bytes = RatingCreated.encode(ratingCreated).finish();
 
-      nc.publish("ratings", bytes);
+      nc.publish("ratings", codec.encode(ratingCreated));
     } catch (e) {
       console.error(e);
     }
