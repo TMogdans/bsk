@@ -10,11 +10,8 @@ RUN apk --no-cache -U upgrade
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY ../../api/package*.json .
-COPY ../../api/process.yml .
 COPY ../../api/prisma ./prisma
-RUN npm i -g pm2
 RUN npm i --only=production
 RUN npx prisma generate
-RUN npx prisma migrate deploy
 EXPOSE 3000
-ENTRYPOINT ["pm2-runtime", "./process.yml"]
+CMD ["npm", "run", "start:migrate:prod"]

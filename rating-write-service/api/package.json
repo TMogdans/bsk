@@ -10,7 +10,8 @@
     "test": "jest --passWithNoTests --coverage",
     "test:watch": "jest --watch",
     "check_style": "npx prettier . --check",
-    "fix_style": "npx prettier . --write"
+    "fix_style": "npx prettier . --write",
+    "start:migrate:prod": "prisma migrate deploy && node dist/index.js"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
