@@ -92,8 +92,15 @@ export const client = async () => {
       nc.publish(
         "ratings",
         codec.encode({
-          objectId: receivedMessage.payload.object_id,
-          userId: receivedMessage.payload.user_id,
+          meta: {
+            event: "rating-created",
+            producer: process.env.APP_NAME || "rating-write-service",
+            version: "1.0.0",
+          },
+          payload: {
+            objectId: receivedMessage.payload.object_id,
+            userId: receivedMessage.payload.user_id,
+          }
         }),
       );
     } catch (e) {
