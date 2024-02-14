@@ -1,4 +1,4 @@
-import { client } from "./pubsub/daprClient";
+import { client } from "./pubsub/client";
 
 client()
   .then(() => console.log("rating-write-service started"))

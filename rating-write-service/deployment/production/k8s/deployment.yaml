@@ -14,12 +14,6 @@ spec:
     metadata:
       labels:
         app: rating-write-service
-      annotations:
-        dapr.io/enabled: "false"
-        dapr.io/app-id: "rating-write-service"
-        dapr.io/app-port: "3000"
-        dapr.io/log-level: "debug"
-        dapr.io/enable-api-logging: "true"
     spec:
       containers:
         - name: rating-write-service
@@ -27,6 +21,11 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          resources:
+            limits:
+              memory: "600Mi"
+            requests:
+              memory: "512Mi"
           env:
             - name: PORT
               valueFrom:
@@ -38,11 +37,11 @@ spec:
                 configMapKeyRef:
                   name: rating-write-service-environment-config-map
                   key: APP_NAME
-            - name: DAPR_HTTP_PORT
+            - name: NATS_SERVER
               valueFrom:
                 configMapKeyRef:
                   name: rating-write-service-environment-config-map
-                  key: DAPR_HTTP_PORT
+                  key: NATS_SERVER
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:

@@ -13,19 +13,7 @@ spec:
   metrics:
     - type: Resource
       resource:
-        name: cpu
+        name: memory
         target:
           type: Utilization
-          averageUtilization: 50
-status:
-  observedGeneration: 1
-  lastScaleTime: <some-time>
-  currentReplicas: 1
-  desiredReplicas: 1
-  currentMetrics:
-    - type: Resource
-      resource:
-        name: cpu
-        current:
-          averageUtilization: 0
-          averageValue: 0
+          averageUtilization: 512
