@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - 'rating-write-service/api/**'
+      - 'rating-write-service/deployment/**'
     branches:
       - main
   pull_request:
     paths:
       - 'rating-write-service/api/**'
+      - 'rating-write-service/deployment/**'
     branches:
       - main
   workflow_dispatch:
@@ -43,7 +45,7 @@ jobs:
         working-directory: ${{env.WORKING-DIRECTORY}}
 
   build_and_push:
-    name: Build Docker image and push to ghrc
+    name: Build Docker image and push to ghcr
     needs: build_and_test
     runs-on: ubuntu-latest
     env:
