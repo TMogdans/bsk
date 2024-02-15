@@ -85,24 +85,24 @@ export const client = async () => {
 
       await prisma.rating.createMany({
         data: generateCreationData(receivedMessage, config),
+      }).then(() => {
+        console.log(`rating created`);
+
+        nc.publish(
+            "ratings",
+            codec.encode({
+              meta: {
+                event: "rating-created",
+                producer: process.env.APP_NAME || "rating-write-service",
+                version: "1.0.0",
+              },
+              payload: {
+                objectId: receivedMessage.payload.object_id,
+                userId: receivedMessage.payload.user_id,
+              }
+            }),
+        );
       });
-
-      console.log(`rating created`);
-
-      nc.publish(
-        "ratings",
-        codec.encode({
-          meta: {
-            event: "rating-created",
-            producer: process.env.APP_NAME || "rating-write-service",
-            version: "1.0.0",
-          },
-          payload: {
-            objectId: receivedMessage.payload.object_id,
-            userId: receivedMessage.payload.user_id,
-          }
-        }),
-      );
     } catch (e) {
       console.error(e);
     }
