@@ -1,4 +1,5 @@
 {
+  "message": "rating-received",
   "meta": {
     "producer": "frontend",
     "version": "1.0.0"

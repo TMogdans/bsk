@@ -7,6 +7,7 @@ const natsServer = process.env.NATS_SERVER || "nats:4222";
 const prisma = new PrismaClient();
 
 const ratingMessageSchema = object({
+  message: string().required(),
   meta: object({
     producer: string().required(),
     version: string().required(),
@@ -64,7 +65,10 @@ export const client = async () => {
   for await (const m of sub) {
     const receivedMessage = codec.decode(m.data) as unknown as RatingMessage;
 
-    if (receivedMessage.meta.version !== "1.0.0") {
+    if (
+      receivedMessage.meta.version !== "1.0.0" ||
+      receivedMessage.message !== "rating-received"
+    ) {
       console.error("Unsupported version");
       continue;
     }
@@ -83,26 +87,28 @@ export const client = async () => {
     try {
       const config = await prisma.config.findMany();
 
-      await prisma.rating.createMany({
-        data: generateCreationData(receivedMessage, config),
-      }).then(() => {
-        console.log(`rating created`);
+      await prisma.rating
+        .createMany({
+          data: generateCreationData(receivedMessage, config),
+        })
+        .then(() => {
+          console.log(`rating created`);
 
-        nc.publish(
+          nc.publish(
             "ratings",
             codec.encode({
+              message: "rating-created",
               meta: {
-                event: "rating-created",
                 producer: process.env.APP_NAME || "rating-write-service",
                 version: "1.0.0",
               },
               payload: {
                 objectId: receivedMessage.payload.object_id,
                 userId: receivedMessage.payload.user_id,
-              }
+              },
             }),
-        );
-      });
+          );
+        });
     } catch (e) {
       console.error(e);
     }

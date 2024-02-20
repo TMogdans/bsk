@@ -1,4 +1,5 @@
 export type RatingMessage = {
+  message: string;
   meta: {
     producer: string;
     version: string;
