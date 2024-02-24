@@ -1,0 +1,11 @@
+{
+  "message": "rating-created",
+  "meta": {
+    "producer": "rating-write-service",
+    "version": "1.0.0"
+  },
+  "payload": {
+    "object_id": "87ffd110-f249-43ca-9a04-36a106bc52fa",
+    "user_id": "9bd70fdb-65af-47b0-acd5-d854818ce7ba"
+  }
+}
