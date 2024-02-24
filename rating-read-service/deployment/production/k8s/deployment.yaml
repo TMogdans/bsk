@@ -6,7 +6,7 @@ metadata:
   labels:
     app: rating-read-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: rating-read-service
