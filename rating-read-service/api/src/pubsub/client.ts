@@ -39,7 +39,15 @@ export const client = async () => {
   const sub = nc.subscribe(subject);
 
   for await (const m of sub) {
-    const receivedMessage = codec.decode(m.data);
+    let receivedMessage = undefined as unknown;
+
+    try {
+      receivedMessage = codec.decode(m.data);
+    } catch (e) {
+        console.error(e);
+        continue;
+    }
+
     let validatedMessage = {} as RatingCreatedMessage;
 
     try {
