@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rating-read-service
+  namespace: bsk
+  labels:
+    app: rating-read-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rating-read-service
+  template:
+    metadata:
+      labels:
+        app: rating-read-service
+    spec:
+      containers:
+        - name: rating-read-service
+          image: ghcr.io/tmogdans/bsk/rating-read-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "600Mi"
+            requests:
+              memory: "512Mi"
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-read-service-environment-config-map
+                  key: PORT
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-read-service-environment-config-map
+                  key: APP_NAME
+            - name: NATS_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-read-service-environment-config-map
+                  key: NATS_SERVER
+      restartPolicy: Always

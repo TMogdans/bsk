@@ -1,1 +1,1 @@
-console.log("rating-read-service started")
+console.log("rating-read-service started");
