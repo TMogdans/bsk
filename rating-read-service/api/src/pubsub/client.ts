@@ -1,6 +1,9 @@
 import { object, string } from "yup";
 import { connect, JSONCodec } from "nats";
-import { RatingCreatedMessage } from "../types/messages";
+import {RatingCreatedMessage} from "../types/messages";
+import { collect } from "collectionizejs";
+import {RatingBody, RatingConfig, RatingValue, SingleRating} from "../types/rating";
+import {RatingsProcessor} from "../service/ratingsProcessor";
 
 const natsServer = process.env.NATS_SERVER || "nats://localhost:4222";
 
@@ -60,6 +63,11 @@ export const client = async () => {
     console.log(
       `[${sub.getProcessed()}]: ${JSON.stringify(validatedMessage.payload)}`,
     );
+
+    const ratingProcessor = new RatingsProcessor(validatedMessage.payload.object_id);
+
+    console.log(ratingProcessor.getDatasets().all());
+
   }
   console.log("subscription closed");
 };

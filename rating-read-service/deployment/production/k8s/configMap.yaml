@@ -7,3 +7,5 @@ data:
   PORT: "3000"
   APP_NAME: "rating-read-service"
   NATS_SERVER: "nats:4222"
+  RATING_WRITE_SERVICE_HOST: "rating-write-service"
+  RATING_WRITE_SERVICE_PORT: "80"
