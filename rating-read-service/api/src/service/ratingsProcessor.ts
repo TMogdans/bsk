@@ -2,10 +2,12 @@ import { collect } from "collectionizejs";
 import { RatingBody, RatingValue, SingleRating } from "../types/rating";
 
 export class RatingsProcessor {
-  private readonly objectId: string;
+  private readonly ratingsCollection = collect([]);
+  private readonly objectId: string = "";
   private datasets = collect([]);
 
-  constructor(objectId: string) {
+  constructor(objectId: string, ratingsCollection: any) {
+    this.ratingsCollection = ratingsCollection;
     this.objectId = objectId;
 
     this.process()
@@ -13,14 +15,12 @@ export class RatingsProcessor {
         .catch(e => console.error(e.message, e.stack, e.name, e.toString()));
   }
 
-  async process() {
-    const ratingsCollection = await this.getRatingsCollection();
-
-    ratingsCollection
+  private async process() {
+    this.ratingsCollection
         .pluck("userId")
         .unique()
         .forEach((userId: string) => {
-      const userRatings = ratingsCollection.where("userId", userId);
+      const userRatings = this.ratingsCollection.where("userId", userId);
 
       const ratings = userRatings.map((userRating: SingleRating) => {
         return {
@@ -62,19 +62,5 @@ export class RatingsProcessor {
 
   public getDatasets() {
     return this.datasets;
-  }
-
-  private async getRatingsCollection() {
-    const fetch_url = this.constructFetchUrl();
-    const response = await fetch(fetch_url);
-
-    return collect(await response.json());
-  }
-
-  private constructFetchUrl() {
-    const host = process.env.RATING_WRITE_SERVICE_HOST || "localhost";
-    const port = process.env.RATING_WRITE_SERVICE_PORT || "3000";
-
-    return `http://${host}:${port}/ratings/${this.objectId}`;
   }
 }
