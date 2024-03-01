@@ -2,6 +2,7 @@ import { RatingMessage, Config } from "../types/rating";
 import { connect, JSONCodec } from "nats";
 import { object, string } from "yup";
 import { Prisma, PrismaClient } from "@prisma/client";
+import {getRatingsForBoardGameIdAndUserId} from "../http/ratings-controller";
 
 const natsServer = process.env.NATS_SERVER || "nats:4222";
 const prisma = new PrismaClient();
@@ -94,6 +95,8 @@ export const client = async () => {
         .then(() => {
           console.log(`rating created`);
 
+          const payload = getRatingsForBoardGameIdAndUserId(receivedMessage.payload.object_id, receivedMessage.payload.user_id);
+          console.log(`payload: ${JSON.stringify(payload)}`);
           nc.publish(
             "ratings",
             codec.encode({
@@ -102,10 +105,7 @@ export const client = async () => {
                 producer: process.env.APP_NAME || "rating-write-service",
                 version: "1.0.0",
               },
-              payload: {
-                objectId: receivedMessage.payload.object_id,
-                userId: receivedMessage.payload.user_id,
-              },
+              payload: payload,
             }),
           );
         });
