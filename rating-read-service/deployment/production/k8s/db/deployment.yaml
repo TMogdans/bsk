@@ -1,12 +1,26 @@
-apiVersion: elasticsearch.k8s.elastic.co/v1
-kind: Elasticsearch
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: rating-read-service-db
   namespace: bsk
+  labels:
+    app: rating-read-service-db
 spec:
-  version: 8.12.1
-  nodeSets:
-    - name: default
-      count: 1
-      config:
-        node.store.allow_mmap: false
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rating-read-service-db
+  template:
+    metadata:
+      labels:
+        app: rating-read-service-db
+    spec:
+      containers:
+        - name: rating-read-service-db
+          image: redis
+          args: ["--appendonly", "yes"]
+          ports:
+            - containerPort: 6379
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
