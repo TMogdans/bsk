@@ -74,7 +74,7 @@ export const client = async () => {
               payload: {
                 object_id: receivedMessage.payload.object_id,
                 user_id: receivedMessage.payload.user_id,
-                data: ratingGenerator.getRatings().all(),
+                ratings: ratingGenerator.getRatings().all(),
               },
             }),
           );
