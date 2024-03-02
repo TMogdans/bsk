@@ -3,9 +3,10 @@ import {RatingCreatedMessage} from "../../types/messages";
 import {ratingCreatedSchema} from "../../schemas/ratingCreatedSchema";
 import {collect} from "collectionizejs";
 
-export class MessageSubject implements Subscriber {
+export class MessageSubscriber implements Subscriber {
     public ratingsCollection = collect([]);
     public objectId = "";
+    public userId = "";
 
     private natsServer = process.env.NATS_SERVER || "nats://localhost:4222";
     private observers: Observer[] = [];
@@ -67,7 +68,9 @@ export class MessageSubject implements Subscriber {
             );
 
             this.objectId = validatedMessage.payload.object_id;
-            this.ratingsCollection = await this.getRatingsCollection(this.objectId);
+            this.userId = validatedMessage.payload.user_id;
+            this.ratingsCollection = collect(validatedMessage.payload.ratings);
+
             this.notify();
         }
         console.log("subscription closed");
@@ -87,19 +90,5 @@ export class MessageSubject implements Subscriber {
         }
 
         return validatedRatingCreatedMessage;
-    }
-
-    private async getRatingsCollection(objectId: string) {
-        const fetch_url = this.constructFetchUrl(objectId);
-        const response = await fetch(fetch_url);
-
-        return collect(await response.json());
-    }
-
-    private constructFetchUrl(objectId: string) {
-        const host = process.env.RATING_WRITE_SERVICE_HOST || "localhost";
-        const port = process.env.RATING_WRITE_SERVICE_PORT || "3000";
-
-        return `http://${host}:${port}/ratings/${objectId}`;
     }
 }

@@ -1,10 +1,10 @@
-import {MessageSubject} from "./service/observer/messageSubject";
+import {MessageSubscriber} from "./service/observer/messageSubscriber";
 import {IncomingMessageObserver} from "./service/observer/incomingMessageObserver";
 
-const subject = new MessageSubject();
+const messageSubscriber = new MessageSubscriber();
 const incomingMessageObserver = new IncomingMessageObserver();
 
-subject.attach(incomingMessageObserver);
-subject.subscribeToMessageBus()
+messageSubscriber.attach(incomingMessageObserver);
+messageSubscriber.subscribeToMessageBus()
   .then(() => console.log("rating-read-service started"))
   .catch((err) => console.error(err));

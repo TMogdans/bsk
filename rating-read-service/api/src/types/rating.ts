@@ -11,7 +11,7 @@ export type RatingConfig = {
   weight: number;
 };
 
-export type RatingBody = {
+export type RatingDataset = {
   userId: string;
   objectId: string;
   createdAt: string;

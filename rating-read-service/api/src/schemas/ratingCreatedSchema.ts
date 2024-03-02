@@ -1,4 +1,4 @@
-import {object, string} from "yup";
+import {array, number, object, string} from "yup";
 
 export const ratingCreatedSchema = object({
     message: string().required(),
@@ -9,5 +9,12 @@ export const ratingCreatedSchema = object({
     payload: object({
         object_id: string().required(),
         user_id: string().required(),
+        ratings: array().of(
+            object({
+                value: number().required(),
+                weight: number().required(),
+                name: string().required(),
+            }),
+        ),
     }),
 });
