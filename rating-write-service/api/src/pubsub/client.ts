@@ -1,8 +1,8 @@
-import { RatingMessage, Config } from "../types/rating";
+import { RatingMessage } from "../types/rating";
 import { connect, JSONCodec } from "nats";
 import { object, string } from "yup";
 import { Prisma, PrismaClient } from "@prisma/client";
-import {getRatingsForBoardGameIdAndUserId} from "../http/ratings-controller";
+import RatingGenerator from "../services/ratingGenerator";
 
 const natsServer = process.env.NATS_SERVER || "nats:4222";
 const prisma = new PrismaClient();
@@ -26,37 +26,6 @@ const ratingMessageSchema = object({
   }),
 });
 
-const generateCreationData = (
-  receivedMessage: RatingMessage,
-  config: Config[],
-): Prisma.RatingCreateManyInput => {
-  const objectId = receivedMessage.payload.object_id;
-  const userId = receivedMessage.payload.user_id;
-  const { object_id, user_id, ...payload } = receivedMessage.payload;
-
-  const configMap = new Map<string, Config>();
-  for (const c of config) {
-    configMap.set(c.name, c);
-  }
-
-  let creationArray = [];
-  for (const [key, value] of Object.entries(payload)) {
-    const result = configMap.get(key);
-    if (result === undefined) {
-      console.error(`Config not found for ${key}`);
-      continue;
-    }
-
-    creationArray.push({
-      configId: result.id,
-      userId: userId,
-      objectId: objectId,
-      value: value,
-    });
-  }
-
-  return creationArray as unknown as Prisma.RatingCreateManyInput;
-};
 export const client = async () => {
   const nc = await connect({ servers: natsServer });
   const codec = JSONCodec();
@@ -87,16 +56,16 @@ export const client = async () => {
 
     try {
       const config = await prisma.config.findMany();
+      const ratingGenerator = new RatingGenerator(receivedMessage, config);
 
       await prisma.rating
         .createMany({
-          data: generateCreationData(receivedMessage, config),
+          data: ratingGenerator.getDatasets().all() as unknown as Prisma.RatingCreateManyInput[],
         })
-        .then(() => {
+        .then((result) => {
           console.log(`rating created`);
+          console.log(result);
 
-          const payload = getRatingsForBoardGameIdAndUserId(receivedMessage.payload.object_id, receivedMessage.payload.user_id);
-          console.log(`payload: ${JSON.stringify(payload)}`);
           nc.publish(
             "ratings",
             codec.encode({
@@ -105,7 +74,11 @@ export const client = async () => {
                 producer: process.env.APP_NAME || "rating-write-service",
                 version: "1.0.0",
               },
-              payload: payload,
+              payload: {
+                object_id: receivedMessage.payload.object_id,
+                user_id: receivedMessage.payload.user_id,
+                data: ratingGenerator.getRatings().all(),
+              },
             }),
           );
         });
