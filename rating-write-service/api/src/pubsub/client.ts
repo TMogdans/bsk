@@ -63,9 +63,6 @@ export const client = async () => {
           data: ratingGenerator.getDatasets().all() as unknown as Prisma.RatingCreateManyInput[],
         })
         .then((result) => {
-          console.log(`rating created`);
-          console.log(result);
-
           nc.publish(
             "ratings",
             codec.encode({
