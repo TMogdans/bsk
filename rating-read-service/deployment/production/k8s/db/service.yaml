@@ -4,10 +4,10 @@ metadata:
   name: rating-read-service-db
   namespace: bsk
 spec:
-  clusterIP: None
+  type: NodePort
+  selector:
+    app: rating-read-service-db
   ports:
     - port: 6379
       targetPort: 6379
-      name: rating-read-service-db
-  selector:
-    app: rating-read-service-db
+      protocol: TCP

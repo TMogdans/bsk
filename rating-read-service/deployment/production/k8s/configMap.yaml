@@ -9,3 +9,4 @@ data:
   NATS_SERVER: "nats:4222"
   RATING_WRITE_SERVICE_HOST: "rating-write-service"
   RATING_WRITE_SERVICE_PORT: "80"
+  REDIS_URL: "redis://rating-read-service-db:6379"

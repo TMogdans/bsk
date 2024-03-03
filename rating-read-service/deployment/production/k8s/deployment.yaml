@@ -42,4 +42,9 @@ spec:
                 configMapKeyRef:
                   name: rating-read-service-environment-config-map
                   key: NATS_SERVER
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-read-service-environment-config-map
+                  key: REDIS_URL
       restartPolicy: Always
