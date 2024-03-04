@@ -31,19 +31,13 @@ module.exports = {
     { label: 'Services', href: '/services' },
     { label: 'Visualiser', href: '/visualiser' },
     { label: '3D Node Graph', href: '/overview' },
-    { label: 'GitHub', href: 'https://github.com/boyney123/eventcatalog-demo/edit/master' }
+    { label: 'GitHub', href: 'https://github.com/TMogdans/bsk' }
   ],
   users: [
     {
-      id: 'dboyne',
-      name: 'David Boyne',
-      avatarUrl: 'https://pbs.twimg.com/profile_images/1262283153563140096/DYRDqKg6_400x400.png',
-      role: 'Developer',
-    },
-    {
-      id: 'mSmith',
-      name: 'Matthew Smith',
-      avatarUrl: 'https://randomuser.me/api/portraits/lego/3.jpg',
+      id: 'sirtoby',
+      name: 'Tobias Mogdans',
+      avatarUrl: 'https://gravatar.com/lordrathan',
       role: 'Developer',
     },
   ],

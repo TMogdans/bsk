@@ -1,0 +1,68 @@
+{
+  "message": {
+    "type": "string"
+  },
+  "meta": {
+    "type": "object",
+    "properties": {
+      "producer": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "required": [
+        "producer",
+        "version"
+      ]
+    }
+  },
+  "payload": {
+    "type": "object",
+    "properties": {
+      "object_id": {
+        "type": "string",
+        "description": "The ID of the rated object"
+      },
+      "userId": {
+        "type": "string",
+        "description": "The ID of the user"
+      },
+      "ratings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "description": "The rating"
+            },
+            "weight": {
+              "type": "number",
+              "description": "How weighted the rating is"
+            },
+            "name": {
+              "type": "string",
+              "description": "Internal name of the rating"
+            },
+            "required": [
+              "value",
+              "weight",
+              "name"
+            ]
+          }
+        }
+      },
+      "required": [
+        "object_id",
+        "userId",
+        "ratings"
+      ]
+    }
+  },
+  "required": [
+    "message",
+    "meta",
+    "payload"
+  ]
+}

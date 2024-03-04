@@ -6,6 +6,43 @@
   },
   "payload": {
     "object_id": "87ffd110-f249-43ca-9a04-36a106bc52fa",
-    "user_id": "9bd70fdb-65af-47b0-acd5-d854818ce7ba"
+    "user_id": "9bd70fdb-65af-47b0-acd5-d854818ce7ba",
+    "ratings": [
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "material_quality"
+      },
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "layout"
+      },
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "complexity"
+      },
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "difficulty"
+      },
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "fun"
+      },
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "variety"
+      },
+      {
+        "value": 5,
+        "weight": 0.7,
+        "name": "replayability"
+      }
+    ]
   }
 }

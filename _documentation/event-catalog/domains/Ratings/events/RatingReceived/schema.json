@@ -1,0 +1,77 @@
+{
+  "message": {
+    "type": "string"
+  },
+  "meta": {
+    "type": "object",
+    "properties": {
+      "producer": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "required": [
+        "producer",
+        "version"
+      ]
+    }
+  },
+  "payload": {
+    "type": "object",
+    "properties": {
+      "object_id": {
+        "type": "string",
+        "description": "The ID of the rated object"
+      },
+      "userId": {
+        "type": "string",
+        "description": "The ID of the user"
+      },
+      "material_quality": {
+        "type": "number",
+        "description": "The rating of the material quality"
+      },
+      "layout": {
+        "type": "number",
+        "description": "The rating of the layout"
+      },
+      "complexity": {
+        "type": "number",
+        "description": "The rating of the complexity"
+      },
+      "difficulty": {
+        "type": "number",
+        "description": "The rating of the difficulty"
+      },
+      "fun": {
+        "type": "number",
+        "description": "The rating of the fun"
+      },
+      "variety": {
+        "type": "number",
+        "description": "The rating of the variety"
+      },
+      "replayability": {
+        "type": "number",
+        "description": "The rating of the replayability"
+      },
+      "required": [
+        "object_id",
+        "userId",
+        "material_quality",
+        "layout",
+        "complexity",
+        "difficulty",
+        "fun",
+        "variety",
+        "replayability"
+      ]
+    }
+  },
+  "required": [
+    "message",
+    "meta",
+    "payload"
+  ]
+}
