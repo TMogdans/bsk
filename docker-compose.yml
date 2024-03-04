@@ -170,6 +170,18 @@ services:
     networks:
       - bsk-network
 
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - dbdata2:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=citizix_user
+      - POSTGRES_DB=boardgame_db
+
+
 networks:
   bsk-network:
     driver: bridge
