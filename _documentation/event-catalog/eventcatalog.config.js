@@ -3,7 +3,7 @@ module.exports = {
   tagline: 'Discover, Explore and Document your Event Driven Architectures',
   organizationName: 'Your Company',
   projectName: 'Event Catalog',
-  editUrl: 'https://github.com/boyney123/eventcatalog-demo/edit/master',
+  editUrl: 'https://github.com/TMogdans/bsk/_documentation/event-catalog/edit/master',
   trailingSlash: true,
   primaryCTA: {
     label: 'Explore Events',
@@ -11,7 +11,7 @@ module.exports = {
   },
   secondaryCTA: {
     label: 'Getting Started',
-    href:"https://www.eventcatalog.dev/"
+    href:"https://github.com/TMogdans/bsk"
   },
   logo: {
     alt: 'EventCatalog Logo',
@@ -20,8 +20,6 @@ module.exports = {
   },
   headerLinks: [
     { label: 'Events', href: '/events'},
-    { label: 'Services', href: '/services' },
-    { label: 'Domains', href: '/domains'},
     { label: 'Users', href: '/users'},
     { label: 'Visualiser', href: '/visualiser' },
     { label: '3D Node Graph', href: '/overview' },
