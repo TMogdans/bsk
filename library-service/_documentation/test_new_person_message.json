@@ -1,0 +1,12 @@
+{
+  "message": "person-provided",
+  "meta": {
+    "producer": "frontend",
+    "version": "1.0.0"
+  },
+  "payload": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "description": "Lorem ipsum!"
+  }
+}
