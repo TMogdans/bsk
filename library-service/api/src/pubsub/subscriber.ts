@@ -1,8 +1,9 @@
 import { connect, JSONCodec } from "nats";
-import { BaseMessage, PersonMessage } from "../types/messages";
+import {BaseMessage, CategoryMessage, PersonMessage} from "../types/messages";
 import { match } from "ts-pattern";
 import { PrismaClient } from "@prisma/client";
 import personProcessor from "../services/personProcessor";
+import categoryProcessor from "../services/categoryProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
@@ -26,7 +27,7 @@ export const subscriber = async () => {
         const processor = new personProcessor(dbClient);
 
         try {
-          processor.setMessage(receivedMessage as PersonMessage).validate();
+          processor.setMessage(receivedMessage as PersonMessage);
         } catch (e) {
           console.log(e);
         }
@@ -36,8 +37,22 @@ export const subscriber = async () => {
             console.log(person);
         });
       })
-      .with({ message: "category-provided", meta: { version: "1.0.0" } }, () =>
-        console.log("category-provided message received"),
+      .with({ message: "category-provided", meta: { version: "1.0.0" } }, () => {
+        console.log("category-provided message received");
+
+        const processor = new categoryProcessor(dbClient);
+
+        try {
+          processor.setMessage(receivedMessage as CategoryMessage);
+        } catch (e) {
+          console.log(e);
+        }
+
+        const category = processor.persist();
+        category.then((category) => {
+          console.log(category);
+        });
+      }
       )
       .with({ message: "mechanic-provided", meta: { version: "1.0.0" } }, () =>
         console.log("mechanic-provided message received"),
