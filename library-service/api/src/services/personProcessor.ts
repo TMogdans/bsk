@@ -11,7 +11,9 @@ export default class personProcessor {
   }
 
   public setMessage(message: PersonMessage) {
-    this.message = message;
+    this.validate(message)
+        .then(() => this.message = message)
+        .catch((e) => console.log(e));
 
     return this;
   }
@@ -38,13 +40,13 @@ export default class personProcessor {
     }
   }
 
-  public async validate() {
-    if (this.message === undefined) {
+  private async validate(message: PersonMessage) {
+    if (message === undefined) {
       throw new Error("Message not set");
     }
 
     const result = await newPersonMessageSchema
-      .validate(this.message)
+      .validate(message)
       .then(() => true)
       .catch(() => false);
 
