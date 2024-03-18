@@ -1,11 +1,38 @@
 import { connect, JSONCodec } from "nats";
-import {BaseMessage, CategoryMessage, PersonMessage} from "../types/messages";
+import { BaseMessage, CategoryMessage, PersonMessage } from "../types/messages";
 import { match } from "ts-pattern";
 import { PrismaClient } from "@prisma/client";
 import personProcessor from "../services/personProcessor";
 import categoryProcessor from "../services/categoryProcessor";
+import { ProcessorInterface } from "../services/processorInterface";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
+
+function getProcessor(
+  receivedMessage: BaseMessage,
+  dbClient: PrismaClient,
+): ProcessorInterface {
+  match(receivedMessage)
+    .with({ message: "person-provided", meta: { version: "1.0.0" } }, () => {
+      return new personProcessor(dbClient);
+    })
+    .with({ message: "category-provided", meta: { version: "1.0.0" } }, () => {
+      return new categoryProcessor(dbClient);
+    })
+    .with({ message: "mechanic-provided", meta: { version: "1.0.0" } }, () =>
+      console.log("mechanic-provided message received"),
+    )
+    .with({ message: "award-provided", meta: { version: "1.0.0" } }, () =>
+      console.log("award-provided message received"),
+    )
+    .with({ message: "publisher-provided", meta: { version: "1.0.0" } }, () =>
+      console.log("publisher-provided message received"),
+    )
+    .with({ message: "boardgame-provided", meta: { version: "1.0.0" } }, () =>
+      console.log("boardgame-provided message received"),
+    );
+  throw new Error("Unsupported message");
+}
 
 export const subscriber = async () => {
   const nc = await connect({ servers: natsServer });
@@ -17,58 +44,22 @@ export const subscriber = async () => {
 
   for await (const m of subscription) {
     const receivedMessage = codec.decode(m.data) as unknown as BaseMessage;
+
     console.log(
       `[${subscription.getProcessed()}]: ${JSON.stringify(receivedMessage)}`,
     );
 
-    match(receivedMessage)
-      .with({ message: "person-provided", meta: { version: "1.0.0" } }, () => {
-        console.log("person-provided message received");
-        const processor = new personProcessor(dbClient);
+    try {
+      const processor = getProcessor(receivedMessage, dbClient);
+      processor.setMessage(receivedMessage);
 
-        try {
-          processor.setMessage(receivedMessage as PersonMessage);
-        } catch (e) {
-          console.log(e);
-        }
-
-        const person = processor.persist();
-        person.then((person) => {
-            console.log(person);
-        });
-      })
-      .with({ message: "category-provided", meta: { version: "1.0.0" } }, () => {
-        console.log("category-provided message received");
-
-        const processor = new categoryProcessor(dbClient);
-
-        try {
-          processor.setMessage(receivedMessage as CategoryMessage);
-        } catch (e) {
-          console.log(e);
-        }
-
-        const category = processor.persist();
-        category.then((category) => {
-          console.log(category);
-        });
-      }
-      )
-      .with({ message: "mechanic-provided", meta: { version: "1.0.0" } }, () =>
-        console.log("mechanic-provided message received"),
-      )
-      .with({ message: "award-provided", meta: { version: "1.0.0" } }, () =>
-        console.log("award-provided message received"),
-      )
-      .with({ message: "publisher-provided", meta: { version: "1.0.0" } }, () =>
-        console.log("publisher-provided message received"),
-      )
-      .with({ message: "boardgame-provided", meta: { version: "1.0.0" } }, () =>
-        console.log("boardgame-provided message received"),
-      )
-      .otherwise(() => {
-        console.log("UnsupportedMessage");
+      const object = processor.create();
+      object.then((object) => {
+        console.log(object);
       });
+    } catch (e) {
+      console.log(e);
+    }
   }
   console.log("subscription closed");
 };

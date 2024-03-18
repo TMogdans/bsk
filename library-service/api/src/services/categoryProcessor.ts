@@ -1,8 +1,9 @@
 import {PrismaClient, Prisma} from "@prisma/client";
 import {CategoryMessage} from "../types/messages";
 import {newCategoryMessageSchema} from "../schemas/categoryMessageSchema";
+import {ProcessorInterface} from "./processorInterface";
 
-export default class categoryProcessor {
+export default class categoryProcessor implements ProcessorInterface {
     private message: CategoryMessage | undefined = undefined;
     private dbClient = {} as PrismaClient;
 
@@ -18,7 +19,7 @@ export default class categoryProcessor {
         return this;
     }
 
-    public async persist() {
+    public async create() {
         if (this.message === undefined) {
             throw new Error("Message or dbClient not set");
         }

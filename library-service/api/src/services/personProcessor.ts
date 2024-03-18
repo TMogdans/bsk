@@ -1,8 +1,9 @@
-import { PersonMessage } from "../types/messages";
+import {BaseMessage, PersonMessage} from "../types/messages";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { newPersonMessageSchema } from "../schemas/personMessage";
+import {ProcessorInterface} from "./processorInterface";
 
-export default class personProcessor {
+export default class personProcessor implements ProcessorInterface{
   private message: PersonMessage | undefined = undefined;
   private dbClient = {} as PrismaClient;
 
@@ -10,15 +11,15 @@ export default class personProcessor {
     this.dbClient = dbClient;
   }
 
-  public setMessage(message: PersonMessage) {
-    this.validate(message)
-        .then(() => this.message = message)
+  public setMessage(message: BaseMessage) {
+    this.validate(message as PersonMessage)
+        .then(() => this.message = message as PersonMessage)
         .catch((e) => console.log(e));
 
     return this;
   }
 
-  public async persist() {
+  public async create() {
     if (this.message === undefined) {
       throw new Error("Message or dbClient not set");
     }
