@@ -1,6 +1,6 @@
 import {BaseMessage, PersonMessage} from "../types/messages";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { newPersonMessageSchema } from "../schemas/personMessage";
+import { newPersonMessageSchema } from "../schemas/personMessageSchema";
 import {ProcessorInterface} from "./processorInterface";
 
 export default class personProcessor implements ProcessorInterface{
