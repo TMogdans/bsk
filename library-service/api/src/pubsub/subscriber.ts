@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import personProcessor from "../services/personProcessor";
 import categoryProcessor from "../services/categoryProcessor";
 import { ProcessorInterface } from "../services/processorInterface";
+import mechanicProcessor from "../services/mechanicProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
@@ -13,14 +14,17 @@ function getProcessor(
   dbClient: PrismaClient,
 ): ProcessorInterface {
   match(receivedMessage)
-    .with({ message: "person-provided", meta: { version: "1.0.0" } }, () => {
-      return new personProcessor(dbClient);
-    })
-    .with({ message: "category-provided", meta: { version: "1.0.0" } }, () => {
-      return new categoryProcessor(dbClient);
-    })
-    .with({ message: "mechanic-provided", meta: { version: "1.0.0" } }, () =>
-      console.log("mechanic-provided message received"),
+    .with(
+      { message: "person-provided", meta: { version: "1.0.0" } },
+      () => new personProcessor(dbClient),
+    )
+    .with(
+      { message: "category-provided", meta: { version: "1.0.0" } },
+      () => new categoryProcessor(dbClient),
+    )
+    .with(
+      { message: "mechanic-provided", meta: { version: "1.0.0" } },
+      () => new mechanicProcessor(dbClient),
     )
     .with({ message: "award-provided", meta: { version: "1.0.0" } }, () =>
       console.log("award-provided message received"),
