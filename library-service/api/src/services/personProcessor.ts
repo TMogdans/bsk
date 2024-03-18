@@ -28,7 +28,7 @@ export default class personProcessor {
         data: {
           firstName: firstName,
           lastName: lastName,
-          slug: `${firstName}-${lastName}`,
+          slug: `${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
           description: description,
         } as Prisma.PersonCreateInput,
       });
