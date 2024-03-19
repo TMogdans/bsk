@@ -12,7 +12,7 @@ export default class personProcessor implements ProcessorInterface{
   }
 
   public setMessage(message: BaseMessage) {
-    this.validate(message as PersonMessage)
+    this.validate(message)
         .then(() => this.message = message as PersonMessage)
         .catch((e) => console.log(e));
 
@@ -41,7 +41,7 @@ export default class personProcessor implements ProcessorInterface{
     }
   }
 
-  private async validate(message: PersonMessage) {
+  private async validate(message: BaseMessage) {
     if (message === undefined) {
       throw new Error("Message not set");
     }

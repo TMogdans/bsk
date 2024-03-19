@@ -12,7 +12,7 @@ export default class mechanicProcessor implements ProcessorInterface {
     }
 
     public setMessage(message: BaseMessage) {
-        this.validate(message as MechanicMessage)
+        this.validate(message)
             .then(() => this.message = message as MechanicMessage)
             .catch((e) => console.log(e));
 
@@ -40,7 +40,7 @@ export default class mechanicProcessor implements ProcessorInterface {
         }
     }
 
-    private async validate(message: MechanicMessage) {
+    private async validate(message: BaseMessage) {
         if (message === undefined) {
             throw new Error("Message not set");
         }

@@ -1,5 +1,5 @@
 import {PrismaClient, Prisma} from "@prisma/client";
-import {CategoryMessage} from "../types/messages";
+import {BaseMessage, CategoryMessage} from "../types/messages";
 import {newCategoryMessageSchema} from "../schemas/categoryMessageSchema";
 import {ProcessorInterface} from "./processorInterface";
 
@@ -11,9 +11,9 @@ export default class categoryProcessor implements ProcessorInterface {
         this.dbClient = dbClient;
     }
 
-    public setMessage(message: CategoryMessage) {
+    public setMessage(message: BaseMessage) {
         this.validate(message)
-            .then(() => this.message = message)
+            .then(() => this.message = message as CategoryMessage)
             .catch((e) => console.log(e));
 
         return this;
@@ -40,7 +40,7 @@ export default class categoryProcessor implements ProcessorInterface {
         }
     }
 
-    private async validate(message: CategoryMessage) {
+    private async validate(message: BaseMessage) {
         if (message === undefined) {
             throw new Error("Message not set");
         }
