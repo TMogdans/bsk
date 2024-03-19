@@ -2,17 +2,18 @@ import { ProcessorInterface } from "./processorInterface";
 import { AwardMessage, BaseMessage } from "../types/messages";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { newAwardMessageSchema } from "../schemas/awardMessageSchema";
+import baseProcessor from "./baseProcessor";
 
-export default class awardProcessor implements ProcessorInterface {
+export default class awardProcessor extends baseProcessor implements ProcessorInterface {
   private message: AwardMessage | undefined = undefined;
-  private dbClient = {} as PrismaClient;
 
   constructor(dbClient: PrismaClient) {
+    super();
     this.dbClient = dbClient;
   }
 
   public setMessage(message: BaseMessage): ProcessorInterface {
-    this.validate(message)
+    this.validate(message, newAwardMessageSchema)
       .then(() => (this.message = message as AwardMessage))
       .catch((e) => console.log(e));
 
@@ -38,11 +39,5 @@ export default class awardProcessor implements ProcessorInterface {
       console.error(e);
       console.log("Failed to persist award");
     }
-  }
-
-  private async validate(message: BaseMessage) {
-    await newAwardMessageSchema.validate(message).catch(() => {
-      throw new Error("Invalid message");
-    });
   }
 }

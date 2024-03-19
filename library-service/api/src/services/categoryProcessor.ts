@@ -1,18 +1,19 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { BaseMessage, CategoryMessage } from "../types/messages";
 import { newCategoryMessageSchema } from "../schemas/categoryMessageSchema";
 import { ProcessorInterface } from "./processorInterface";
+import baseProcessor from "./baseProcessor";
 
-export default class categoryProcessor implements ProcessorInterface {
+export default class categoryProcessor extends baseProcessor implements ProcessorInterface {
   private message: CategoryMessage | undefined = undefined;
-  private dbClient = {} as PrismaClient;
 
   constructor(dbClient: PrismaClient) {
+    super();
     this.dbClient = dbClient;
   }
 
   public setMessage(message: BaseMessage) {
-    this.validate(message)
+    this.validate(message, newCategoryMessageSchema)
       .then(() => (this.message = message as CategoryMessage))
       .catch((e) => console.log(e));
 
@@ -38,11 +39,5 @@ export default class categoryProcessor implements ProcessorInterface {
       console.error(e);
       console.log("Failed to persist category");
     }
-  }
-
-  private async validate(message: BaseMessage) {
-    await newCategoryMessageSchema.validate(message).catch(() => {
-      throw new Error("Invalid message");
-    });
   }
 }

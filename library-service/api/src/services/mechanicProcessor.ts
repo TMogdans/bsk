@@ -2,17 +2,18 @@ import { ProcessorInterface } from "./processorInterface";
 import { PrismaClient } from "@prisma/client";
 import { BaseMessage, MechanicMessage } from "../types/messages";
 import { newMechanicMessageSchema } from "../schemas/mechanicMessageSchema";
+import baseProcessor from "./baseProcessor";
 
-export default class mechanicProcessor implements ProcessorInterface {
+export default class mechanicProcessor extends baseProcessor implements ProcessorInterface {
   private message: MechanicMessage | undefined = undefined;
-  private dbClient = {} as PrismaClient;
 
   constructor(dbClient: PrismaClient) {
+    super();
     this.dbClient = dbClient;
   }
 
   public setMessage(message: BaseMessage) {
-    this.validate(message)
+    this.validate(message, newMechanicMessageSchema)
       .then(() => (this.message = message as MechanicMessage))
       .catch((e) => console.log(e));
 
@@ -38,11 +39,5 @@ export default class mechanicProcessor implements ProcessorInterface {
       console.error(e);
       console.log("Failed to persist mechanic");
     }
-  }
-
-  private async validate(message: BaseMessage) {
-    await newMechanicMessageSchema.validate(message).catch(() => {
-      throw new Error("Invalid message");
-    });
   }
 }

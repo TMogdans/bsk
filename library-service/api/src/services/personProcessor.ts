@@ -2,17 +2,18 @@ import { BaseMessage, PersonMessage } from "../types/messages";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { newPersonMessageSchema } from "../schemas/personMessageSchema";
 import { ProcessorInterface } from "./processorInterface";
+import baseProcessor from "./baseProcessor";
 
-export default class personProcessor implements ProcessorInterface {
+export default class personProcessor extends baseProcessor implements ProcessorInterface {
   private message: PersonMessage | undefined = undefined;
-  private dbClient = {} as PrismaClient;
 
   constructor(dbClient: PrismaClient) {
+    super();
     this.dbClient = dbClient;
   }
 
   public setMessage(message: BaseMessage) {
-    this.validate(message)
+    this.validate(message, newPersonMessageSchema)
       .then(() => (this.message = message as PersonMessage))
       .catch((e) => console.log(e));
 
@@ -39,11 +40,5 @@ export default class personProcessor implements ProcessorInterface {
       console.error(e);
       console.log("Failed to persist person");
     }
-  }
-
-  private async validate(message: BaseMessage) {
-    await newPersonMessageSchema.validate(message).catch(() => {
-      throw new Error("Invalid message");
-    });
   }
 }
