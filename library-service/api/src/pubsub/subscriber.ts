@@ -1,11 +1,12 @@
 import { connect, JSONCodec } from "nats";
-import { BaseMessage, CategoryMessage, PersonMessage } from "../types/messages";
+import { BaseMessage } from "../types/messages";
 import { match } from "ts-pattern";
 import { PrismaClient } from "@prisma/client";
 import personProcessor from "../services/personProcessor";
 import categoryProcessor from "../services/categoryProcessor";
 import { ProcessorInterface } from "../services/processorInterface";
 import mechanicProcessor from "../services/mechanicProcessor";
+import awardProcessor from "../services/awardProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
@@ -26,8 +27,9 @@ function getProcessor(
       { message: "mechanic-provided", meta: { version: "1.0.0" } },
       () => new mechanicProcessor(dbClient),
     )
-    .with({ message: "award-provided", meta: { version: "1.0.0" } }, () =>
-      console.log("award-provided message received"),
+    .with(
+      { message: "award-provided", meta: { version: "1.0.0" } },
+      () => () => new awardProcessor(dbClient),
     )
     .with({ message: "publisher-provided", meta: { version: "1.0.0" } }, () =>
       console.log("publisher-provided message received"),
