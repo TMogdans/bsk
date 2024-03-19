@@ -1,9 +1,9 @@
-import {BaseMessage, PersonMessage} from "../types/messages";
+import { BaseMessage, PersonMessage } from "../types/messages";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { newPersonMessageSchema } from "../schemas/personMessageSchema";
-import {ProcessorInterface} from "./processorInterface";
+import { ProcessorInterface } from "./processorInterface";
 
-export default class personProcessor implements ProcessorInterface{
+export default class personProcessor implements ProcessorInterface {
   private message: PersonMessage | undefined = undefined;
   private dbClient = {} as PrismaClient;
 
@@ -13,8 +13,8 @@ export default class personProcessor implements ProcessorInterface{
 
   public setMessage(message: BaseMessage) {
     this.validate(message)
-        .then(() => this.message = message as PersonMessage)
-        .catch((e) => console.log(e));
+      .then(() => (this.message = message as PersonMessage))
+      .catch((e) => console.log(e));
 
     return this;
   }
@@ -42,19 +42,8 @@ export default class personProcessor implements ProcessorInterface{
   }
 
   private async validate(message: BaseMessage) {
-    if (message === undefined) {
-      throw new Error("Message not set");
-    }
-
-    const result = await newPersonMessageSchema
-      .validate(message)
-      .then(() => true)
-      .catch(() => false);
-
-    if (!result) {
+    await newPersonMessageSchema.validate(message).catch(() => {
       throw new Error("Invalid message");
-    }
-
-    return this;
+    });
   }
 }

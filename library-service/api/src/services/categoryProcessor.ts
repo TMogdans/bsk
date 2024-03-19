@@ -1,57 +1,48 @@
-import {PrismaClient, Prisma} from "@prisma/client";
-import {BaseMessage, CategoryMessage} from "../types/messages";
-import {newCategoryMessageSchema} from "../schemas/categoryMessageSchema";
-import {ProcessorInterface} from "./processorInterface";
+import { PrismaClient, Prisma } from "@prisma/client";
+import { BaseMessage, CategoryMessage } from "../types/messages";
+import { newCategoryMessageSchema } from "../schemas/categoryMessageSchema";
+import { ProcessorInterface } from "./processorInterface";
 
 export default class categoryProcessor implements ProcessorInterface {
-    private message: CategoryMessage | undefined = undefined;
-    private dbClient = {} as PrismaClient;
+  private message: CategoryMessage | undefined = undefined;
+  private dbClient = {} as PrismaClient;
 
-    constructor(dbClient: PrismaClient) {
-        this.dbClient = dbClient;
+  constructor(dbClient: PrismaClient) {
+    this.dbClient = dbClient;
+  }
+
+  public setMessage(message: BaseMessage) {
+    this.validate(message)
+      .then(() => (this.message = message as CategoryMessage))
+      .catch((e) => console.log(e));
+
+    return this;
+  }
+
+  public async create() {
+    if (this.message === undefined) {
+      throw new Error("Message or dbClient not set");
     }
 
-    public setMessage(message: BaseMessage) {
-        this.validate(message)
-            .then(() => this.message = message as CategoryMessage)
-            .catch((e) => console.log(e));
+    const { name, description } = this.message.payload;
 
-        return this;
+    try {
+      return await this.dbClient.category.create({
+        data: {
+          name: name,
+          slug: name.toLowerCase(),
+          description: description,
+        } as Prisma.CategoryCreateInput,
+      });
+    } catch (e) {
+      console.error(e);
+      console.log("Failed to persist category");
     }
+  }
 
-    public async create() {
-        if (this.message === undefined) {
-            throw new Error("Message or dbClient not set");
-        }
-
-        const {name, description} = this.message.payload;
-
-        try {
-            return await this.dbClient.category.create({
-                data: {
-                    name: name,
-                    slug: name.toLowerCase(),
-                    description: description,
-                } as Prisma.CategoryCreateInput
-            });
-        } catch (e) {
-            console.error(e);
-            console.log("Failed to persist category");
-        }
-    }
-
-    private async validate(message: BaseMessage) {
-        if (message === undefined) {
-            throw new Error("Message not set");
-        }
-
-        const result = await newCategoryMessageSchema
-            .validate(message)
-            .then(() => true)
-            .catch(() => false);
-
-        if (!result) {
-            throw new Error("Invalid message");
-        }
-    }
+  private async validate(message: BaseMessage) {
+    await newCategoryMessageSchema.validate(message).catch(() => {
+      throw new Error("Invalid message");
+    });
+  }
 }
