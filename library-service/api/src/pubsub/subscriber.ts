@@ -8,6 +8,7 @@ import { ProcessorInterface } from "../services/processorInterface";
 import mechanicProcessor from "../services/mechanicProcessor";
 import awardProcessor from "../services/awardProcessor";
 import publisherProcessor from "../services/publischerProcessor";
+import boardgameProcessor from "../services/boardgameProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
@@ -36,8 +37,9 @@ function getProcessor(
       { message: "publisher-provided", meta: { version: "1.0.0" } },
       () => new publisherProcessor(dbClient),
     )
-    .with({ message: "boardgame-provided", meta: { version: "1.0.0" } }, () =>
-      console.log("boardgame-provided message received"),
+    .with(
+      { message: "boardgame-provided", meta: { version: "1.0.0" } },
+      () => new boardgameProcessor(dbClient),
     );
   throw new Error("Unsupported message");
 }
