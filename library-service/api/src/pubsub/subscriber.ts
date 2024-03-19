@@ -7,6 +7,7 @@ import categoryProcessor from "../services/categoryProcessor";
 import { ProcessorInterface } from "../services/processorInterface";
 import mechanicProcessor from "../services/mechanicProcessor";
 import awardProcessor from "../services/awardProcessor";
+import publisherProcessor from "../services/publischerProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
@@ -29,10 +30,11 @@ function getProcessor(
     )
     .with(
       { message: "award-provided", meta: { version: "1.0.0" } },
-      () => () => new awardProcessor(dbClient),
+      () => new awardProcessor(dbClient),
     )
-    .with({ message: "publisher-provided", meta: { version: "1.0.0" } }, () =>
-      console.log("publisher-provided message received"),
+    .with(
+      { message: "publisher-provided", meta: { version: "1.0.0" } },
+      () => new publisherProcessor(dbClient),
     )
     .with({ message: "boardgame-provided", meta: { version: "1.0.0" } }, () =>
       console.log("boardgame-provided message received"),
