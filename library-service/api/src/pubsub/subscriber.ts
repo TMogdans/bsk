@@ -2,12 +2,12 @@ import { connect, JSONCodec } from "nats";
 import { BaseMessage } from "../types/messages";
 import { match } from "ts-pattern";
 import { PrismaClient } from "@prisma/client";
-import personProcessor from "../services/personProcessor";
-import categoryProcessor from "../services/categoryProcessor";
+import PersonProcessor from "../services/personProcessor";
+import CategoryProcessor from "../services/categoryProcessor";
 import { ProcessorInterface } from "../services/processorInterface";
-import mechanicProcessor from "../services/mechanicProcessor";
-import awardProcessor from "../services/awardProcessor";
-import publisherProcessor from "../services/publischerProcessor";
+import MechanicProcessor from "../services/mechanicProcessor";
+import AwardProcessor from "../services/awardProcessor";
+import PublisherProcessor from "../services/publischerProcessor";
 import boardgameProcessor from "../services/boardgameProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
@@ -19,23 +19,23 @@ function getProcessor(
   match(receivedMessage)
     .with(
       { message: "person-provided", meta: { version: "1.0.0" } },
-      () => new personProcessor(dbClient),
+      () => new PersonProcessor(),
     )
     .with(
       { message: "category-provided", meta: { version: "1.0.0" } },
-      () => new categoryProcessor(dbClient),
+      () => new CategoryProcessor(),
     )
     .with(
       { message: "mechanic-provided", meta: { version: "1.0.0" } },
-      () => new mechanicProcessor(dbClient),
+      () => new MechanicProcessor(),
     )
     .with(
       { message: "award-provided", meta: { version: "1.0.0" } },
-      () => new awardProcessor(dbClient),
+      () => new AwardProcessor(),
     )
     .with(
       { message: "publisher-provided", meta: { version: "1.0.0" } },
-      () => new publisherProcessor(dbClient),
+      () => new PublisherProcessor(),
     )
     .with(
       { message: "boardgame-provided", meta: { version: "1.0.0" } },

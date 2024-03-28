@@ -1,16 +1,14 @@
 import { BaseMessage, PersonMessage } from "../types/messages";
-import { Prisma, PrismaClient } from "@prisma/client";
 import { newPersonMessageSchema } from "../schemas/personMessageSchema";
 import { ProcessorInterface } from "./processorInterface";
 import baseProcessor from "./baseProcessor";
+import { Person } from "../entity/Person";
 
-export default class personProcessor extends baseProcessor implements ProcessorInterface {
+export default class PersonProcessor
+  extends baseProcessor
+  implements ProcessorInterface
+{
   private message: PersonMessage | undefined = undefined;
-
-  constructor(dbClient: PrismaClient) {
-    super();
-    this.dbClient = dbClient;
-  }
 
   public setMessage(message: BaseMessage) {
     this.validate(message, newPersonMessageSchema)
@@ -28,14 +26,14 @@ export default class personProcessor extends baseProcessor implements ProcessorI
     const { firstName, lastName, description } = this.message.payload;
 
     try {
-      return await this.dbClient.person.create({
-        data: {
-          firstName: firstName,
-          lastName: lastName,
-          slug: `${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
-          description: description,
-        } as Prisma.PersonCreateInput,
-      });
+      const person = new Person();
+
+      person.firstName = firstName;
+      person.lastName = lastName;
+      person.description = description;
+      person.slug = `${firstName.toLowerCase()}-${lastName.toLowerCase()}`;
+
+      return await person.save();
     } catch (e) {
       console.error(e);
       console.log("Failed to persist person");

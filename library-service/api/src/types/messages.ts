@@ -48,14 +48,15 @@ export type PublisherMessage = BaseMessage & {
 }
 
 export type BoardgameMessage = BaseMessage & {
-    message: "boardgame-provided";
-    payload: {
-        name: string;
-        description: string;
-        minAge: number;
-        minNumberOfPlayers: number;
-        maxNumberOfPlayers: number;
-        minPlayTimeMinutes: number;
-        maxPlayTimeMinutes: number;
-    };
-}
+  message: "boardgame-provided";
+  payload: {
+    name: string;
+    description: string;
+    minAge: number;
+    minNumberOfPlayers: number;
+    maxNumberOfPlayers: number;
+    minPlayTimeMinutes: number;
+    maxPlayTimeMinutes: number;
+    categories: string[];
+  };
+};

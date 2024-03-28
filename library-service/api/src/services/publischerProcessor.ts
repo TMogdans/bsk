@@ -1,19 +1,14 @@
 import { ProcessorInterface } from "./processorInterface";
 import { BaseMessage, PublisherMessage } from "../types/messages";
-import { PrismaClient, Prisma } from "@prisma/client";
 import { newPublisherMessageSchema } from "../schemas/publisherMessageSchema";
 import baseProcessor from "./baseProcessor";
+import { Publisher } from "../entity/Publisher";
 
-export default class publisherProcessor
+export default class PublisherProcessor
   extends baseProcessor
   implements ProcessorInterface
 {
   private message: PublisherMessage | undefined = undefined;
-
-  constructor(dbClient: PrismaClient) {
-    super();
-    this.dbClient = dbClient;
-  }
 
   public setMessage(message: BaseMessage) {
     this.validate(message, newPublisherMessageSchema)
@@ -31,13 +26,13 @@ export default class publisherProcessor
     const { name, description } = this.message.payload;
 
     try {
-      return await this.dbClient.publisher.create({
-        data: {
-          name: name,
-          slug: name.toLowerCase(),
-          description: description,
-        } as Prisma.PublisherCreateInput,
-      });
+      const publisher = new Publisher();
+
+      publisher.name = name;
+      publisher.slug = name.toLowerCase();
+      publisher.description = description;
+
+      return await publisher.save();
     } catch (e) {
       console.error(e);
       console.log("Failed to persist publisher");

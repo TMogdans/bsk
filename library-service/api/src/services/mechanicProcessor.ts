@@ -1,16 +1,15 @@
 import { ProcessorInterface } from "./processorInterface";
-import { PrismaClient } from "@prisma/client";
 import { BaseMessage, MechanicMessage } from "../types/messages";
 import { newMechanicMessageSchema } from "../schemas/mechanicMessageSchema";
 import baseProcessor from "./baseProcessor";
+import { Mechanic } from "../entity/Mechanic";
 
-export default class mechanicProcessor extends baseProcessor implements ProcessorInterface {
+export default class MechanicProcessor
+  extends baseProcessor
+  implements ProcessorInterface
+{
   private message: MechanicMessage | undefined = undefined;
 
-  constructor(dbClient: PrismaClient) {
-    super();
-    this.dbClient = dbClient;
-  }
 
   public setMessage(message: BaseMessage) {
     this.validate(message, newMechanicMessageSchema)
@@ -28,13 +27,13 @@ export default class mechanicProcessor extends baseProcessor implements Processo
     const { name, description } = this.message.payload;
 
     try {
-      return await this.dbClient.mechanic.create({
-        data: {
-          name: name,
-          slug: name.toLowerCase(),
-          description: description,
-        },
-      });
+      const mechanic = new Mechanic();
+
+      mechanic.name = name;
+      mechanic.slug = name.toLowerCase();
+      mechanic.description = description;
+
+      return await mechanic.save();
     } catch (e) {
       console.error(e);
       console.log("Failed to persist mechanic");
