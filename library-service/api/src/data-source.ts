@@ -1,16 +1,22 @@
 import {DataSource} from "typeorm";
-import {Category} from "./entity/Category";
+
+const host = process.env.DB_HOST || "localhost"
+const port = Number(process.env.DB_PORT) || 5432
+const username = process.env.DB_USER || "citizix_user"
+const password = process.env.DB_PASSWORD || "S3cret"
+const database = process.env.DB_NAME || "postgres"
+
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: process.env.DB_HOST || "localhost",
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE || "library",
+    host,
+    port,
+    username,
+    password,
+    database,
     synchronize: true,
     logging: true,
-    entities: ["entity/*.ts"],
+    entities: ["dist/entity/*.js"],
     subscribers: [],
-    migrations: [],
+    migrations: ["dist/migration/*.js"],
 })
