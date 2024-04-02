@@ -1,6 +1,5 @@
 import { connect, JSONCodec } from "nats";
 import { BaseMessage } from "../types/messages";
-import { match } from "ts-pattern";
 import PersonProcessor from "../services/personProcessor";
 import CategoryProcessor from "../services/categoryProcessor";
 import { ProcessorInterface } from "../services/processorInterface";
@@ -12,9 +11,6 @@ import BoardgameProcessor from "../services/boardgameProcessor";
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
 function getProcessor(receivedMessage: BaseMessage): ProcessorInterface {
-  console.log("message: ", receivedMessage.message);
-  console.log("version: ", receivedMessage.meta.version);
-
   const processorMap = new Map<string, ProcessorInterface>([
     ["person-provided", new PersonProcessor()],
     ["category-provided", new CategoryProcessor()],

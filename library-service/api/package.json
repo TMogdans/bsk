@@ -40,7 +40,6 @@
     "nats": "^2.19.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
-    "ts-pattern": "^5.0.8",
     "ts-proto": "^1.167.3",
     "tsx": "^4.7.0",
     "typeorm": "^0.3.20",
