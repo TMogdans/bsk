@@ -10,12 +10,10 @@ export default class AwardProcessor
 {
   private message: AwardMessage | undefined = undefined;
 
-  public setMessage(message: BaseMessage): ProcessorInterface {
-    this.validate(message, newAwardMessageSchema)
+  public async setMessage(message: BaseMessage) {
+    await  this.validate(message, newAwardMessageSchema)
       .then(() => (this.message = message as AwardMessage))
       .catch((e) => console.log(e));
-
-    return this;
   }
 
   public async create() {

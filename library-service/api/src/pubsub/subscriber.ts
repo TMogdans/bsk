@@ -1,47 +1,36 @@
 import { connect, JSONCodec } from "nats";
 import { BaseMessage } from "../types/messages";
 import { match } from "ts-pattern";
-import { PrismaClient } from "@prisma/client";
 import PersonProcessor from "../services/personProcessor";
 import CategoryProcessor from "../services/categoryProcessor";
 import { ProcessorInterface } from "../services/processorInterface";
 import MechanicProcessor from "../services/mechanicProcessor";
 import AwardProcessor from "../services/awardProcessor";
 import PublisherProcessor from "../services/publischerProcessor";
-import boardgameProcessor from "../services/boardgameProcessor";
+import BoardgameProcessor from "../services/boardgameProcessor";
 
 const natsServer = process.env.NATS_SERVER || "localhost:4222";
 
-function getProcessor(
-  receivedMessage: BaseMessage,
-  dbClient: PrismaClient,
-): ProcessorInterface {
-  match(receivedMessage)
-    .with(
-      { message: "person-provided", meta: { version: "1.0.0" } },
-      () => new PersonProcessor(),
-    )
-    .with(
-      { message: "category-provided", meta: { version: "1.0.0" } },
-      () => new CategoryProcessor(),
-    )
-    .with(
-      { message: "mechanic-provided", meta: { version: "1.0.0" } },
-      () => new MechanicProcessor(),
-    )
-    .with(
-      { message: "award-provided", meta: { version: "1.0.0" } },
-      () => new AwardProcessor(),
-    )
-    .with(
-      { message: "publisher-provided", meta: { version: "1.0.0" } },
-      () => new PublisherProcessor(),
-    )
-    .with(
-      { message: "boardgame-provided", meta: { version: "1.0.0" } },
-      () => new boardgameProcessor(dbClient),
-    );
-  throw new Error("Unsupported message");
+function getProcessor(receivedMessage: BaseMessage): ProcessorInterface {
+  console.log("message: ", receivedMessage.message);
+  console.log("version: ", receivedMessage.meta.version);
+
+  const processorMap = new Map<string, ProcessorInterface>([
+    ["person-provided", new PersonProcessor()],
+    ["category-provided", new CategoryProcessor()],
+    ["mechanic-provided", new MechanicProcessor()],
+    ["award-provided", new AwardProcessor()],
+    ["publisher-provided", new PublisherProcessor()],
+    ["boardgame-provided", new BoardgameProcessor()],
+  ]);
+
+  const processor = processorMap.get(receivedMessage.message);
+
+  if (processor === undefined) {
+    throw new Error("No processor found for message");
+  }
+
+  return processor;
 }
 
 export const subscriber = async () => {
@@ -49,7 +38,6 @@ export const subscriber = async () => {
   const codec = JSONCodec();
   const subject = "frontend";
   const subscription = nc.subscribe(subject);
-  const dbClient = new PrismaClient();
   console.log(`Subscribed to ${subject}`);
 
   for await (const m of subscription) {
@@ -60,12 +48,12 @@ export const subscriber = async () => {
     );
 
     try {
-      const processor = getProcessor(receivedMessage, dbClient);
-      processor.setMessage(receivedMessage);
-
-      const object = processor.create();
-      object.then((object) => {
-        console.log(object);
+      const processor = getProcessor(receivedMessage);
+      processor.setMessage(receivedMessage).then(() => {
+        const object = processor.create();
+        object.then((object) => {
+          console.log(object);
+        });
       });
     } catch (e) {
       console.log(e);

@@ -11,12 +11,10 @@ export default class MechanicProcessor
   private message: MechanicMessage | undefined = undefined;
 
 
-  public setMessage(message: BaseMessage) {
-    this.validate(message, newMechanicMessageSchema)
+  public async setMessage(message: BaseMessage) {
+    await this.validate(message, newMechanicMessageSchema)
       .then(() => (this.message = message as MechanicMessage))
       .catch((e) => console.log(e));
-
-    return this;
   }
 
   public async create() {

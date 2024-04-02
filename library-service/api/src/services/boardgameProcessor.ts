@@ -4,18 +4,16 @@ import { BaseMessage, BoardgameMessage } from "../types/messages";
 import { newBoardGameMessageSchema } from "../schemas/boardgameMessageSchema";
 import Boardgame from "../entity/Boardgame";
 
-export default class boardgameProcessor
+export default class BoardgameProcessor
   extends baseProcessor
   implements ProcessorInterface
 {
   private message: BoardgameMessage | undefined = undefined;
 
-  public setMessage(message: BaseMessage) {
-    this.validate(message, newBoardGameMessageSchema)
+  public async setMessage(message: BaseMessage) {
+    await this.validate(message, newBoardGameMessageSchema)
       .then(() => (this.message = message as BoardgameMessage))
       .catch((e) => console.log(e));
-
-    return this;
   }
 
   public async create() {
@@ -36,15 +34,15 @@ export default class boardgameProcessor
     try {
       const boardgame = new Boardgame();
 
-        boardgame.name = name;
-        boardgame.description = description;
-        boardgame.minAge = minAge;
-        boardgame.minNumberOfPlayers = minNumberOfPlayers;
-        boardgame.maxNumberOfPlayers = maxNumberOfPlayers;
-        boardgame.minPlayTimeMinutes = minPlayTimeMinutes;
-        boardgame.maxPlayTimeMinutes = maxPlayTimeMinutes;
+      boardgame.name = name;
+      boardgame.description = description;
+      boardgame.minAge = minAge;
+      boardgame.minNumberOfPlayers = minNumberOfPlayers;
+      boardgame.maxNumberOfPlayers = maxNumberOfPlayers;
+      boardgame.minPlayTimeMinutes = minPlayTimeMinutes;
+      boardgame.maxPlayTimeMinutes = maxPlayTimeMinutes;
 
-        return await boardgame.save();
+      return await boardgame.save();
     } catch (e) {
       console.error(e);
       console.log("Failed to persist boardgame");

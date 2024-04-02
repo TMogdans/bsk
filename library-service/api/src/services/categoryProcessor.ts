@@ -10,17 +10,15 @@ export default class CategoryProcessor
 {
   private message: CategoryMessage | undefined = undefined;
 
-  public setMessage(message: BaseMessage) {
-    this.validate(message, newCategoryMessageSchema)
+  public async setMessage(message: BaseMessage) {
+    await this.validate(message, newCategoryMessageSchema)
       .then(() => (this.message = message as CategoryMessage))
       .catch((e) => console.log(e));
-
-    return this;
   }
 
   public async create() {
     if (this.message === undefined) {
-      throw new Error("Message or dbClient not set");
+      throw new Error("Message not set");
     }
 
     const { name, description } = this.message.payload;

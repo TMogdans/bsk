@@ -10,12 +10,10 @@ export default class PersonProcessor
 {
   private message: PersonMessage | undefined = undefined;
 
-  public setMessage(message: BaseMessage) {
-    this.validate(message, newPersonMessageSchema)
+  public async setMessage(message: BaseMessage) {
+    await this.validate(message, newPersonMessageSchema)
       .then(() => (this.message = message as PersonMessage))
       .catch((e) => console.log(e));
-
-    return this;
   }
 
   public async create() {

@@ -10,12 +10,10 @@ export default class PublisherProcessor
 {
   private message: PublisherMessage | undefined = undefined;
 
-  public setMessage(message: BaseMessage) {
-    this.validate(message, newPublisherMessageSchema)
+  public async setMessage(message: BaseMessage) {
+    await this.validate(message, newPublisherMessageSchema)
       .then(() => (this.message = message as PublisherMessage))
       .catch((e) => console.log(e));
-
-    return this;
   }
 
   public async create() {

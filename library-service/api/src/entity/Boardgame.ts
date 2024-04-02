@@ -6,6 +6,8 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
@@ -15,6 +17,7 @@ import { Award } from "./Award";
 import { Mechanic } from "./Mechanic";
 import { Publisher } from "./Publisher";
 import { Person } from "./Person";
+import { Link } from "./Link";
 
 @Entity()
 export default class Boardgame extends BaseEntity {
@@ -92,4 +95,9 @@ export default class Boardgame extends BaseEntity {
   })
   @JoinTable()
   artists: Person[];
+
+  @OneToMany(() => Link, (link) => link.boardgame, {
+    cascade: true,
+  })
+  links: Link[];
 }
