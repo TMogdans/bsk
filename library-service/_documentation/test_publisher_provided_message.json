@@ -1,0 +1,11 @@
+{
+  "message": "publisher-provided",
+  "meta": {
+    "producer": "frontend",
+    "version": "1.0.0"
+  },
+  "payload": {
+    "name": "Fantasy Flight Games",
+    "description": "Lorem ipsum!"
+  }
+}

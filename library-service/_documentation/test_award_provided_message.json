@@ -1,0 +1,11 @@
+{
+  "message": "award-provided",
+  "meta": {
+    "producer": "frontend",
+    "version": "1.0.0"
+  },
+  "payload": {
+    "name": "Spiel des Jahres 2023",
+    "description": "Lorem ipsum!"
+  }
+}
