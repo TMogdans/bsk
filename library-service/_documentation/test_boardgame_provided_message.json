@@ -8,9 +8,10 @@
     "name": "Vast the Crystal Caverns",
     "description": "Lorem ipsum!",
     "minAge": 10,
-    "minPlayers": 1,
-    "maxPlayers": 5,
-    "duration": 60,
+    "minNumberOfPlayers": 1,
+    "maxNumberOfPlayers": 5,
+    "minPlayTimeMinutes": 30,
+    "maxPlayTimeMinutes": 75,
     "awards": [
       "golden-geek-best-board-game-artwork-presentation",
       "golden-geek-best-board-game-expansion",
@@ -42,6 +43,7 @@
     ],
     "artists": [
       "kyle-ferrin"
-    ]
+    ],
+    "links": []
   }
 }

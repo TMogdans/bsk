@@ -58,5 +58,11 @@ export type BoardgameMessage = BaseMessage & {
     minPlayTimeMinutes: number;
     maxPlayTimeMinutes: number;
     categories: string[];
+    mechanics: string[];
+    awards: string[];
+    publishers: string[];
+    designers: string[];
+    artists: string[];
+    links: string[];
   };
 };
