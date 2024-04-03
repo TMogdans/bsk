@@ -45,7 +45,7 @@ export default class BoardgameProcessor
       links,
     } = this.message.payload;
 
-    Promise.allSettled([
+    return Promise.allSettled([
       Award.findBy({ slug: In(awards) }),
       Category.findBy({ slug: In(categories) }),
       Mechanic.findBy({ slug: In(mechanics) }),
@@ -54,13 +54,13 @@ export default class BoardgameProcessor
       Person.findBy({ slug: In(artists) }),
       Link.findBy({ name: In(links) }),
     ]).then((values) => {
-      const awards = values[0] as PromiseFulfilledResult<Award[]>;
-      const categories = values[1] as PromiseFulfilledResult<Category[]>;
-      const mechanics = values[2] as PromiseFulfilledResult<Mechanic[]>;
-      const publishers = values[3] as PromiseFulfilledResult<Publisher[]>;
-      const designers = values[4] as PromiseFulfilledResult<Person[]>;
-      const artists = values[5] as PromiseFulfilledResult<Person[]>;
-      const links = values[6] as PromiseFulfilledResult<Link[]>;
+      const awards = values[0].status === "fulfilled" ? values[0] as PromiseFulfilledResult<Award[]> : { value: [] as Award[] };
+      const categories = values[1].status === "fulfilled" ? values[1] as PromiseFulfilledResult<Category[]> : { value: [] as Category[] };
+      const mechanics = values[2].status === "fulfilled" ? values[2] as PromiseFulfilledResult<Mechanic[]> : { value: [] as Mechanic[] };
+      const publishers = values[3].status === "fulfilled" ? values[3] as PromiseFulfilledResult<Publisher[]> : { value: [] as Publisher[] };
+      const designers = values[4].status === "fulfilled" ? values[4] as PromiseFulfilledResult<Person[]> : { value: [] as Person[] };
+      const artists = values[5].status === "fulfilled" ? values[5] as PromiseFulfilledResult<Person[]> : { value: [] as Person[] }
+      const links = values[6].status === "fulfilled" ? values[6] as PromiseFulfilledResult<Link[]> : { value: [] as Link[] };
 
       try {
         const boardgame = new Boardgame();
@@ -83,8 +83,7 @@ export default class BoardgameProcessor
 
         return boardgame.save();
       } catch (e) {
-        console.log(e);
-        console.log("Failed to persist boardgame");
+        console.log("Failed to persist boardgame: ", e);
       }
     });
   }
