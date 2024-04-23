@@ -14,7 +14,7 @@ spec:
         app: rating-write-service-db
     spec:
       containers:
-        - image: postgres:13.3
+        - image: postgres:16.2
           name: rating-write-service-db
           imagePullPolicy: IfNotPresent
           env:
@@ -28,6 +28,11 @@ spec:
                   configMapKeyRef:
                     name: rating-write-service-postgres-configmap
                     key: POSTGRES_USER
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rating-write-service-db-password
+                  key: password
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

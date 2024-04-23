@@ -7,4 +7,4 @@ metadata:
     app: rating-write-service-postgres
 data:
   POSTGRES_DB: "rating-write-service"
-  POSTGRES_USER: "postgres"
+  POSTGRES_USER: "rwuser"

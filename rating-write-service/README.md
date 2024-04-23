@@ -40,53 +40,31 @@ This is a simple rating service that allows users to rate an object.
     ../../protobuf/rating-service/rating-created.proto
 ```
 
-## Messages
+### Kubernetes Secrets
 
-Subscribed to channel `ratings`
-and listens for the following messages:
+Add secrets for the database and the service a connection string:
 
-### `createNewRating`
+Example:
 
-```json
-{
-  "meta": {
-    "producer": "frontend",
-    "version": "1.0.0"
-  },
-  "payload": {
-    "object_id": "87ffd110-f249-43ca-9a04-36a106bc52fa",
-    "user_id": "9bd70fdb-65af-47b0-acd5-d854818ce7ba",
-    "material_quality": 7,
-    "layout": 8,
-    "complexity": 4,
-    "difficulty": 4,
-    "fun": 10,
-    "variety": 4,
-    "replayability": 6
-  }
-}
-
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rating-write-service-db-password|rating-write-service-db-url
+  namespace: bsk
+type: Opaque
+data:
+  password: sOmEbAsE64EnCoDeDpAsSwOrD
 ```
 
-### `updateRating`
+Use kubeseal to encrypt the secret:
 
-```json
-{
-  "meta": {
-    "producer": "frontend",
-    "version": "1.0.0"
-  },
-  "payload": {
-    "object_id": "87ffd110-f249-43ca-9a04-36a106bc52fa",
-    "user_id": "9bd70fdb-65af-47b0-acd5-d854818ce7ba",
-    "material_quality": 7,
-    "layout": 8,
-    "complexity": 4,
-    "difficulty": 4,
-    "fun": 10,
-    "variety": 4,
-    "replayability": 6
-  }
-}
+```bash
+    kubeseal -f secret.yaml -w sealed-secret.yaml --controller-name sealed-secrets --controller-namespace default
+```
 
+Upload the sealed secret to the cluster:
+
+```bash
+    kubectl apply -f sealed-secret.yaml
 ```
