@@ -1,5 +1,14 @@
 terraform {
   required_version = "> 1.5"
+
+  required_providers {
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+    helm = {
+      source = "hashicorp/helm"
+    }
+  }
 }
 
 provider "kubernetes" {
@@ -9,7 +18,7 @@ provider "kubernetes" {
 
 resource "helm_release" "sealed_secrets" {
   name       = "sealed-secrets"
-  repository = "https://github.com/bitnami/charts"
+  repository = "https://charts.bitnami.com/bitnami"
   chart      = "sealed-secrets"
   version    = ">=1.16.0"
 
@@ -19,63 +28,8 @@ resource "helm_release" "sealed_secrets" {
   }
 }
 
-resource "kubernetes_namespace" "game_unity" {
+resource "kubernetes_namespace" "namespace" {
   metadata {
-    name = "game-unity"
-  }
-}
-
-resource "kubernetes_deployment" "nats_deployment" {
-  metadata {
-    name      = "nats"
-    namespace = kubernetes_namespace.game_unity.metadata[0].name
-  }
-
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        app = "nats"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "nats"
-        }
-      }
-
-      spec {
-        container {
-          name  = "nats"
-          image = "nats:latest"
-        }
-      }
-    }
-  }
-}
-
-resource "kubernetes_service" "nats_service" {
-  metadata {
-    name      = "nats"
-    namespace = kubernetes_namespace.game_unity.metadata[0].name
-  }
-
-  spec {
-    selector = {
-      app = "nats"
-    }
-
-    port {
-      port        = 4222
-      target_port = 4222
-    }
-
-    port {
-      port        = 8222
-      target_port = 8222
-    }
+    name = "bsk"
   }
 }
