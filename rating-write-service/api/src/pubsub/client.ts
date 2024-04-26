@@ -1,11 +1,10 @@
 import { RatingMessage } from "../types/rating";
 import { connect, JSONCodec } from "nats";
 import { object, string } from "yup";
-import { Prisma, PrismaClient } from "@prisma/client";
 import RatingGenerator from "../services/ratingGenerator";
+import {Config} from "../entity/Config";
 
 const natsServer = process.env.NATS_SERVER || "nats:4222";
-const prisma = new PrismaClient();
 
 const ratingMessageSchema = object({
   message: string().required(),
@@ -55,30 +54,25 @@ export const client = async () => {
     );
 
     try {
-      const config = await prisma.config.findMany();
-      const ratingGenerator = new RatingGenerator(receivedMessage, config);
+      const config = Config.find();
+      const ratingGenerator = new RatingGenerator(receivedMessage, await config);
+      const ratings = await ratingGenerator.getRatings();
 
-      await prisma.rating
-        .createMany({
-          data: ratingGenerator.getDatasets().all() as unknown as Prisma.RatingCreateManyInput[],
-        })
-        .then((result) => {
-          nc.publish(
-            "ratings",
-            codec.encode({
-              message: "rating-created",
-              meta: {
-                producer: process.env.APP_NAME || "rating-write-service",
-                version: "1.0.0",
-              },
-              payload: {
-                object_id: receivedMessage.payload.object_id,
-                user_id: receivedMessage.payload.user_id,
-                ratings: ratingGenerator.getRatings().all(),
-              },
-            }),
-          );
-        });
+      nc.publish(
+          "ratings",
+          codec.encode({
+            message: "rating-created",
+            meta: {
+              producer: process.env.APP_NAME || "rating-write-service",
+              version: "1.0.0",
+            },
+            payload: {
+              object_id: receivedMessage.payload.object_id,
+              user_id: receivedMessage.payload.user_id,
+              ratings: ratings.all(),
+            },
+          }),
+      );
     } catch (e) {
       console.error(e);
     }

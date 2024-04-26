@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express from "express";
 import { client } from "./pubsub/client";
 import {getAllRatings, getRatingsForBoardGameId, getRatingsForBoardGameIdAndUserId} from "./http/ratings-controller";
