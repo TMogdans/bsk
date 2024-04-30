@@ -7,3 +7,7 @@ data:
   PORT: "3000"
   APP_NAME: "rating-write-service"
   NATS_SERVER: "nats:4222"
+  DB_HOST: "rating-write-service-db"
+  DB_PORT: "5432"
+  DB_NAME: "rating-write-service"
+  DB_USER: "rwuser"

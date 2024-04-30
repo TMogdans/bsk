@@ -1,10 +1,12 @@
 import "reflect-metadata";
 import express from "express";
-import { client } from "./pubsub/client";
+import {client} from "./pubsub/client";
 import {getAllRatings, getRatingsForBoardGameId, getRatingsForBoardGameIdAndUserId} from "./http/ratings-controller";
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+console.log(process.env.DB_PASSWORD);
 
 client()
   .then(() => console.log("rating-write-service started"))

@@ -42,9 +42,29 @@ spec:
                 configMapKeyRef:
                   name: rating-write-service-environment-config-map
                   key: NATS_SERVER
-            - name: DATABASE_URL
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-environment-config-map
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-environment-config-map
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-environment-config-map
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rating-write-service-postgres-configmap
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: rating-write-service-db-url
-                  key: url
+                  name: rating-write-service-db-password
+                  key: password
       restartPolicy: Always
