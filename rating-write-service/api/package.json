@@ -11,7 +11,7 @@
     "test:watch": "jest --watch",
     "check_style": "npx prettier . --check",
     "fix_style": "npx prettier . --write",
-    "start:migrate:prod": "npm run typeorm migration:run -- -d dist/data-source.js && node dist/index.js"
+    "start:migrate:prod": "typeorm migration:run -d dist/data-source.js && node dist/index.js"
   },
   "author": "Tobias Mogdans",
   "license": "MIT",
