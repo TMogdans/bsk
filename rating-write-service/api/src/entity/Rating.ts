@@ -2,9 +2,10 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
-    Entity, Index,
+    Entity,
+    Index,
     ManyToOne,
-    PrimaryGeneratedColumn, Unique,
+    PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
 import {Config} from "./Config";
