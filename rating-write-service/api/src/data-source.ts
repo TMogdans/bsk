@@ -1,4 +1,6 @@
 import {DataSource} from "typeorm";
+import {Config} from "./entity/Config";
+import {Rating} from "./entity/Rating";
 
 const host = process.env.DB_HOST || "localhost"
 const port = Number(process.env.DB_PORT) || 5432
@@ -16,7 +18,7 @@ export const AppDataSource = new DataSource({
     database,
     synchronize: true,
     logging: true,
-    entities: ["dist/entity/**/*.js"],
+    entities: [Config, Rating],
     subscribers: [],
     migrations: ["dist/migration/**/*.js"],
 })
