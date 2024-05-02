@@ -1,8 +1,8 @@
-import { connect, JSONCodec } from "nats";
-import { BaseMessage } from "../types/messages";
+import {connect, JSONCodec} from "nats";
+import {BaseMessage} from "../types/messages";
 import PersonProcessor from "../services/personProcessor";
 import CategoryProcessor from "../services/categoryProcessor";
-import { ProcessorInterface } from "../services/processorInterface";
+import {ProcessorInterface} from "../services/processorInterface";
 import MechanicProcessor from "../services/mechanicProcessor";
 import AwardProcessor from "../services/awardProcessor";
 import PublisherProcessor from "../services/publischerProcessor";
@@ -32,7 +32,7 @@ function getProcessor(receivedMessage: BaseMessage): ProcessorInterface {
 export const subscriber = async () => {
   const nc = await connect({ servers: natsServer });
   const codec = JSONCodec();
-  const subject = "frontend";
+  const subject = "events";
   const subscription = nc.subscribe(subject);
   console.log(`Subscribed to ${subject}`);
 
