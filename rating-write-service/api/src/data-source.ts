@@ -10,7 +10,7 @@ const username = process.env.DB_USER || "rwuser"
 const password = process.env.DB_PASSWORD || "öklsdf9"
 const database = process.env.DB_NAME || "rating-write-service"
 
-console.debug(`Connecting to database ${database} on ${host}:${port} as ${username}:${password}`)
+console.debug(`Connecting to database ${process.env.DB_NAME} on ${process.env.DB_HOST}:${process.env.DB_PORT} as ${process.env.DB_USER}:${process.env.DB_PASSWORD}`)
 
 export const PostgresDataSource = new DataSource({
     type: "postgres",
@@ -25,6 +25,8 @@ export const PostgresDataSource = new DataSource({
     subscribers: [],
     migrations: [Migration1714133051703, ConfigSeed1714134894178],
 });
+
+console.debug("Data Source created", PostgresDataSource)
 
 PostgresDataSource.initialize()
     .then(() => {
