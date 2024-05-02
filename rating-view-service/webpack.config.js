@@ -50,10 +50,12 @@ module.exports = (_, argv) => ({
       shared: {
         ...deps,
         react: {
+          eager: true,
           singleton: true,
           requiredVersion: deps.react,
         },
         "react-dom": {
+          eager: true,
           singleton: true,
           requiredVersion: deps["react-dom"],
         },

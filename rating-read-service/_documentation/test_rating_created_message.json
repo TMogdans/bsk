@@ -1,47 +1,58 @@
 {
-  "message": "rating-created",
+  "message": "rating-read",
   "meta": {
-    "producer": "rating-write-service",
-    "version": "1.0.0"
+    "producer": "rating-read-service",
+    "version": "1.0.0",
+    "timestamp": "2024-05-02T11:51:26.321Z"
   },
   "payload": {
-    "object_id": "87ffd110-f249-43ca-9a04-36a106bc52fa",
-    "user_id": "9bd70fdb-65af-47b0-acd5-d854818ce7ba",
+    "objectId": "37ffbsd0-f249-43ca-9a04-36a106bc52fa",
+    "createdAt": "2024-05-02T11:51:26.321Z",
+    "total": 6.14,
+    "weightedTotal": 4.59,
+    "normalizedTotal": 6.69,
     "ratings": [
       {
-        "value": 5,
+        "name": "material_quality",
         "weight": 0.7,
-        "name": "material_quality"
+        "value": 7,
+        "weighted": 4.9
       },
       {
-        "value": 5,
-        "weight": 0.7,
-        "name": "layout"
+        "name": "layout",
+        "weight": 0.8,
+        "value": 8,
+        "weighted": 6.4
       },
       {
-        "value": 5,
-        "weight": 0.7,
-        "name": "complexity"
+        "name": "complexity",
+        "weight": 0.4,
+        "value": 4,
+        "weighted": 1.6
       },
       {
-        "value": 5,
-        "weight": 0.7,
-        "name": "difficulty"
+        "name": "difficulty",
+        "weight": 0.5,
+        "value": 4,
+        "weighted": 2
       },
       {
-        "value": 5,
-        "weight": 0.7,
-        "name": "fun"
+        "name": "fun",
+        "weight": 1,
+        "value": 10,
+        "weighted": 10
       },
       {
-        "value": 5,
-        "weight": 0.7,
-        "name": "variety"
+        "name": "variety",
+        "weight": 0.6,
+        "value": 4,
+        "weighted": 2.4
       },
       {
-        "value": 5,
-        "weight": 0.7,
-        "name": "replayability"
+        "name": "replayability",
+        "weight": 0.8,
+        "value": 6,
+        "weighted": 4.8
       }
     ]
   }

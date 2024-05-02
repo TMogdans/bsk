@@ -7,7 +7,7 @@ import './index.css'
 const App = () => (
   <div className="container">
       <h1>Hi vom Container</h1>
-      <Hello />
+      <Hello id={"bestanden"} />
   </div>
 )
 const rootElement = document.getElementById('app')
