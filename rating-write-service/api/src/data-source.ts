@@ -1,6 +1,8 @@
 import {DataSource} from "typeorm";
 import {Config} from "./entity/Config";
 import {Rating} from "./entity/Rating";
+import {Migration1714133051703} from "./migration/1714133051703-migration";
+import {ConfigSeed1714134894178} from "./migration/1714134894178-config_seed";
 
 const host = process.env.DB_HOST || "localhost"
 const port = Number(process.env.DB_PORT) || 5432
@@ -20,7 +22,7 @@ export const PostgresDataSource = new DataSource({
     logging: true,
     entities: [Config, Rating],
     subscribers: [],
-    migrations: ["dist/migration/**/*.js"],
+    migrations: [Migration1714133051703, ConfigSeed1714134894178],
 });
 
 PostgresDataSource.initialize()
