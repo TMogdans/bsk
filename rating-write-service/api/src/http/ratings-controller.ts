@@ -1,13 +1,20 @@
 import {Rating} from "../entity/Rating";
+import {PostgresDataSource} from "../data-source";
 
-export const getRatingsForBoardGameId = async (boardGameId: string) => {
-    return await Rating.findBy({objectId: boardGameId});
-};
+export class RatingsController {
 
-export const getRatingsForBoardGameIdAndUserId = async (boardGameId: string, userId: string) => {
-    return await Rating.findBy({objectId: boardGameId, userId: userId});
+    public async getRatingsForBoardGameId(boardGameId: string) {
+        const repository = PostgresDataSource.getRepository(Rating);
+        return await repository.findBy({objectId: boardGameId});
+    }
+
+    public async getRatingsForBoardGameIdAndUserId(boardGameId: string, userId: string) {
+        const repository = PostgresDataSource.getRepository(Rating);
+        return await repository.findBy({objectId: boardGameId, userId: userId});
+    }
+
+    public async getAllRatings() {
+        const repository = PostgresDataSource.getRepository(Rating);
+        return await repository.find();
+    }
 }
-
-export const getAllRatings = async () => {
-    return await Rating.find();
-};

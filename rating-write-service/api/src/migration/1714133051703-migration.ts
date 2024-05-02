@@ -7,7 +7,7 @@ export class Migration1714133051703 implements MigrationInterface {
 
         await queryRunner.createTable(
             new Table({
-                name: 'configs',
+                name: 'config',
                 columns: [
                     {
                         name: 'id',
@@ -31,12 +31,12 @@ export class Migration1714133051703 implements MigrationInterface {
                         type: 'smallint'
                     },
                     {
-                        name: 'created_at',
+                        name: 'createdAt',
                         type: 'timestamp',
                         default: 'now()'
                     },
                     {
-                        name: 'updated_at',
+                        name: 'updatedAt',
                         type: 'timestamp',
                         default: 'now()'
                     }
@@ -46,7 +46,7 @@ export class Migration1714133051703 implements MigrationInterface {
 
         await queryRunner.createTable(
             new Table({
-                name: 'ratings',
+                name: 'rating',
                 columns: [
                     {
                         name: 'id',
@@ -56,15 +56,15 @@ export class Migration1714133051703 implements MigrationInterface {
                         generationStrategy: 'uuid'
                     },
                     {
-                        name: 'config_id',
+                        name: 'configId',
                         type: 'uuid'
                     },
                     {
-                        name: 'user_id',
+                        name: 'userId',
                         type: 'varchar'
                     },
                     {
-                        name: 'object_id',
+                        name: 'objectId',
                         type: 'varchar'
                     },
                     {
@@ -72,20 +72,20 @@ export class Migration1714133051703 implements MigrationInterface {
                         type: 'smallint'
                     },
                     {
-                        name: 'created_at',
+                        name: 'createdAt',
                         type: 'timestamp',
                         default: 'now()'
                     },
                     {
-                        name: 'updated_at',
+                        name: 'updatedAt',
                         type: 'timestamp',
                         default: 'now()'
                     }
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ['config_id'],
-                        referencedTableName: 'configs',
+                        columnNames: ['configId'],
+                        referencedTableName: 'config',
                         referencedColumnNames: ['id']
                     }
                 ]
@@ -94,8 +94,8 @@ export class Migration1714133051703 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('ratings');
-        await queryRunner.dropTable('configs');
+        await queryRunner.dropTable('rating');
+        await queryRunner.dropTable('config');
     }
 
 }

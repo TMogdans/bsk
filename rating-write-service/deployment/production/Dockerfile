@@ -11,5 +11,4 @@ COPY --from=builder /app/dist ./dist
 COPY ../../api/package*.json .
 RUN npm i --only=production
 EXPOSE 3000
-#CMD ["npm", "run", "start:migrate:prod"]
-CMD ["npm", "run", "debug-start"]
+CMD ["npm", "run", "start:migrate:prod"]

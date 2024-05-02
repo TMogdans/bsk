@@ -9,7 +9,7 @@ export class Config extends BaseEntity {
     @Column({unique: true})
     name: string;
 
-    @Column({default: "1.0"})
+    @Column({default: 1.0, type: "float"})
     weight: number;
 
     @Column()

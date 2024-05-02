@@ -6,7 +6,6 @@ import {Config} from "../entity/Config";
 export default class RatingGenerator {
     private receivedMessage: RatingMessage;
     private readonly config: Config[];
-    private dbDatasets = collect();
     private ratings = collect();
     private configMap = new Map<string, Config>();
 
@@ -30,14 +29,16 @@ export default class RatingGenerator {
                 continue;
             }
 
-            const rating = Rating.create({
-                configId: result.id,
-                userId,
-                objectId,
-                value,
-            });
+            const rating = new Rating();
 
-            this.dbDatasets.add(rating);
+            rating.configId = result.id;
+            rating.userId = userId;
+            rating.objectId = objectId;
+            rating.value = value;
+
+            rating.save().then(r => console.log("Rating saved", r));
+
+
         }
     }
 
@@ -45,6 +46,7 @@ export default class RatingGenerator {
         for (const c of this.config) {
             this.configMap.set(c.name, c);
         }
+        console.log("Config map created", this.configMap);
     }
 
     private extractObjectInformation() {
@@ -70,10 +72,6 @@ export default class RatingGenerator {
                 name: result.name,
             })
         }
-    }
-
-    public getDatasets() {
-        return this.dbDatasets;
     }
 
     public async getRatings() {
