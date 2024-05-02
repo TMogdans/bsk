@@ -41,7 +41,7 @@ export class MessageSubscriber implements Subscriber {
     public async subscribeToMessageBus() {
         const nc = await connect({servers: this.natsServer});
         const codec = JSONCodec();
-        const subject = "ratings";
+        const subject = "events";
         const sub = nc.subscribe(subject);
 
         for await (const m of sub) {
