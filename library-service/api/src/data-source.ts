@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
     username,
     password,
     database,
-    synchronize: true,
+    synchronize: false,
     logging: true,
     entities: ["dist/entity/*.js"],
     subscribers: [],
