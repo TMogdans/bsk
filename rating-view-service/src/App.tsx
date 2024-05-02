@@ -1,13 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {Hello} from 'rvs/Hello';
 
 import './index.css'
 
 const App = () => (
   <div className="container">
-      <h1>Hi vom Container</h1>
-      <Hello />
+      <div>Michse sein remote app!</div>
   </div>
 )
 const rootElement = document.getElementById('app')

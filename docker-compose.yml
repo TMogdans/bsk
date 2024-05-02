@@ -80,7 +80,7 @@ services:
 
   bsk_frontend:
     build:
-      context: ./frontend
+      context: design
       dockerfile: Dockerfile
     container_name: bsk_frontend
     restart: unless-stopped
@@ -91,7 +91,7 @@ services:
       - "3001:3000"
       - "6006:6006"
     volumes:
-      - ./frontend:/frontend
+      - ./design:/design
     networks:
       - bsk-network
 

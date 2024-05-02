@@ -1,5 +1,3 @@
-import {Typography} from "../Atoms/Typography";
-import {TypographyStyle} from "../../Types/TypographyType";
 import dayjs from "dayjs";
 import React from "react";
 import style from "./DateContainer.module.css";

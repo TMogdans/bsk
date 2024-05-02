@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Nav} from "../Components/Molekules/Nav";
 import items from "../Utils/navItems.json";
 
