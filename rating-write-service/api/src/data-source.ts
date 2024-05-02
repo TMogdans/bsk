@@ -10,6 +10,7 @@ const username = process.env.DB_USER || "rwuser"
 const password = process.env.DB_PASSWORD || "öklsdf9"
 const database = process.env.DB_NAME || "rating-write-service"
 
+console.debug(`Connecting to database ${database} on ${host}:${port} as ${username}:${password}`)
 
 export const PostgresDataSource = new DataSource({
     type: "postgres",
