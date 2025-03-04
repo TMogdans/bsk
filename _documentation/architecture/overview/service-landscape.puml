@@ -1,0 +1,32 @@
+@startuml "Library Service - Integration"
+!include <C4/C4_Container>
+
+Person(user, "User", "Platform user")
+
+System_Boundary(platform, "Brettspiel Platform") {
+    Container(frontend, "Frontend Application", "React/Vue/etc", "User Interface")
+    
+    Container(libraryService, "Library Service", "Node.js/TypeORM", "Stores boardgame information")
+    Container(ratingService, "Rating Services", "Node.js", "Handles user ratings")
+    Container(eventService, "Event Service", "Node.js", "Manages events & conventions")
+    
+    ContainerDb(libraryDb, "Library Database", "PostgreSQL", "Stores boardgame data")
+    ContainerQueue(messageBus, "Message Bus", "NATS", "Event communication")
+}
+
+Rel(user, frontend, "Uses")
+Rel(frontend, libraryService, "Reads data", "REST/GraphQL")
+Rel(frontend, ratingService, "Reads/writes ratings", "REST/GraphQL")
+Rel(frontend, eventService, "Views/registers for events", "REST/GraphQL")
+
+Rel(libraryService, libraryDb, "Reads/Writes")
+Rel(libraryService, messageBus, "Subscribes to events")
+
+Rel(ratingService, messageBus, "Publishes 'game-rated' events")
+Rel(ratingService, messageBus, "Subscribes to 'boardgame-provided' events")
+
+Rel(eventService, messageBus, "Publishes 'event-created' events")
+Rel(eventService, messageBus, "Subscribes to 'boardgame-provided' events")
+
+SHOW_LEGEND()
+@enduml

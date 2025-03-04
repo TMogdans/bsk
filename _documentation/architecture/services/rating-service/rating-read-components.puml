@@ -1,0 +1,26 @@
+@startuml "Rating Read Service - Components"
+skinparam componentStyle uml2
+skinparam backgroundColor white
+
+package "Rating Read Service" {
+  [Express App] as ExpressApp
+  [MessageSubscriber] as MsgSub
+  [IncomingMessageObserver] as Observer
+  [RatingsController] as Controller
+  [Redis Client] as RedisClient
+  
+  MsgSub -down-> Observer : "notifies"
+  ExpressApp -down-> Controller : "routes to"
+  Controller -down-> RedisClient : "queries"
+  Observer -right-> RedisClient : "updates cache"
+}
+
+cloud "Client Applications" as Clients
+database "Redis" as Redis
+queue "NATS" as NATS
+
+Clients -down-> ExpressApp : "HTTP requests"
+RedisClient -down-> Redis : "reads/writes cache"
+NATS -right-> MsgSub : "provides events"
+
+@enduml

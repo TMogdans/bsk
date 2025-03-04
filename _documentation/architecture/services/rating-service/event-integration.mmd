@@ -1,0 +1,50 @@
+flowchart TD
+    User([User])
+    
+    subgraph "Command Side"
+        RatingWrite["Rating Write Service"]
+        Postgres[(PostgreSQL)]
+    end
+    
+    subgraph "Event Bus"
+        NATS[NATS Message Bus]
+    end
+    
+    subgraph "Query Side"
+        RatingRead["Rating Read Service"]
+        Redis[(Redis Cache)]
+    end
+    
+    subgraph "Presentation"
+        RatingView["Rating View Service (React)"]
+    end
+    
+    %% Command flow
+    User -->|1. Submit Rating| RatingWrite
+    RatingWrite -->|2. Store Rating| Postgres
+    RatingWrite -->|3. Publish Rating Event| NATS
+    
+    %% Query flow
+    NATS -->|4. Subscribe to Events| RatingRead
+    RatingRead -->|5. Update Cache| Redis
+    RatingView -->|6a. Query Ratings| RatingRead
+    RatingRead -->|7a. Return from Cache| RatingView
+    
+    %% Direct subscription
+    NATS -->|6b. Real-time Updates| RatingView
+    
+    %% Display to user
+    RatingView -->|8. Show Ratings| User
+    
+    %% Styling
+    classDef write fill:#f9d6d2,stroke:#d85f4a,stroke-width:1px
+    classDef read fill:#d2f9d6,stroke:#4ad85f,stroke-width:1px
+    classDef view fill:#d2d6f9,stroke:#4a5fd8,stroke-width:1px
+    classDef storage fill:#f5f5f5,stroke:#333333,stroke-width:1px
+    classDef bus fill:#f9f9d2,stroke:#d8d54a,stroke-width:1px
+    
+    class RatingWrite write
+    class RatingRead read
+    class RatingView view
+    class Postgres,Redis storage
+    class NATS bus

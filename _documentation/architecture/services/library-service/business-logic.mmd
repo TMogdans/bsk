@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant NATS as NATS Message Bus
+    participant Sub as Subscriber
+    participant Proc as BoardgameProcessor
+    participant Val as Validator
+    participant Entity as Boardgame Entity
+    participant DB as PostgreSQL
+    
+    NATS->>Sub: Event: boardgame-provided
+    Sub->>Proc: setMessage(message)
+    Proc->>Val: validate(message, schema)
+    
+    alt Validation Success
+        Val-->>Proc: Valid message
+        Proc->>Proc: Process message payload
+        Proc->>Entity: Create new Boardgame
+        
+        par Fetch Related Entities
+            Entity->>DB: Find Awards
+            Entity->>DB: Find Categories
+            Entity->>DB: Find Mechanics
+            Entity->>DB: Find Publishers
+            Entity->>DB: Find Designers
+            Entity->>DB: Find Artists
+        end
+        
+        Entity->>DB: Save Boardgame with relationships
+        DB-->>Entity: Saved entity
+        Entity-->>Proc: Return saved object
+        Proc-->>Sub: Processing complete
+    else Validation Failure
+        Val-->>Proc: Validation error
+        Proc-->>Sub: Log error
+    end

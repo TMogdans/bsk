@@ -1,0 +1,26 @@
+@startuml "Rating Write Service - Components"
+skinparam componentStyle uml2
+skinparam backgroundColor white
+
+package "Rating Write Service" {
+  [Express App] as ExpressApp
+  [NATS Client] as NatsClient
+  [Controllers] as Controllers
+  [Entity Layer] as Entities
+  [TypeORM] as TypeORM
+  
+  ExpressApp -down-> Controllers : "routes to"
+  Controllers -down-> Entities : "manipulates"
+  Controllers -right-> NatsClient : "publishes events"
+  Entities -down-> TypeORM : "uses"
+}
+
+cloud "Client Applications" as Clients
+database "PostgreSQL" as PostgresDB
+queue "NATS" as NATS
+
+Clients -down-> ExpressApp : "HTTP requests"
+TypeORM -down-> PostgresDB : "persists data"
+NatsClient -right-> NATS : "publishes rating events"
+
+@enduml

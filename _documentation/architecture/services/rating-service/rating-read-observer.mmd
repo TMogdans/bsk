@@ -1,0 +1,29 @@
+classDiagram
+    class Subject {
+        +attach(observer)
+        +detach(observer)
+        +notify()
+    }
+    
+    class MessageSubscriber {
+        -observers: Observer[]
+        +attach(observer)
+        +detach(observer)
+        +subscribeToMessageBus()
+        -notify(message)
+    }
+    
+    class Observer {
+        +update(message)
+    }
+    
+    class IncomingMessageObserver {
+        -redisClient
+        +update(message)
+        -processRatingMessage(message)
+        -updateRedisCache(rating)
+    }
+    
+    Subject <|-- MessageSubscriber
+    Observer <|-- IncomingMessageObserver
+    MessageSubscriber o-- Observer : notifies >

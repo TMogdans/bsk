@@ -1,12 +1,12 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
     {
       "type": "text",
-      "version": 130,
-      "versionNonce": 282960634,
+      "version": 131,
+      "versionNonce": 18130076,
       "isDeleted": false,
       "id": "bfkR4LqQGEDBMWg0FtFCj",
       "fillStyle": "hachure",
@@ -19,24 +19,27 @@
       "y": 320.37358445387616,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
-      "width": 83,
+      "width": 82.0599365234375,
       "height": 25,
       "seed": 148496762,
       "groupIds": [
         "JWq_oytYXre5LxUBqec6g"
       ],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
-      "updated": 1644434716402,
+      "updated": 1741073680650,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Kalender",
-      "baseline": 18,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Kalender"
+      "originalText": "Kalender",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -60,15 +63,17 @@
       "groupIds": [
         "JWq_oytYXre5LxUBqec6g"
       ],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434716402,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
-      "version": 154,
-      "versionNonce": 1310944506,
+      "version": 155,
+      "versionNonce": 1131053860,
       "isDeleted": false,
       "id": "YcUIFF-0l6x-0GtydaChg",
       "fillStyle": "hachure",
@@ -81,24 +86,27 @@
       "y": 422.1387728177584,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
-      "width": 55,
+      "width": 53.53993225097656,
       "height": 25,
       "seed": 274954618,
       "groupIds": [
         "T6KDPXfArFNfh6awmzSpu"
       ],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
-      "updated": 1644434500243,
+      "updated": 1741073680651,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Spiele",
-      "baseline": 18,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Spiele"
+      "originalText": "Spiele",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -122,10 +130,12 @@
       "groupIds": [
         "T6KDPXfArFNfh6awmzSpu"
       ],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434500243,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "rectangle",
@@ -147,7 +157,8 @@
       "height": 95.159912109375,
       "seed": 809363878,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -155,7 +166,8 @@
         }
       ],
       "updated": 1644435066480,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -177,18 +189,21 @@
       "height": 25,
       "seed": 1729178042,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644435066480,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Frontend",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "uNVHy6NR2AzkQgai-6dFV",
-      "originalText": "Frontend"
+      "originalText": "Frontend",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -210,7 +225,8 @@
       "height": 105.22247314453125,
       "seed": 407336570,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -218,7 +234,8 @@
         }
       ],
       "updated": 1644434492323,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -240,18 +257,21 @@
       "height": 25,
       "seed": 1720777446,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434492323,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Adminoberfläche",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "X0NmBU4JYKU0xJ3V0mKmx",
-      "originalText": "Adminoberfläche"
+      "originalText": "Adminoberfläche",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -273,7 +293,8 @@
       "height": 91.6971435546875,
       "seed": 474384954,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -281,7 +302,8 @@
         }
       ],
       "updated": 1644434500243,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -303,18 +325,21 @@
       "height": 25,
       "seed": 1226892538,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434500243,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Geolocation",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "K70aWw_G1wychtUf7vfnk",
-      "originalText": "Geolocation"
+      "originalText": "Geolocation",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -336,7 +361,8 @@
       "height": 76.06878662109375,
       "seed": 711844346,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -344,7 +370,8 @@
         }
       ],
       "updated": 1644434500243,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -366,18 +393,21 @@
       "height": 25,
       "seed": 954466790,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434500243,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Spielegruppen",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "x8EZWHHsxDT72BRY95qG7",
-      "originalText": "Spielegruppen"
+      "originalText": "Spielegruppen",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -399,7 +429,8 @@
       "height": 83.02755737304688,
       "seed": 1377434214,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -407,7 +438,8 @@
         }
       ],
       "updated": 1644434492323,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -429,23 +461,26 @@
       "height": 25,
       "seed": 32161062,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434492323,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Nutzer/User",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "u1WQIb8cYV_LnlQvyZl0U",
-      "originalText": "Nutzer/User"
+      "originalText": "Nutzer/User",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "text",
-      "version": 19,
-      "versionNonce": 372566970,
+      "version": 20,
+      "versionNonce": 1624092956,
       "isDeleted": false,
       "id": "GOEwJjd-ZzR-pQ1trIBeV",
       "fillStyle": "hachure",
@@ -458,22 +493,25 @@
       "y": 125.6605788010819,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
-      "width": 258,
+      "width": 256.4999084472656,
       "height": 45,
       "seed": 1311143162,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
-      "updated": 1644434123358,
+      "updated": 1741073680651,
       "link": null,
+      "locked": false,
       "fontSize": 36,
       "fontFamily": 1,
       "text": "Excalidraw.com",
-      "baseline": 32,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Excalidraw.com"
+      "originalText": "Excalidraw.com",
+      "lineHeight": 1.25,
+      "baseline": 32
     },
     {
       "type": "rectangle",
@@ -495,7 +533,8 @@
       "height": 108.51064828725964,
       "seed": 903788582,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -503,7 +542,8 @@
         }
       ],
       "updated": 1644434492323,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -525,18 +565,21 @@
       "height": 75,
       "seed": 497603750,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434492323,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Content \nManagement \nSystem",
-      "baseline": 68,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "SXHxAfr3nFqF1A8znrt3f",
-      "originalText": "Content Management System"
+      "originalText": "Content Management System",
+      "lineHeight": 1.25,
+      "baseline": 68
     },
     {
       "type": "rectangle",
@@ -558,7 +601,8 @@
       "height": 71.72271728515625,
       "seed": 1836314598,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -566,7 +610,8 @@
         }
       ],
       "updated": 1644434624384,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -588,18 +633,21 @@
       "height": 25,
       "seed": 1918550650,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644434624384,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Message Bus",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "-d-saUdxn1GdBWDPNxtwE",
-      "originalText": "Message Bus"
+      "originalText": "Message Bus",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -621,7 +669,8 @@
       "height": 65.75265737680286,
       "seed": 1955506810,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -629,7 +678,8 @@
         }
       ],
       "updated": 1644435111150,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -651,18 +701,21 @@
       "height": 50,
       "seed": 1985207418,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644435111150,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Backend for \nFrontend",
-      "baseline": 43,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "b_kYDJdgIYQZCFcLzEuWV",
-      "originalText": "Backend for Frontend"
+      "originalText": "Backend for Frontend",
+      "lineHeight": 1.25,
+      "baseline": 43
     },
     {
       "type": "rectangle",
@@ -684,7 +737,8 @@
       "height": 42.32619065504808,
       "seed": 1803685734,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -692,7 +746,8 @@
         }
       ],
       "updated": 1644435537102,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -714,18 +769,21 @@
       "height": 25,
       "seed": 824942694,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644435537102,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Forum",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "x_AtOV5uzOqbU4fvWGeaM",
-      "originalText": "Forum"
+      "originalText": "Forum",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -747,10 +805,12 @@
       "height": 389.07538780799257,
       "seed": 20715002,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644436175187,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "rectangle",
@@ -772,10 +832,12 @@
       "height": 432.2019606370191,
       "seed": 366386362,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644436194595,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "rectangle",
@@ -797,7 +859,8 @@
       "height": 45.779536320612976,
       "seed": 1428360166,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -805,7 +868,8 @@
         }
       ],
       "updated": 1644438901606,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -827,23 +891,26 @@
       "height": 25,
       "seed": 1244656506,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644438901606,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "ical export",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "TN-_0XJYygMcQkl1PgGGK",
-      "originalText": "ical export"
+      "originalText": "ical export",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "text",
-      "version": 436,
-      "versionNonce": 188522362,
+      "version": 437,
+      "versionNonce": 553025188,
       "isDeleted": false,
       "id": "aaBWQcVvBNLJZ-SelPxt4",
       "fillStyle": "hachure",
@@ -856,22 +923,25 @@
       "y": 719.6983830378604,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
-      "width": 430,
+      "width": 430.4796142578125,
       "height": 650,
       "seed": 361256742,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
-      "updated": 1644438970125,
+      "updated": 1741073680652,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Event\nID ULID\nName\nType\nbegins_at\nends_at\nzip\nlocation\ncountry\nstreet\ndescription\nbarrier_free\nentry_fee\nonline_event\npublished\nevent_url\ncreated_at\nupdated_at\ndeleted_at\ncreated_by\n-------\nevtl. später\nseries_type <none | daily | weekly | monthly>\nseries_interval\n-> benötigt evtl. exclude-list für Ausnahmen\n",
-      "baseline": 643,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Event\nID ULID\nName\nType\nbegins_at\nends_at\nzip\nlocation\ncountry\nstreet\ndescription\nbarrier_free\nentry_fee\nonline_event\npublished\nevent_url\ncreated_at\nupdated_at\ndeleted_at\ncreated_by\n-------\nevtl. später\nseries_type <none | daily | weekly | monthly>\nseries_interval\n-> benötigt evtl. exclude-list für Ausnahmen\n"
+      "originalText": "Event\nID ULID\nName\nType\nbegins_at\nends_at\nzip\nlocation\ncountry\nstreet\ndescription\nbarrier_free\nentry_fee\nonline_event\npublished\nevent_url\ncreated_at\nupdated_at\ndeleted_at\ncreated_by\n-------\nevtl. später\nseries_type <none | daily | weekly | monthly>\nseries_interval\n-> benötigt evtl. exclude-list für Ausnahmen\n",
+      "lineHeight": 1.25,
+      "baseline": 643
     },
     {
       "type": "rectangle",
@@ -893,7 +963,8 @@
       "height": 70.07312481219952,
       "seed": 119193446,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [
         {
           "type": "text",
@@ -901,7 +972,8 @@
         }
       ],
       "updated": 1644437551820,
-      "link": null
+      "link": null,
+      "locked": false
     },
     {
       "type": "text",
@@ -923,23 +995,26 @@
       "height": 25,
       "seed": 2141015418,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
       "updated": 1644437549739,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Spielelisten",
-      "baseline": 18,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "sHNFIHjPExIo5pTHuMR9r",
-      "originalText": "Spielelisten"
+      "originalText": "Spielelisten",
+      "lineHeight": 1.25,
+      "baseline": 18
     },
     {
       "type": "text",
-      "version": 440,
-      "versionNonce": 1297485434,
+      "version": 441,
+      "versionNonce": 1857105308,
       "isDeleted": false,
       "id": "j3E8D2lVB_vwc2W5qnuXT",
       "fillStyle": "hachure",
@@ -952,22 +1027,25 @@
       "y": 721.5553307166466,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
-      "width": 471,
+      "width": 470.5796203613281,
       "height": 275,
       "seed": 1206956730,
       "groupIds": [],
-      "strokeSharpness": "sharp",
+      "frameId": null,
+      "roundness": null,
       "boundElements": [],
-      "updated": 1644439205581,
+      "updated": 1741073680653,
       "link": null,
+      "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
       "text": "Infos für später\n\n- Termin mit Spieleliste verknüpfbar\n-- damit man sehen kann, welche \n   Spiele gespielt werden können/ vorhanden sind\n- Serientermine\n- eigene Termine kopieren\n- Termin mit Spielegruppe verknüpfbar\n- Termin in Sozialen Medien teilbar\n- private Termine für Spielegruppen\n- evtl. doodle integration (oder selber bauen)",
-      "baseline": 268,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Infos für später\n\n- Termin mit Spieleliste verknüpfbar\n-- damit man sehen kann, welche \n   Spiele gespielt werden können/ vorhanden sind\n- Serientermine\n- eigene Termine kopieren\n- Termin mit Spielegruppe verknüpfbar\n- Termin in Sozialen Medien teilbar\n- private Termine für Spielegruppen\n- evtl. doodle integration (oder selber bauen)"
+      "originalText": "Infos für später\n\n- Termin mit Spieleliste verknüpfbar\n-- damit man sehen kann, welche \n   Spiele gespielt werden können/ vorhanden sind\n- Serientermine\n- eigene Termine kopieren\n- Termin mit Spielegruppe verknüpfbar\n- Termin in Sozialen Medien teilbar\n- private Termine für Spielegruppen\n- evtl. doodle integration (oder selber bauen)",
+      "lineHeight": 1.25,
+      "baseline": 268
     }
   ],
   "appState": {

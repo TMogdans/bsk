@@ -1,0 +1,46 @@
+flowchart LR
+    subgraph "External Services"
+        Admin["Admin Service"]
+        GameService["Game Service"]
+    end
+    
+    subgraph "Library Service"
+        Subscriber["Event Subscriber"]
+        Processors["Processors"]
+        DB[(PostgreSQL)]
+    end
+    
+    subgraph "Events"
+        GameEvent["boardgame-provided"]
+        CatEvent["category-provided"]
+        MechEvent["mechanic-provided"]
+        AwardEvent["award-provided"]
+        PublEvent["publisher-provided"]
+        PersonEvent["person-provided"]
+    end
+    
+    subgraph "NATS"
+        EventBus["Message Bus"]
+    end
+    
+    %% Flow
+    Admin -->|publishes| EventBus
+    GameService -->|publishes| EventBus
+    
+    EventBus -->|routes| GameEvent & CatEvent & MechEvent & AwardEvent & PublEvent & PersonEvent
+    
+    GameEvent & CatEvent & MechEvent & AwardEvent & PublEvent & PersonEvent -->|consumed by| Subscriber
+    
+    Subscriber -->|forwards to| Processors
+    Processors -->|persist| DB
+    
+    %% Styling
+    classDef service fill:#d5e8d4,stroke:#82b366,stroke-width:1px
+    classDef component fill:#dae8fc,stroke:#6c8ebf,stroke-width:1px
+    classDef event fill:#ffe6cc,stroke:#d79b00,stroke-width:1px
+    classDef db fill:#f5f5f5,stroke:#666666,stroke-width:1px
+    
+    class Admin,GameService service
+    class Subscriber,Processors component
+    class GameEvent,CatEvent,MechEvent,AwardEvent,PublEvent,PersonEvent event
+    class DB db

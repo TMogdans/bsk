@@ -1,0 +1,90 @@
+@startuml "Library Service - Data Model"
+skinparam linetype ortho
+skinparam backgroundColor white
+
+entity "Boardgame" as BG {
+  * id : UUID
+  --
+  * name : string
+  * slug : string
+  description : text
+  * minAge : int2
+  * minNumberOfPlayers : int2
+  * maxNumberOfPlayers : int2
+  * minPlayTimeMinutes : int2
+  * maxPlayTimeMinutes : int2
+  * createdAt : datetime
+  * updatedAt : datetime
+  deletedAt : datetime
+  * version : int
+}
+
+entity "Award" as AW {
+  * id : UUID
+  --
+  * name : string
+  * slug : string
+  description : text
+  * createdAt : datetime
+  * updatedAt : datetime
+}
+
+entity "Category" as CAT {
+  * id : UUID
+  --
+  * name : string
+  * slug : string
+  description : text
+  * createdAt : datetime
+  * updatedAt : datetime
+}
+
+entity "Mechanic" as MECH {
+  * id : UUID
+  --
+  * name : string
+  * slug : string
+  description : text
+  * createdAt : datetime
+  * updatedAt : datetime
+}
+
+entity "Publisher" as PUB {
+  * id : UUID
+  --
+  * name : string
+  * slug : string
+  description : text
+  * createdAt : datetime
+  * updatedAt : datetime
+}
+
+entity "Person" as PERS {
+  * id : UUID
+  --
+  * firstName : string
+  * lastName : string
+  * slug : string
+  description : text
+  * createdAt : datetime
+  * updatedAt : datetime
+}
+
+entity "Link" as LINK {
+  * id : UUID
+  --
+  * name : string
+  * url : string
+  * createdAt : datetime
+  * updatedAt : datetime
+}
+
+BG }o--o{ AW : has awards
+BG }o--o{ CAT : has categories
+BG }o--o{ MECH : has mechanics
+BG }o--o{ PUB : has publishers
+BG }o--o{ PERS : has designers
+BG }o--o{ PERS : has artists
+BG ||--o{ LINK : has links
+
+@enduml

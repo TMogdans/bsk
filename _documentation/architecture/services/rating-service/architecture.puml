@@ -1,0 +1,31 @@
+@startuml "Rating Services - Architecture Overview"
+!include <C4/C4_Container>
+
+Person(user, "User", "Platform user")
+
+System_Boundary(ratingSystem, "Rating System") {
+    Container(ratingWriteService, "Rating Write Service", "Node.js/Express/TypeORM", "Processes and stores rating commands")
+    Container(ratingReadService, "Rating Read Service", "Node.js/Express/Redis", "Provides optimized read access to ratings")
+    Container(ratingViewService, "Rating View Service", "React/NATS.ws", "User interface for ratings")
+    
+    ContainerDb(postgresDB, "PostgreSQL", "Database", "Stores rating data")
+    ContainerDb(redisDB, "Redis", "In-memory DB", "Caches ratings for fast reads")
+    ContainerQueue(natsQueue, "NATS", "Message Bus", "Event communication")
+}
+
+System(otherServices, "Other Platform Services", "Library Service, Event Service, etc.")
+
+Rel(user, ratingViewService, "Views and submits ratings", "HTTPS")
+Rel(ratingViewService, natsQueue, "Subscribes to rating updates", "NATS.ws")
+Rel(ratingViewService, ratingReadService, "Retrieves ratings", "HTTP/REST")
+
+Rel(ratingWriteService, postgresDB, "Stores ratings", "SQL")
+Rel(ratingWriteService, natsQueue, "Publishes rating events", "NATS")
+
+Rel(ratingReadService, redisDB, "Caches ratings", "Redis protocol")
+Rel(ratingReadService, natsQueue, "Subscribes to rating events", "NATS")
+
+Rel(otherServices, natsQueue, "Publishes/Subscribes to events", "NATS")
+
+SHOW_LEGEND()
+@enduml
