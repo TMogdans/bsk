@@ -1,0 +1,49 @@
+graph TD
+    subgraph "Kubernetes Cluster"
+        subgraph "monitoring Namespace"
+            Prometheus["Prometheus Server"]
+            Grafana["Grafana Dashboard"]
+            AlertManager["Alert Manager"]
+        end
+        
+        subgraph "bsk Namespace"
+            Services["Microservices<br>(Library, Event, Rating)"]
+            NATS["NATS Message Broker"]
+            DBs["Datenbanken<br>(PostgreSQL, Redis)"]
+        end
+        
+        subgraph "kube-system"
+            kube-state-metrics["kube-state-metrics"]
+            node-exporter["Node Exporter"]
+        end
+    end
+    
+    subgraph "External"
+        DevOpsTeam["DevOps Team"]
+        Webhook["Webhook<br>(Slack/Teams)"]
+    end
+    
+    Services -->|"/metrics<br>Prometheus Endpoint"| Prometheus
+    NATS -->|"Metriken"| Prometheus
+    DBs -->|"Metriken über Exporters"| Prometheus
+    
+    kube-state-metrics -->|"Kubernetes-Metriken"| Prometheus
+    node-exporter -->|"Node-Metriken"| Prometheus
+    
+    Prometheus -->|"Datenquelle"| Grafana
+    Prometheus -->|"Auslösen von Alerts"| AlertManager
+    
+    AlertManager -->|"Benachrichtigungen"| Webhook
+    AlertManager -->|"Kritische Alerts"| DevOpsTeam
+    
+    Grafana -->|"Dashboards"| DevOpsTeam
+    
+    classDef primary fill:#dae8fc,stroke:#6c8ebf,stroke-width:1px
+    classDef secondary fill:#d5e8d4,stroke:#82b366,stroke-width:1px
+    classDef alert fill:#f8cecc,stroke:#b85450,stroke-width:1px
+    classDef external fill:#fff2cc,stroke:#d6b656,stroke-width:1px
+    
+    class Prometheus,Grafana primary
+    class Services,NATS,DBs,kube-state-metrics,node-exporter secondary
+    class AlertManager alert
+    class DevOpsTeam,Webhook external

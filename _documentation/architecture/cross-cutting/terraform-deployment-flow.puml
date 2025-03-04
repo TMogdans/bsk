@@ -1,0 +1,55 @@
+@startuml "Terraform Deployment Flow"
+!theme plain
+skinparam backgroundColor white
+
+' Akteure definieren
+actor "DevOps Engineer" as DevOps
+participant "Terraform" as TF
+participant "Kubernetes API" as K8S
+database "Git Repository" as Git
+
+' Komponenten definieren
+collections "Terraform Modules" as Modules
+collections "Kubernetes Resources" as Resources
+
+' Flow darstellen
+DevOps -> Git : Commitet Terraform-Konfiguration
+DevOps -> TF : terraform init
+TF -> Git : Lädt Module
+TF --> Modules : Initialisiert
+
+DevOps -> TF : terraform plan
+TF -> K8S : Prüft aktuellen Status
+TF -> DevOps : Zeigt geplante Änderungen
+
+DevOps -> TF : terraform apply
+TF -> K8S : Erstellt/Aktualisiert Ressourcen
+
+group "Namespaces erstellen"
+    TF -> K8S : Erstellt bsk Namespace
+    TF -> K8S : Erstellt monitoring Namespace
+    TF -> K8S : Erstellt certmanager Namespace
+    K8S --> Resources : Namespaces angelegt
+end
+
+group "Security-Komponenten installieren"
+    TF -> K8S : Installiert Sealed Secrets via Helm
+    TF -> K8S : Installiert Cert-Manager via Helm
+    TF -> K8S : Konfiguriert Vault Deployment
+    K8S --> Resources : Security-Komponenten bereitgestellt
+end
+
+group "Messaging-Infrastruktur einrichten"
+    TF -> K8S : Erstellt NATS Deployment
+    TF -> K8S : Erstellt NATS Service
+    K8S --> Resources : NATS verfügbar
+end
+
+group "Überwachung einrichten"
+    TF -> K8S : Erstellt Prometheus Deployment
+    TF -> K8S : Erstellt Prometheus Service
+    K8S --> Resources : Monitoring verfügbar
+end
+
+K8S -> DevOps : Infrastruktur bereit
+@enduml

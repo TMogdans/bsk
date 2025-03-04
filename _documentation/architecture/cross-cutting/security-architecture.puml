@@ -1,0 +1,54 @@
+@startuml "Kubernetes Security Architecture"
+!include <kubernetes/k8s-sprites-unlabeled-25pct>
+!include <office/Servers/database_server>
+!include <office/Security/lock_protected>
+
+skinparam BackgroundColor white
+skinparam componentStyle rectangle
+
+' Definiere Komponenten
+package "Kubernetes Security Components" {
+    component "<$k8s>\nSealed Secrets Controller" as SSC
+    component "<$k8s>\nCert Manager" as CM
+    component "<$k8s>\nHashiCorp Vault" as Vault
+    component "<$lock_protected>\nTLS Certificates" as TLS
+    component "<$k8s>\nKubernetes Secrets" as Secrets
+    component "<$k8s>\nServiceAccounts" as SA
+}
+
+' Definiere Services
+package "Anwendungsservices" {
+    component "<$k8s>\nLibrary Service" as Library
+    component "<$k8s>\nEvent Service" as Event
+    component "<$k8s>\nRating Services" as Rating
+}
+
+' Definiere externe Komponenten
+actor "DevOps Engineer" as DevOps
+component "CI/CD Pipeline" as CICD
+component "<$database_server>\nDatenbanken" as DB
+
+' Verbindungen
+DevOps --> CICD : Commit verschlüsselte Secrets
+CICD --> SSC : Stellt Sealed Secrets bereit
+SSC --> Secrets : Entschlüsselt zu K8s-Secrets
+
+CM --> TLS : Stellt TLS-Zertifikate aus
+TLS --> Library : Sichert API-Verbindungen
+TLS --> Event : Sichert API-Verbindungen
+TLS --> Rating : Sichert API-Verbindungen
+
+Vault --> Secrets : Verwaltet dynamische Secrets
+Vault --> DB : Rotiert Datenbankzugangsdaten
+
+' Services nutzen Secrets
+Secrets --> Library : Stellt Zugangsdaten bereit
+Secrets --> Event : Stellt Zugangsdaten bereit
+Secrets --> Rating : Stellt Zugangsdaten bereit
+
+' ServiceAccounts für RBAC
+SA --> Library : Definiert Berechtigungen
+SA --> Event : Definiert Berechtigungen
+SA --> Rating : Definiert Berechtigungen
+
+@enduml

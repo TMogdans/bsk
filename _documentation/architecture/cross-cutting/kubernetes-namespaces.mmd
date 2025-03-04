@@ -1,0 +1,75 @@
+flowchart TB
+    subgraph Kubernetes["Kubernetes Cluster"]
+        subgraph NSbsk["bsk Namespace"]
+            Library["Library Service"]
+            Event["Event Service"]
+            
+            subgraph RatingSvcs["Rating Services"]
+                RatingWrite["Rating Write Service"]
+                RatingRead["Rating Read Service"]
+                RatingView["Rating View Service"]
+            end
+            
+            NATS["NATS Message Broker"]
+            PostgreSQL[(PostgreSQL)]
+            Redis[(Redis)]
+        end
+        
+        subgraph NSmonitoring["monitoring Namespace"]
+            Prometheus["Prometheus Server"]
+            Grafana["Grafana Dashboard"]
+        end
+        
+        subgraph NSsecurity["Security Namespaces"]
+            subgraph NSvault["vault-namespace"]
+                Vault["HashiCorp Vault"]
+            end
+            
+            subgraph NScertmanager["certmanager Namespace"]
+                CertManager["Cert Manager"]
+            end
+            
+            SealedSecrets["Sealed Secrets Controller"]
+        end
+        
+        Ingress["Ingress Controller"]
+    end
+    
+    Terraform[("Terraform<br>IaC")]
+    
+    %% Verbindungen
+    Terraform -->|"konfiguriert"| NSbsk & NSmonitoring & NSsecurity & Ingress
+    
+    %% Service-Verbindungen
+    Library <--> NATS
+    Event <--> NATS
+    RatingWrite --> NATS
+    RatingRead --> NATS
+    RatingView --> NATS
+    
+    Library --> PostgreSQL
+    Event --> PostgreSQL
+    RatingWrite --> PostgreSQL
+    RatingRead --> Redis
+    
+    Prometheus --> Library & Event & RatingWrite & RatingRead & RatingView & NATS
+    Prometheus --> Grafana
+    
+    Ingress --> Library & Event & RatingWrite & RatingRead & RatingView
+    
+    %% Styling
+    classDef namespace fill:#e6f3ff,stroke:#7fb1d3,stroke-width:2px
+    classDef service fill:#d5e8d4,stroke:#82b366,stroke-width:1px
+    classDef database fill:#f5f5f5,stroke:#666666,stroke-width:1px
+    classDef messaging fill:#d5f5e3,stroke:#2e8b57,stroke-width:1px
+    classDef monitoring fill:#fff2cc,stroke:#d6b656,stroke-width:1px
+    classDef security fill:#f8cecc,stroke:#b85450,stroke-width:1px
+    classDef infra fill:#e1d5e7,stroke:#9673a6,stroke-width:1px
+    
+    class NSbsk,NSmonitoring,NSsecurity,NSvault,NScertmanager namespace
+    class Library,Event,RatingWrite,RatingRead,RatingView service
+    class PostgreSQL,Redis database
+    class NATS messaging
+    class Prometheus,Grafana monitoring
+    class Vault,CertManager,SealedSecrets security
+    class Ingress,Terraform infra

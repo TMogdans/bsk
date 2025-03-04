@@ -1,0 +1,71 @@
+@startuml "Gesamtinfrastruktur"
+!include <C4/C4_Container>
+
+AddElementTag("k8s", $bgColor="#326CE5", $fontColor="#ffffff", $shape="RoundedBoxShape")
+AddElementTag("terraform", $bgColor="#7B42BC", $fontColor="#ffffff")
+AddElementTag("monitoring", $bgColor="#FF6D00", $fontColor="#ffffff")
+AddElementTag("security", $bgColor="#FF0000", $fontColor="#ffffff")
+AddElementTag("messaging", $bgColor="#00C853", $fontColor="#ffffff")
+
+Person(user, "Benutzer", "Nutzer der Brettspiel-Plattform")
+
+System_Boundary(k8s_cluster, "Kubernetes Cluster") {
+    Container_Boundary(bsk_namespace, "bsk Namespace") {
+        Container(library, "Library Service", "Node.js, TypeORM", "Verwaltet Brettspiel-Katalog", $tags="k8s")
+        Container(event, "Event Service", "PHP, Laravel", "Verwaltet Veranstaltungen", $tags="k8s")
+        
+        Container_Boundary(rating_services, "Rating Services") {
+            Container(rating_write, "Rating Write Service", "Node.js, TypeORM", "Speichert Bewertungen", $tags="k8s")
+            Container(rating_read, "Rating Read Service", "Node.js, Redis", "Liest Bewertungen", $tags="k8s")
+            Container(rating_view, "Rating View Service", "React", "UI für Bewertungen", $tags="k8s")
+        }
+        
+        ContainerDb(postgres, "PostgreSQL", "Relationale Datenbank", "Speichert Anwendungsdaten", $tags="k8s")
+        ContainerDb(redis, "Redis", "In-Memory DB", "Caching für Lesezugriffe", $tags="k8s")
+        
+        Container(nats, "NATS Message Broker", "Event Bus", "Verarbeitet Events zwischen Services", $tags="k8s,messaging")
+    }
+    
+    Container_Boundary(monitoring_namespace, "monitoring Namespace") {
+        Container(prometheus, "Prometheus", "Monitoring", "Überwacht Systemmetriken", $tags="k8s,monitoring")
+        Container(grafana, "Grafana", "Dashboard", "Visualisiert Metriken", $tags="k8s,monitoring")
+    }
+    
+    Container_Boundary(security_namespace, "Security") {
+        Container(certmanager, "Cert Manager", "TLS Management", "Verwaltet TLS-Zertifikate", $tags="k8s,security")
+        Container(vault, "HashiCorp Vault", "Secret Management", "Sicherer Schlüsselspeicher", $tags="k8s,security")
+        Container(sealed_secrets, "Sealed Secrets", "Secret Encryption", "Verschlüsselt Secrets in Git", $tags="k8s,security")
+    }
+    
+    Container(ingress, "Ingress Controller", "NGINX", "API-Gateway und Routing", $tags="k8s")
+}
+
+System_Ext(terraform, "Terraform", "Infrastructure as Code", $tags="terraform")
+
+Rel(user, ingress, "Zugriff auf Plattform", "HTTPS")
+Rel(ingress, library, "Routing zu Service")
+Rel(ingress, event, "Routing zu Service")
+Rel(ingress, rating_view, "Routing zu Service")
+Rel(ingress, rating_read, "Routing zu Service")
+Rel(ingress, rating_write, "Routing zu Service")
+
+Rel(library, nats, "Publiziert/Abonniert Events")
+Rel(event, nats, "Publiziert/Abonniert Events")
+Rel(rating_write, nats, "Publiziert Events")
+Rel(rating_read, nats, "Abonniert Events")
+Rel(rating_view, nats, "Abonniert Events", "WebSocket")
+
+Rel(library, postgres, "Persistiert Daten")
+Rel(event, postgres, "Persistiert Daten")
+Rel(rating_write, postgres, "Persistiert Ratings")
+Rel(rating_read, redis, "Liest gecachte Daten")
+
+Rel(prometheus, library, "Überwacht", "Metrics API")
+Rel(prometheus, event, "Überwacht", "Metrics API")
+Rel(prometheus, rating_write, "Überwacht", "Metrics API")
+Rel(prometheus, grafana, "Liefert Metriken", "PromQL")
+
+Rel(terraform, k8s_cluster, "Konfiguriert", "Kubernetes API")
+
+SHOW_LEGEND()
+@enduml

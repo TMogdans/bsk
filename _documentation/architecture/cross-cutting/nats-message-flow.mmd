@@ -1,0 +1,31 @@
+sequenceDiagram
+    participant LibrarySvc as Library Service
+    participant EventSvc as Event Service
+    participant RatingWriteSvc as Rating Write Service
+    participant RatingReadSvc as Rating Read Service
+    participant RatingViewSvc as Rating View Service (UI)
+    participant NATS as NATS Message Broker
+    
+    Note over NATS: Zentraler Nachrichtenbus in Kubernetes
+    
+    alt Boardgame erstellt/aktualisiert
+        LibrarySvc->>NATS: Publiziert boardgame-provided
+        NATS-->>EventSvc: Liefert boardgame-provided
+        NATS-->>RatingReadSvc: Liefert boardgame-provided
+    end
+    
+    alt Event erstellt/aktualisiert
+        EventSvc->>NATS: Publiziert event-created
+        NATS-->>LibrarySvc: Liefert event-created
+        NATS-->>RatingViewSvc: Liefert event-created
+    end
+    
+    alt Rating abgegeben
+        RatingWriteSvc->>NATS: Publiziert rating-submitted
+        NATS-->>RatingReadSvc: Liefert rating-submitted
+        RatingReadSvc->>RatingReadSvc: Aktualisiert Redis-Cache
+        NATS-->>RatingViewSvc: Liefert rating-submitted (Echtzeit-Update)
+        NATS-->>LibrarySvc: Liefert rating-submitted (für Statistiken)
+    end
+    
+    Note over NATS: Ermöglicht lose Kopplung der Services

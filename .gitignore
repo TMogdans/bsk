@@ -1,3 +1,7 @@
 .env
 /grafana/data
 /prometheus/data
+/*-service/api/coverage
+/deployment/k8s/.terraform
+/deployment/k8s/terraform.tfstate
+/deployment/k8s/terraform.tfstate.backup
