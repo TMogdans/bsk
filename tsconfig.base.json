@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    /* Language und JavaScript Ausgabe */
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext"],
+    "jsx": "react",
+
+    /* Strikte Typisierung */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    /* Modulinteroperabilität */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+
+    /* Codegenerierung */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "removeComments": false,
+    "skipLibCheck": true,
+
+    /* Erweiterte Überprüfungen */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Für TypeORM und andere Decorator-basierte Bibliotheken */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}

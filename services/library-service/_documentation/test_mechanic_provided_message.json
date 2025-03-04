@@ -1,0 +1,11 @@
+{
+  "message": "mechanic-provided",
+  "meta": {
+    "producer": "frontend",
+    "version": "1.0.0"
+  },
+  "payload": {
+    "name": "Worker-Placement",
+    "description": "Lorem ipsum!"
+  }
+}

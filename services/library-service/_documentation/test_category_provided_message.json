@@ -1,0 +1,11 @@
+{
+  "message": "category-provided",
+  "meta": {
+    "producer": "frontend",
+    "version": "1.0.0"
+  },
+  "payload": {
+    "name": "Sci-Fi-Fantasy",
+    "description": "Lorem ipsum!"
+  }
+}

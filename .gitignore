@@ -10,3 +10,12 @@
 /deployment/k8s/terraform.tfstate
 /deployment/k8s/terraform.tfstate.backup
 /deployment/k8s/terraform.tfstate.bak
+/services/*/api/node_modules
+/services/*/api/dist
+/services/*/api/coverage
+/services/*/api/.env
+/node_modules
+/dist
+/coverage
+/.env
+services/library-service/deployment/production/k8s/db/sealed-postgres-password-secret.yaml

@@ -1,0 +1,16 @@
+{
+  "name": "@bsk/nats-client",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/node": "catalog:",
+    "nats": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}
