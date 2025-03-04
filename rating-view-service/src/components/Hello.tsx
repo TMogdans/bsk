@@ -1,6 +1,6 @@
 import React from "react"
 import {useNatsSubscription} from "../hooks/useNats";
-import {JSONCodec, Msg} from "nats";
+import {JSONCodec, Msg} from "nats.ws";
 
 const natsSubject = 'commands';
 const sc = JSONCodec();

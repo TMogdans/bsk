@@ -59,6 +59,11 @@ module.exports = (_, argv) => ({
           singleton: true,
           requiredVersion: deps["react-dom"],
         },
+        "nats.ws": {
+          eager: true,
+          singleton: true,
+          requiredVersion: deps["nats.ws"],
+        }
       },
     }),
     new HtmlWebPackPlugin({

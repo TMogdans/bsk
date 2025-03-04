@@ -1,4 +1,4 @@
-import {connect, Msg, NatsConnection, NatsError} from "nats";
+import {connect, Msg, NatsConnection, NatsError} from "nats.ws";
 import {useEffect, useState} from "react";
 
 export const natsClientPromise = connect({servers: 'nats://localhost:4222'});
