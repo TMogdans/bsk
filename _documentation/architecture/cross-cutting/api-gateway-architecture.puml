@@ -1,0 +1,61 @@
+@startuml "API Gateway Architektur"
+!include <C4/C4_Container>
+
+AddElementTag("gateway", $bgColor="#FF9800", $fontColor="#ffffff")
+AddElementTag("k8s", $bgColor="#326CE5", $fontColor="#ffffff", $shape="RoundedBoxShape")
+AddElementTag("external", $bgColor="#9E9E9E", $fontColor="#ffffff")
+
+Person(user, "Benutzer", "Nutzer der Brettspiel-Plattform")
+
+System_Boundary(k8s_cluster, "Kubernetes Cluster") {
+    
+    Container(ingress, "Ingress Controller", "NGINX", "HTTP(S) Routing und TLS-Terminierung", $tags="k8s")
+    
+    Container_Boundary(bsk_namespace, "bsk Namespace") {
+        
+        Container(krakend, "KrakenD API Gateway", "Go/KrakenD CE", "Zentrales API-Gateway", $tags="k8s,gateway")
+        
+        Container_Boundary(api_features, "API-Gateway Funktionen") {
+            Container(routing, "Routing", "", "Routing zu Microservices", $tags="gateway")
+            Container(aggregation, "Aggregation", "", "Zusammenführung mehrerer API-Antworten", $tags="gateway")
+            Container(transformation, "Transformation", "", "JSON-Transformationen und Filterung", $tags="gateway")
+            Container(caching, "Caching", "", "Response-Caching für häufige Anfragen", $tags="gateway")
+            Container(logging, "Logging & Metriken", "", "Zentrale Überwachung des API-Traffics", $tags="gateway")
+        }
+        
+        Container(library, "Library Service", "Node.js", "Brettspiel-Katalog", $tags="k8s")
+        Container(event, "Event Service", "PHP", "Veranstaltungen", $tags="k8s")
+        Container(rating_read, "Rating Read Service", "Node.js", "Liest Bewertungen", $tags="k8s")
+        Container(rating_write, "Rating Write Service", "Node.js", "Speichert Bewertungen", $tags="k8s")
+    }
+}
+
+System_Ext(future_auth, "Authentifizierungssystem", "Zukünftig: Keycloak", $tags="external")
+
+Rel(user, ingress, "HTTPS Anfragen", "HTTPS")
+Rel(ingress, krakend, "Leitet alle /api Anfragen weiter", "HTTP")
+
+Rel_U(krakend, routing, "verwendet")
+Rel_U(krakend, aggregation, "verwendet")
+Rel_U(krakend, transformation, "verwendet")
+Rel_U(krakend, caching, "verwendet")
+Rel_U(krakend, logging, "verwendet")
+
+Rel_D(krakend, library, "Leitet Anfragen weiter", "HTTP")
+Rel_D(krakend, event, "Leitet Anfragen weiter", "HTTP")
+Rel_D(krakend, rating_read, "Leitet Anfragen weiter", "HTTP") 
+Rel_D(krakend, rating_write, "Leitet Anfragen weiter", "HTTP")
+
+Rel_R(krakend, future_auth, "Zukünftige Integration", "OAuth2/OIDC")
+
+note right of krakend
+  KrakenD übernimmt zentrale API-Gateway Funktionen:
+  - Einheitlicher API-Endpunkt für Clients
+  - Backend-Aggregation für Frontend-optimierte Responses
+  - Caching zur Reduzierung der Backend-Last
+  - Transformation/Filterung von JSON-Payloads
+  - Zentrale Metriken und Logging
+end note
+
+SHOW_LEGEND()
+@enduml

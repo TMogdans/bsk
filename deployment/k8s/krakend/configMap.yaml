@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: krakend-config
+  namespace: bsk
+data:
+  krakend.json: |
+    {
+      "version": 3,
+      "name": "BSK API Gateway",
+      "port": "8080",
+      "cache_ttl": "3600s",
+      "timeout": "3s",
+      "extra_config": {
+        "telemetry/logging": {
+          "level": "DEBUG",
+          "prefix": "[KRAKEND]",
+          "syslog": false,
+          "stdout": true
+        },
+        "telemetry/metrics": {
+          "collection_time": "60s",
+          "listen_address": ":8090"
+        }
+      },
+      "endpoints": [
+        {
+          "endpoint": "/api/v1/library",
+          "method": "GET",
+          "output_encoding": "json",
+          "backend": [
+            {
+              "url_pattern": "/",
+              "host": [
+                "http://library-service"
+              ],
+              "encoding": "json",
+              "method": "GET"
+            }
+          ]
+        },
+        {
+          "endpoint": "/api/v1/ratings",
+          "method": "GET",
+          "output_encoding": "json",
+          "backend": [
+            {
+              "url_pattern": "/",
+              "host": [
+                "http://rating-read-service"
+              ],
+              "encoding": "json",
+              "method": "GET"
+            }
+          ]
+        },
+        {
+          "endpoint": "/api/v1/ratings",
+          "method": "POST",
+          "output_encoding": "json",
+          "backend": [
+            {
+              "url_pattern": "/",
+              "host": [
+                "http://rating-write-service"
+              ],
+              "encoding": "json",
+              "method": "POST"
+            }
+          ]
+        },
+        {
+          "endpoint": "/api/v1/events",
+          "method": "GET",
+          "output_encoding": "json",
+          "backend": [
+            {
+              "url_pattern": "/events",
+              "host": [
+                "http://event-service"
+              ],
+              "encoding": "json",
+              "method": "GET"
+            }
+          ]
+        }
+      ],
+      "output_encoding": "json"
+    }
