@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: event-service-postgres-pv-volume
+  namespace: bsk
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/event-service-postgres"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: event-service-postgres-pv-claim
+  namespace: bsk
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

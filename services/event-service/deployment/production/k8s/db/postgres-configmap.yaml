@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-postgres-configmap
+  namespace: bsk
+  labels:
+    app: event-service-postgres
+data:
+  POSTGRES_DB: "events"
+  POSTGRES_USER: "postgres"

@@ -1,0 +1,28 @@
+# Add this to the main docker-compose.yml
+# This is not a standalone file, just a snippet to add to the root docker-compose.yml
+
+  event-service:
+    build:
+      context: .
+      dockerfile: services/event-service/deployment/development/Dockerfile
+    container_name: event-service
+    restart: unless-stopped
+    depends_on:
+      - nats
+      - postgres
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      LOG_LEVEL: debug
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: events
+      DB_USER: postgres
+      DB_PASSWORD: S3cret
+      NATS_SERVER: nats:4222
+    ports:
+      - "3010:3000"
+    volumes:
+      - ./services/event-service/api:/app/services/event-service/api
+    networks:
+      - bsk-network

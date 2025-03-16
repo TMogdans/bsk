@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-service-db
+  namespace: bsk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-service-db
+  template:
+    metadata:
+      labels:
+        app: event-service-db
+    spec:
+      containers:
+        - image: postgres:16-alpine
+          name: event-service-db
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: event-service-postgres-configmap
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: event-service-postgres-configmap
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: event-service-db-password
+                  key: password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: event-service-postgres-pv-volume
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+          - name: event-service-postgres-pv-volume
+            persistentVolumeClaim:
+              claimName: event-service-postgres-pv-claim

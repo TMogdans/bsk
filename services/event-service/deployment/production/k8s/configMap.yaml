@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-environment-config-map
+  namespace: bsk
+data:
+  PORT: "3000"
+  LOG_LEVEL: "info"
+  DB_HOST: "event-service-db"
+  DB_PORT: "5432"
+  DB_NAME: "events"
+  NATS_SERVER: "nats:4222"

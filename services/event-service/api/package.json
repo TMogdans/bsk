@@ -1,0 +1,49 @@
+{
+  "name": "@bsk/event-service",
+  "version": "1.0.0",
+  "description": "Event service for managing events and event types",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node dist/index.js",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "format": "biome format --write .",
+    "lint": "biome check .",
+    "lint:fix": "biome check --apply ."
+  },
+  "dependencies": {
+    "@bsk/nats-client": "workspace:*",
+    "cors": "catalog:",
+    "date-fns": "catalog:",
+    "dotenv": "catalog:",
+    "express": "catalog:",
+    "helmet": "catalog:",
+    "http-errors": "^2.0.0",
+    "morgan": "catalog:",
+    "pino": "catalog:",
+    "pino-pretty": "catalog:",
+    "slonik": "catalog:",
+    "@slonik/migrator": "catalog:",
+    "slugify": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/http-errors": "^2.0.4",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "catalog:",
+    "@types/supertest": "^6.0.2",
+    "@vitest/coverage-v8": "catalog:",
+    "supertest": "^6.3.4",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-node": "catalog:",
+    "vitest": "catalog:"
+  }
+}
