@@ -12,3 +12,4 @@ catalog:
   "typescript": ^5.8.2
   "nats": ^2.29.2
   "@types/node": ^22.13.9
+  "express": ^4.21.2,

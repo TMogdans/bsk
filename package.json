@@ -19,6 +19,7 @@
   "dependencies": {
     "@dapr/dapr": "^3.2.0",
     "collectionizejs": "^0.3.0",
+    "express": "catalog:",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "tsx": "^4.7.0",
