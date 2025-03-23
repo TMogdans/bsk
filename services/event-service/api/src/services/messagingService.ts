@@ -1,7 +1,7 @@
-import natsClient from '@bsk/nats-client';
+import * as NATS from 'nats';
 import { createLogger } from '../utils/logger';
 import { config } from '../config';
-import { EventResponse } from '../schemas/eventSchema';
+import type { EventResponse } from '../schemas/eventSchema';
 import { z } from 'zod';
 
 const logger = createLogger('MessagingService');
@@ -19,6 +19,7 @@ export type EventNotification = z.infer<typeof eventNotificationSchema>;
 
 export class MessagingService {
   private connected = false;
+  private client?: NATS.NatsConnection;
   
   /**
    * Initialisiert die Verbindung zu NATS
@@ -27,7 +28,7 @@ export class MessagingService {
     if (this.connected) return;
     
     try {
-      await natsClient.connect(config.nats.url);
+      this.client = await NATS.connect({ servers: config.nats.url });
       this.connected = true;
       logger.info(`Connected to NATS server at ${config.nats.url}`);
     } catch (error) {
@@ -40,7 +41,7 @@ export class MessagingService {
    * Sendet eine Benachrichtigung über ein Event-Update
    */
   async publishEventUpdate(event: EventResponse, action: 'created' | 'updated' | 'deleted'): Promise<void> {
-    if (!this.connected) {
+    if (!this.connected || !this.client) {
       await this.connect();
     }
     
@@ -53,7 +54,13 @@ export class MessagingService {
     };
     
     try {
-      await natsClient.publish<EventNotification>('events.updates', notification);
+      // Veröffentliche die Nachricht im NATS
+      const sc = NATS.StringCodec();
+      this.client?.publish(
+        'events.updates',
+        sc.encode(JSON.stringify(notification))
+      );
+      
       logger.info({ eventId: event.id, action }, 'Published event notification');
     } catch (error) {
       logger.error({ error, event, action }, 'Failed to publish event notification');
@@ -64,8 +71,8 @@ export class MessagingService {
    * Schließt die Verbindung zu NATS
    */
   async close(): Promise<void> {
-    if (this.connected) {
-      await natsClient.close();
+    if (this.connected && this.client) {
+      await this.client.drain();
       this.connected = false;
       logger.info('Closed NATS connection');
     }

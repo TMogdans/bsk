@@ -1,8 +1,9 @@
 import app from './app';
 import { config } from './config';
 import { createLogger } from './utils/logger';
-import { pool } from './db/pool';
+import { pool, getPool } from './db/pool';
 import { MessagingService } from './services/messagingService';
+import { sql } from 'slonik';
 
 const logger = createLogger('server');
 const messagingService = new MessagingService();
@@ -10,10 +11,9 @@ const messagingService = new MessagingService();
 // Function to test database connection
 const testDatabaseConnection = async () => {
   try {
-    await pool.connect(async (connection) => {
-      await connection.query('SELECT 1');
-      logger.info('Database connection successful');
-    });
+    // Verwenden des kompatiblen pool-Objekts
+    await pool.query(sql.unsafe`SELECT 1`);
+    logger.info('Database connection successful');
     return true;
   } catch (error) {
     logger.error({ error }, 'Failed to connect to database');
@@ -84,9 +84,7 @@ const startServer = async () => {
   }
 };
 
-// Only start the server if this file is executed directly
-if (import.meta.url === import.meta.resolve('./index.ts')) {
-  startServer();
-}
+// Start the server
+startServer();
 
 export { app, startServer };

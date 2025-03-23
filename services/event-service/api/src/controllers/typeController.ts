@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { TypeService } from '../services/typeService';
 import { createTypeSchema, updateTypeSchema } from '../schemas/eventSchema';
 import { createLogger } from '../utils/logger';
@@ -33,10 +33,10 @@ export class TypeController {
    */
   async getTypeById(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = parseInt(req.params.id);
+      const id = Number.parseInt(req.params.id);
       logger.debug({ id }, 'Getting type by ID');
       
-      if (isNaN(id)) {
+      if (Number.isNaN(id)) {
         throw new ValidationError('Invalid ID format', { id: 'Must be a number' });
       }
       
@@ -75,10 +75,10 @@ export class TypeController {
    */
   async updateType(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = parseInt(req.params.id);
+      const id = Number.parseInt(req.params.id);
       logger.debug({ id, body: req.body }, 'Updating type');
       
-      if (isNaN(id)) {
+      if (Number.isNaN(id)) {
         throw new ValidationError('Invalid ID format', { id: 'Must be a number' });
       }
       
@@ -102,10 +102,10 @@ export class TypeController {
    */
   async deleteType(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = parseInt(req.params.id);
+      const id = Number.parseInt(req.params.id);
       logger.debug({ id }, 'Deleting type');
       
-      if (isNaN(id)) {
+      if (Number.isNaN(id)) {
         throw new ValidationError('Invalid ID format', { id: 'Must be a number' });
       }
       

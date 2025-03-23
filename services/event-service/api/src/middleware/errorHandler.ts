@@ -1,15 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { createLogger } from '../utils/logger';
 import createHttpError from 'http-errors';
+import { config } from '../config';
 
 const logger = createLogger('errorHandler');
 
 class ApplicationError extends Error {
   constructor(
     public message: string, 
-    public statusCode: number = 500, 
-    public type: string = 'ApplicationError',
+    public statusCode = 500, 
+    public type = 'ApplicationError',
     public details?: unknown
   ) {
     super(message);

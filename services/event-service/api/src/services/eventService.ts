@@ -2,13 +2,20 @@ import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { TypeRepository } from '../repositories/typeRepository';
 import { EventRepository } from '../repositories/eventRepository';
-import { CreateEvent, EventFilter, UpdateEvent } from '../schemas/eventSchema';
-import { EventList, Month } from '../types/eventTypes';
+import type { Event, CreateEvent, EventFilter, UpdateEvent } from '../schemas/eventSchema';
+import type { EventList, Month } from '../types/eventTypes';
 import { createLogger } from '../utils/logger';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler';
 import { MessagingService } from './messagingService';
 
 const logger = createLogger('EventService');
+
+// Definiere einen Typ für die angereicherten Events
+type EnrichedEvent = Event & {
+  type_name: string;
+  type: { name: string };
+  meta: { url: string };
+};
 
 export class EventService {
   private typeRepository: TypeRepository;
@@ -48,8 +55,7 @@ export class EventService {
         return {
           ...eventWithType,
           type: {
-            name: eventWithType.type_name,
-            translated: this.getTranslation(eventWithType.type_translations, 'de')
+            name: eventWithType.type_name
           },
           meta: {
             url: `/events/${eventWithType.slug}`
@@ -58,8 +64,8 @@ export class EventService {
       })
     );
     
-    // Filter out any nulls
-    const validEvents = enrichedEvents.filter(Boolean);
+    // Filter out nulls and cast to appropriate type
+    const validEvents = enrichedEvents.filter((event): event is EnrichedEvent => event !== null);
     
     // Group by month and format for API response
     const months = this.groupEventsByMonth(validEvents);
@@ -73,7 +79,7 @@ export class EventService {
   /**
    * Get a specific event by its slug
    */
-  async getEventBySlug(slug: string) {
+  async getEventBySlug(slug: string): Promise<EnrichedEvent> {
     logger.debug({ slug }, 'Getting event by slug');
     
     const event = await this.eventRepository.getEventWithType(slug);
@@ -86,8 +92,7 @@ export class EventService {
     return {
       ...event,
       type: {
-        name: event.type_name,
-        translated: this.getTranslation(event.type_translations, 'de')
+        name: event.type_name
       },
       meta: {
         url: `/events/${event.slug}`
@@ -98,7 +103,7 @@ export class EventService {
   /**
    * Create a new event
    */
-  async createEvent(eventData: CreateEvent): Promise<any> {
+  async createEvent(eventData: CreateEvent): Promise<EnrichedEvent> {
     logger.debug({ eventData }, 'Creating new event');
     
     // Convert type string to type_id
@@ -122,11 +127,10 @@ export class EventService {
     }
     
     // Format for API response
-    const formattedEvent = {
+    const formattedEvent: EnrichedEvent = {
       ...createdEvent,
       type: {
-        name: createdEvent.type_name,
-        translated: this.getTranslation(createdEvent.type_translations, 'de')
+        name: createdEvent.type_name
       },
       meta: {
         url: `/events/${createdEvent.slug}`
@@ -147,7 +151,7 @@ export class EventService {
   /**
    * Update an existing event
    */
-  async updateEvent(id: number, eventData: UpdateEvent): Promise<any> {
+  async updateEvent(id: number, eventData: UpdateEvent): Promise<EnrichedEvent> {
     logger.debug({ id, eventData }, 'Updating event');
     
     // Check if event exists
@@ -172,8 +176,7 @@ export class EventService {
     
     // Update event
     const updatedEvent = await this.eventRepository.update(id, {
-      ...eventData,
-      type_id
+      ...eventData
     });
     
     if (!updatedEvent) {
@@ -188,11 +191,10 @@ export class EventService {
     }
     
     // Format for API response
-    const formattedEvent = {
+    const formattedEvent: EnrichedEvent = {
       ...eventWithType,
       type: {
-        name: eventWithType.type_name,
-        translated: this.getTranslation(eventWithType.type_translations, 'de')
+        name: eventWithType.type_name
       },
       meta: {
         url: `/events/${eventWithType.slug}`
@@ -229,11 +231,10 @@ export class EventService {
     }
     
     // Format for notification
-    const formattedEvent = {
+    const formattedEvent: EnrichedEvent = {
       ...event,
       type: {
-        name: event.type_name,
-        translated: this.getTranslation(event.type_translations, 'de')
+        name: event.type_name
       },
       meta: {
         url: `/events/${event.slug}`
@@ -251,12 +252,12 @@ export class EventService {
   /**
    * Group events by month
    */
-  private groupEventsByMonth(events: any[]): Month[] {
+  private groupEventsByMonth(events: EnrichedEvent[]): Month[] {
     if (events.length === 0) {
       return [];
     }
     
-    const eventsByMonth: Record<string, any[]> = {};
+    const eventsByMonth: Record<string, EnrichedEvent[]> = {};
     
     // Group events by month
     for (const event of events) {
@@ -275,16 +276,5 @@ export class EventService {
       heading,
       events
     }));
-  }
-  
-  /**
-   * Get translation for a specific language
-   */
-  private getTranslation(translations: Record<string, string> | null, lang: string): string {
-    if (!translations) {
-      return '';
-    }
-    
-    return translations[lang] || Object.values(translations)[0] || '';
   }
 }

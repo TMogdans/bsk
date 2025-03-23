@@ -1,5 +1,10 @@
 {
+	"name": "bsk",
+	"version": "1.0.0",
+	"description": "",
 	"dependencies": {
-		"@slonik/migrator": "^0.12.0"
+		"@slonik/migrator": "^0.12.0",
+		"@slonik/pg-driver": "^46.4.0",
+		"typescript-slugify": "^1.0.1"
 	}
 }

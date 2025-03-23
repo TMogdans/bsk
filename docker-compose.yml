@@ -1,27 +1,6 @@
-version: "3.7"
 services:
-  bsk-db:
-    image: mysql:5.7.22
-    container_name: bsk-db
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3308:3306"
-    environment:
-      MYSQL_DATABASE: ${EVENT_DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${EVENT_DB_PASSWORD}
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    command: --init-file /data/application/init.sql
-    volumes:
-      - ./mysql/init.sql:/data/application/init.sql
-      - dbdata:/var/lib/mysql
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
-    networks:
-      - bsk-network
-
   # Neuer Node.js Event-Service
+
   event-service:
     build:
       context: .
@@ -29,10 +8,8 @@ services:
     container_name: event-service
     restart: unless-stopped
     depends_on:
-      postgres:
-        condition: service_healthy
-      nats:
-        condition: service_started
+      - nats
+      - postgres
     environment:
       NODE_ENV: development
       PORT: 3000
@@ -47,8 +24,10 @@ services:
       - "3010:3000"
     volumes:
       - ./services/event-service/api:/app/services/event-service/api
+      - node_modules_event:/app/services/event-service/api/node_modules
     networks:
       - bsk-network
+    command: ["sh", "-c", "cd /app/services/event-service/api && pnpm install && pnpm run dev"]
 
   # Rating Write Service
   rating-write-service:
@@ -227,7 +206,7 @@ services:
     ports:
       - 8088:8080
     depends_on:
-      - bsk-db
+      - postgres
 
   nats:
     image: nats
@@ -261,6 +240,11 @@ services:
       -c max_connections=200
     networks:
       - bsk-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 
 networks:
@@ -270,3 +254,4 @@ networks:
 volumes:
   dbdata:
   dbdata2:
+  node_modules_event:

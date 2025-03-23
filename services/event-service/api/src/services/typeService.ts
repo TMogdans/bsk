@@ -15,7 +15,7 @@ export class TypeService {
   /**
    * Get all event types
    */
-  async getAllTypes(): Promise<Array<{ id: number; name: string; translated: string }>> {
+  async getAllTypes(): Promise<Array<{ id: number; name: string; }>> {
     logger.debug('Getting all event types');
     
     const types = await this.typeRepository.findAll();
@@ -23,15 +23,14 @@ export class TypeService {
     // Format types for API response
     return types.map(type => ({
       id: type.id,
-      name: type.name,
-      translated: this.getTranslation(type.translations, 'de')
+      name: type.name
     }));
   }
   
   /**
    * Get a specific type by ID
    */
-  async getTypeById(id: number): Promise<{ id: number; name: string; translated: string }> {
+  async getTypeById(id: number): Promise<{ id: number; name: string; }> {
     logger.debug({ id }, 'Getting type by ID');
     
     const type = await this.typeRepository.findById(id);
@@ -42,30 +41,28 @@ export class TypeService {
     
     return {
       id: type.id,
-      name: type.name,
-      translated: this.getTranslation(type.translations, 'de')
+      name: type.name
     };
   }
   
   /**
    * Create a new event type
    */
-  async createType(data: CreateType): Promise<{ id: number; name: string; translated: string }> {
+  async createType(data: CreateType): Promise<{ id: number; name: string; }> {
     logger.debug({ data }, 'Creating new type');
     
     const type = await this.typeRepository.create(data);
     
     return {
       id: type.id,
-      name: type.name,
-      translated: this.getTranslation(type.translations, 'de')
+      name: type.name
     };
   }
   
   /**
    * Update an existing event type
    */
-  async updateType(id: number, data: UpdateType): Promise<{ id: number; name: string; translated: string }> {
+  async updateType(id: number, data: UpdateType): Promise<{ id: number; name: string; }> {
     logger.debug({ id, data }, 'Updating type');
     
     const type = await this.typeRepository.update(id, data);
@@ -76,8 +73,7 @@ export class TypeService {
     
     return {
       id: type.id,
-      name: type.name,
-      translated: this.getTranslation(type.translations, 'de')
+      name: type.name
     };
   }
   
@@ -92,16 +88,5 @@ export class TypeService {
     if (!deleted) {
       throw new NotFoundError(`Type with ID ${id} not found`);
     }
-  }
-  
-  /**
-   * Get translation for a specific language
-   */
-  private getTranslation(translations: Record<string, string> | null, lang: string): string {
-    if (!translations) {
-      return '';
-    }
-    
-    return translations[lang] || Object.values(translations)[0] || '';
   }
 }

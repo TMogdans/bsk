@@ -3,8 +3,7 @@ import { z } from 'zod';
 // Base type schema
 export const typeSchema = z.object({
   id: z.number().int().positive(),
-  name: z.string().min(1),
-  translations: z.record(z.string(), z.string()).optional()
+  name: z.string().min(1)
 });
 
 export const createTypeSchema = typeSchema.omit({ id: true });
@@ -61,9 +60,7 @@ export const filterSchema = z.object({
 
 // Schema for event response
 export const eventResponseSchema = eventSchema.extend({
-  type: typeSchema.omit({ id: true }).extend({ 
-    translated: z.string() 
-  })
+  type: typeSchema.omit({ id: true })
 }).omit({ type_id: true });
 
 // Export type definitions

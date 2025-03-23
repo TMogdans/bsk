@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { createHttpError } from 'http-errors';
+import createHttpError from 'http-errors';
 import apiRoutes from './routes/eventRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import { config } from './config';

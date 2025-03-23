@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { EventService } from '../services/eventService';
 import { createEventSchema, filterSchema, updateEventSchema } from '../schemas/eventSchema';
 import { createLogger } from '../utils/logger';
@@ -80,10 +80,10 @@ export class EventController {
    */
   async updateEvent(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = parseInt(req.params.id);
+      const id = Number.parseInt(req.params.id);
       logger.debug({ id, body: req.body }, 'Updating event');
       
-      if (isNaN(id)) {
+      if (Number.isNaN(id)) {
         throw new ValidationError('Invalid ID format', { id: 'Must be a number' });
       }
       
@@ -107,10 +107,10 @@ export class EventController {
    */
   async deleteEvent(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = parseInt(req.params.id);
+      const id = Number.parseInt(req.params.id);
       logger.debug({ id }, 'Deleting event');
       
-      if (isNaN(id)) {
+      if (Number.isNaN(id)) {
         throw new ValidationError('Invalid ID format', { id: 'Must be a number' });
       }
       

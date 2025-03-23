@@ -1,55 +1,58 @@
-import { createPool } from 'slonik';
-import { createMigrator } from '@slonik/migrator';
+import { Migrator } from '@pgkit/migrator';
 import { config } from '../config';
 import { createLogger } from '../utils/logger';
-
-// Import migrations
-import migration1 from './01-create-base-schema';
-import migration2 from './02-seed-default-types';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const logger = createLogger('migrations');
 
-const run = async () => {
-  const connectionString = `postgresql://${config.db.user}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.database}`;
-  
-  logger.info(`Connecting to database at ${config.db.host}:${config.db.port}/${config.db.database}`);
-  
-  const pool = createPool(connectionString);
-  
-  const migrator = createMigrator({
-    migrationsPath: 'migrations',
-    migrationTableName: 'migration',
-    slonik: pool,
-    hooks: {
-      beforeMigration: (migration) => {
-        logger.info(`Running migration: ${migration.name}`);
-      },
-      afterMigration: (migration) => {
-        logger.info(`Migration completed: ${migration.name}`);
-      }
-    }
-  });
+// Get the directory name properly in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Define connection string from config
+const connectionString = `postgresql://${config.db.user}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.database}`;
+
+// Create a migrator instance
+const migrator = new Migrator({
+  client: {
+    connectionString
+  },
+  migrationsPath: path.resolve(__dirname),
+  migrationTableName: 'migrations',
+  // Add custom logger
+  logger: {
+    info: (message) => logger.info(message),
+    error: (message) => logger.error(message),
+    debug: (message) => logger.debug(message),
+    warn: (message) => logger.warn(message)
+  }
+});
+
+const run = async () => {
   try {
-    // Define migrations
-    const migrations = [migration1, migration2];
+    logger.info(`Connecting to database at ${config.db.host}:${config.db.port}/${config.db.database}`);
     
-    // Run migrations in sequence
-    for (const migration of migrations) {
-      await migrator.runMigration(migration);
+    // Run pending migrations
+    logger.info('Running migrations...');
+    const result = await migrator.up();
+    
+    if (result.migrations.length === 0) {
+      logger.info('No pending migrations to run.');
+    } else {
+      for (const migration of result.migrations) {
+        logger.info(`Applied migration: ${migration.name}`);
+      }
+      logger.info(`Total migrations applied: ${result.migrations.length}`);
     }
-    
-    logger.info('All migrations have been completed successfully.');
   } catch (error) {
     logger.error({ error }, 'Migration failed');
     process.exit(1);
-  } finally {
-    await pool.end();
   }
 };
 
 // Run migrations when this file is executed directly
-if (require.main === module) {
+if (process.argv[1] === import.meta.url) {
   run()
     .then(() => {
       process.exit(0);
