@@ -9,16 +9,16 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Copy the service package.json
-COPY services/rating-write-service/api/package.json ./services/rating-write-service/api/
+COPY services/rating-read-service/api/package.json ./services/rating-read-service/api/
 
 # Install dependencies
 RUN pnpm install
 
 # Copy the rest of the application
-COPY services/rating-write-service ./services/rating-write-service
+COPY services/rating-read-service ./services/rating-read-service
 
 # Set working directory to service
-WORKDIR /app/services/rating-write-service/api
+WORKDIR /app/services/rating-read-service/api
 
 # Expose port
 EXPOSE 3000
