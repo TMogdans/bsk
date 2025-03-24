@@ -1,0 +1,27 @@
+meta {
+  name: new event
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{bsk-host}}/api/events
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Testevent",
+    "type": "fair",
+    "begins_at": "2025-08-01",
+    "ends_at": "2025-08-01",
+    "country": "de",
+    "description": "lorem ipsum",
+    "barrier_free": false,
+    "entry_free": false,
+    "online_event": false,
+    "event_url": "http://example.com",
+    "created_by": 1
+  }
+}

@@ -1,0 +1,18 @@
+meta {
+  name: events
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{bsk-host}}/api/events?presence=offline&type=fair
+  body: none
+  auth: inherit
+}
+
+params:query {
+  presence: offline
+  type: fair
+  ~barrierFree: 
+  ~entryFree: 
+}

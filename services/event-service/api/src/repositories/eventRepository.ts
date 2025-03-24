@@ -1,17 +1,15 @@
 import { createSqlTag, sql, type SqlToken } from 'slonik';
-import { pool } from '../db/pool';
+import {getPool} from '../db/pool';
 import { 
-  CreateEvent, 
-  createEventSchema, 
   eventResponseSchema, 
   type Event, 
   type EventFilter, 
   type UpdateEvent 
 } from '../schemas/eventSchema';
 import { createLogger } from '../utils/logger';
-import slugify from "slugify";;
 import { eventSchema } from '../schemas/eventSchema';
 import { z } from 'zod';
+import { slugify } from '../utils/slugify';
 
 const logger = createLogger('EventRepository');
 const sqlEvents = createSqlTag({
@@ -27,10 +25,10 @@ export class EventRepository {
   /**
    * Find all published events that haven't ended yet
    */
-  async findAllFuturePublished(filter?: EventFilter): Promise<readonly Event[]> {
+  async findAllFuturePublished(filter?: EventFilter) {
     logger.debug({ filter }, 'Finding all future published events');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
       let query = sql.fragment`
         SELECT e.* 
         FROM events e
@@ -61,19 +59,18 @@ export class EventRepository {
           }
         }
 
-        const result = await connection.query(sqlEvents.typeAlias("events")`${query} ORDER BY e.begins_at ASC`);
+        const result = await pool.query(sqlEvents.typeAlias("events")`${query} ORDER BY e.begins_at ASC`);
         return result.rows as unknown as Event[];
-      });
   }
 
   /**
    * Find an event by its slug
    */
-  async findBySlug(slug: string): Promise<Event | null> {
+  async findBySlug(slug: string) {
     logger.debug({ slug }, 'Finding event by slug');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.maybeOne(sqlEvents.typeAlias("event")`
+      const result = await pool.maybeOne(sqlEvents.typeAlias("event")`
         SELECT e.* 
         FROM events e
         WHERE e.slug = ${slug}
@@ -83,17 +80,16 @@ export class EventRepository {
       `);
       
       return result;
-    });
   }
 
   /**
    * Find an event by its ID
    */
-  async findById(id: number): Promise<Event | null> {
+  async findById(id: number) {
     logger.debug({ id }, 'Finding event by ID');
-    
-    return (await pool).connect(async (connection) => {
-      const result = await connection.maybeOne(sqlEvents.typeAlias("event")`
+    const pool = await getPool();
+
+      const result = await pool.maybeOne(sqlEvents.typeAlias("event")`
         SELECT * 
         FROM events
         WHERE id = ${id}
@@ -101,19 +97,18 @@ export class EventRepository {
       `);
       
       return result;
-    });
   }
 
   /**
    * Create a new event
    */
-  async create(data: Omit<Event, 'id' | 'slug' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<Event> {
+  async create(data: Omit<Event, 'id' | 'slug' | 'created_at' | 'updated_at' | 'deleted_at'>) {
     logger.debug({ data }, 'Creating new event');
+    const pool = await getPool();
     
     const slug = slugify(data.name);
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.one(sqlEvents.typeAlias("event")`
+      const result = await pool.one(sqlEvents.typeAlias("event")`
         INSERT INTO events (
           name, slug, type_id, begins_at, ends_at, zip, location, country, 
           street, description, barrier_free, entry_free, online_event, 
@@ -140,16 +135,15 @@ export class EventRepository {
       `);
       
       return result;
-    });
   }
 
   /**
    * Update an existing event
    */
-  async update(id: number, data: UpdateEvent): Promise<Event | null> {
+  async update(id: number, data: UpdateEvent) {
     logger.debug({ id, data }, 'Updating event');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
       // Build dynamic SET part of the query
       const updates: SqlToken[] = [];
       
@@ -197,7 +191,7 @@ export class EventRepository {
       // Combine all the update fragments
       const setClause = sql.join(updates, sql.fragment`,`);
       
-      const result = await connection.maybeOne(sqlEvents.typeAlias("event")`
+      const result = await pool.maybeOne(sqlEvents.typeAlias("event")`
         UPDATE events
         SET ${setClause}
         WHERE id = ${id}
@@ -206,17 +200,17 @@ export class EventRepository {
       `);
       
       return result;
-    });
   }
 
   /**
    * Soft delete an event by setting deleted_at
    */
-  async softDelete(id: number): Promise<boolean> {
+  async softDelete(id: number) {
     logger.debug({ id }, 'Soft deleting event');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.query(sqlEvents.typeAlias('void')`
+
+      const result = await pool.query(sqlEvents.typeAlias('void')`
         UPDATE events
         SET deleted_at = NOW()
         WHERE id = ${id}
@@ -224,37 +218,35 @@ export class EventRepository {
       `);
       
       return result.rowCount > 0;
-    });
   }
 
   /**
    * Hard delete an event (usually only for testing/admin purposes)
    */
-  async hardDelete(id: number): Promise<boolean> {
+  async hardDelete(id: number) {
     logger.debug({ id }, 'Hard deleting event');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.query(sqlEvents.typeAlias('void')`
+      const result = await pool.query(sqlEvents.typeAlias('void')`
         DELETE FROM events
         WHERE id = ${id}
       `);
       
       return result.rowCount > 0;
-    });
   }
 
   /**
    * Get event with type information for presentation
    */
-  async getEventWithType(id: number | string): Promise<(Event & { type_name: string }) | null> {
+  async getEventWithType(id: number | string) {
     logger.debug({ id }, 'Getting event with type information');
+    const pool = await getPool();
     
     const condition = typeof id === 'number' 
       ? sql.fragment`e.id = ${id}`
       : sql.fragment`e.slug = ${id}`;
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.maybeOne(sqlEvents.typeAlias("eventResponse")`
+      const result = await pool.maybeOne(sqlEvents.typeAlias("eventResponse")`
         SELECT e.*, t.name as type_name
         FROM events e
         JOIN types t ON e.type_id = t.id
@@ -263,6 +255,5 @@ export class EventRepository {
       `);
       
       return result as (Event & { type_name: string }) | null;
-    });
   }
 }

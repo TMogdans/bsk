@@ -1,0 +1,15 @@
+meta {
+  name: event by slug
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{bsk-host}}/api/events/:slug
+  body: none
+  auth: inherit
+}
+
+params:path {
+  slug: testevent
+}

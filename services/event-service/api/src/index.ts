@@ -1,7 +1,7 @@
 import app from './app';
 import { config } from './config';
 import { createLogger } from './utils/logger';
-import { pool, getPool } from './db/pool';
+import { getPool, closeDB }from './db/pool';
 import { MessagingService } from './services/messagingService';
 import { sql } from 'slonik';
 
@@ -11,6 +11,7 @@ const messagingService = new MessagingService();
 // Function to test database connection
 const testDatabaseConnection = async () => {
   try {
+    const pool = await getPool();
     // Verwenden des kompatiblen pool-Objekts
     await pool.query(sql.unsafe`SELECT 1`);
     logger.info('Database connection successful');
@@ -59,13 +60,14 @@ const startServer = async () => {
       
       server.close(async () => {
         logger.info('HTTP server closed');
-        
+        const closeDatabase = closeDB();
+
         try {
           // Close NATS connection
           await messagingService.close();
           
           // Close database connections
-          await pool.end();
+          await closeDatabase;
           logger.info('All connections closed');
           process.exit(0);
         } catch (err) {

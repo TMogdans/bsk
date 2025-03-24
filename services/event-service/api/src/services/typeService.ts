@@ -12,24 +12,17 @@ export class TypeService {
     this.typeRepository = new TypeRepository();
   }
   
-  /**
-   * Get all event types
-   */
   async getAllTypes(): Promise<Array<{ id: number; name: string; }>> {
     logger.debug('Getting all event types');
     
     const types = await this.typeRepository.findAll();
     
-    // Format types for API response
     return types.map(type => ({
       id: type.id,
       name: type.name
     }));
   }
   
-  /**
-   * Get a specific type by ID
-   */
   async getTypeById(id: number): Promise<{ id: number; name: string; }> {
     logger.debug({ id }, 'Getting type by ID');
     
@@ -45,9 +38,6 @@ export class TypeService {
     };
   }
   
-  /**
-   * Create a new event type
-   */
   async createType(data: CreateType): Promise<{ id: number; name: string; }> {
     logger.debug({ data }, 'Creating new type');
     
@@ -59,9 +49,6 @@ export class TypeService {
     };
   }
   
-  /**
-   * Update an existing event type
-   */
   async updateType(id: number, data: UpdateType): Promise<{ id: number; name: string; }> {
     logger.debug({ id, data }, 'Updating type');
     
@@ -77,9 +64,6 @@ export class TypeService {
     };
   }
   
-  /**
-   * Delete an event type
-   */
   async deleteType(id: number): Promise<void> {
     logger.debug({ id }, 'Deleting type');
     

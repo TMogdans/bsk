@@ -29,7 +29,7 @@
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0",
     "slonik": "^34.0.1",
-    "slugify": "^1.6.6",
+    "slonik-interceptor-preset": "^1.2.10",
     "zod": "^3.21.4"
   },
   "devDependencies": {

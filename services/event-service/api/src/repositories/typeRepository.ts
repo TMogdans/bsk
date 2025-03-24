@@ -1,5 +1,5 @@
 import { sql, createSqlTag } from 'slonik';
-import { pool } from '../db/pool';
+import  {getPool}  from '../db/pool';
 import type { CreateType, Type, UpdateType } from '../schemas/eventSchema';
 import { createLogger } from '../utils/logger';
 import { z } from 'zod';
@@ -13,10 +13,10 @@ const sqlTypes = createSqlTag({
       id: z.number(),
       name: z.string()
     }),
-    types: z.array(z.object({
+    types: z.object({
       id: z.number(),
       name: z.string()
-    })),
+    }),
     void: z.object({}).strict()
   },
 });
@@ -25,62 +25,57 @@ export class TypeRepository {
   /**
    * Find all event types
    */
-  async findAll(): Promise<Type[]> {
+  async findAll(): Promise<ReadonlyArray<Type>> {
     logger.debug('Finding all event types');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.query(sqlTypes.typeAlias('types')`
+      return await pool.many(sqlTypes.typeAlias('types')`
         SELECT id, name
         FROM types
         ORDER BY name ASC
       `);
-      
-      return result.rows;
-    });
   }
 
   /**
    * Find a type by its name
    */
-  async findByName(name: string): Promise<Type | null> {
+  async findByName(name: string) {
     logger.debug({ name }, 'Finding event type by name');
-    
-    return (await pool).connect(async (connection) => {
-      const result = await connection.maybeOne(sqlTypes.typeAlias('type')`
+    const pool = await getPool();
+
+      const result = await pool.maybeOne(sqlTypes.typeAlias('type')`
         SELECT id, name
         FROM types 
         WHERE name = ${name}
       `);
       
       return result;
-    });
   }
 
   /**
    * Find a type by its ID
    */
-  async findById(id: number): Promise<Type | null> {
+  async findById(id: number) {
     logger.debug({ id }, 'Finding event type by ID');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.maybeOne(sqlTypes.typeAlias('type')`
+      const result = await pool.maybeOne(sqlTypes.typeAlias('type')`
         SELECT id, name
         FROM types 
         WHERE id = ${id}
       `);
       
       return result;
-    });
   }
 
   /**
    * Create a new event type
    */
-  async create(data: CreateType): Promise<Type> {
+  async create(data: CreateType) {
     logger.debug({ data }, 'Creating new event type');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.one(sqlTypes.typeAlias('type')`
+      const result = await pool.one(sqlTypes.typeAlias('type')`
         INSERT INTO types (
           name
         ) 
@@ -91,16 +86,15 @@ export class TypeRepository {
       `);
       
       return result;
-    });
   }
 
   /**
    * Update an existing event type
    */
-  async update(id: number, data: UpdateType): Promise<Type | null> {
+  async update(id: number, data: UpdateType) {
     logger.debug({ id, data }, 'Updating event type');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
       // Build dynamic SET part of the query
       const updates = [];
       
@@ -116,7 +110,7 @@ export class TypeRepository {
       // Combine all the update fragments
       const setClause = sql.join(updates, sql.fragment`, `);
       
-      const result = await connection.maybeOne(sqlTypes.typeAlias('type')`
+      const result = await pool.maybeOne(sqlTypes.typeAlias('type')`
         UPDATE types
         SET ${setClause}
         WHERE id = ${id}
@@ -124,22 +118,20 @@ export class TypeRepository {
       `);
       
       return result;
-    });
   }
 
   /**
    * Delete an event type by ID
    */
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number) {
     logger.debug({ id }, 'Deleting event type');
+    const pool = await getPool();
     
-    return (await pool).connect(async (connection) => {
-      const result = await connection.query(sqlTypes.typeAlias('void')`
+      const result = await pool.query(sqlTypes.typeAlias('void')`
         DELETE FROM types
         WHERE id = ${id}
       `);
       
       return result.rowCount > 0;
-    });
   }
 }

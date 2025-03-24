@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@slonik/migrator": "^0.12.0",
 		"@slonik/pg-driver": "^46.4.0",
-		"typescript-slugify": "^1.0.1"
+		"slonik-interceptor-preset": "^1.2.10",
+		"typescript-slugify": "catalog:"
 	}
 }
