@@ -8,8 +8,10 @@ services:
     container_name: event-service
     restart: unless-stopped
     depends_on:
-      - nats
-      - postgres
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_started
     environment:
       NODE_ENV: development
       PORT: 3000
@@ -27,7 +29,8 @@ services:
       - node_modules_event:/app/services/event-service/api/node_modules
     networks:
       - bsk-network
-    command: ["sh", "-c", "cd /app/services/event-service/api && pnpm install && pnpm run dev"]
+    # command wird automatisch an das ENTRYPOINT-Skript übergeben
+    command: ["pnpm", "run", "dev"]
 
   # Rating Write Service
   rating-write-service:
