@@ -1,0 +1,15 @@
+meta {
+  name: event
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{bsk-host}}/api/events/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
