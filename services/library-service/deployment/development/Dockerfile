@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+# Installiere PostgreSQL-Client für pg_isready
+RUN apk add --no-cache postgresql-client
+
 WORKDIR /app
 
 # Install pnpm
@@ -14,8 +17,18 @@ COPY services/library-service/api/package.json ./services/library-service/api/
 # Install dependencies
 RUN pnpm install
 
-# Copy the rest of the application
-COPY services/library-service ./services/library-service
+# Create startup script
+COPY services/library-service/deployment/development/startup.sh /startup.sh
+RUN chmod +x /startup.sh 
+
+# Copy source code and migrations
+COPY services/library-service/api/src ./services/library-service/api/src
+
+# Ensure migrations directory exists
+RUN mkdir -p /app/services/library-service/api/src/migrations
+
+# Copy migration files
+COPY services/library-service/api/src/migrations/*.sql services/library-service/api/src/migrations/*.js /app/services/library-service/api/src/migrations/
 
 # Set working directory to service
 WORKDIR /app/services/library-service/api
@@ -23,5 +36,8 @@ WORKDIR /app/services/library-service/api
 # Expose port
 EXPOSE 3000
 
-# Use ts-node for development instead of the missing dev script
-CMD ["npx", "ts-node", "src/index.ts"]
+# Startup script wird beim Container-Start ausgeführt
+ENTRYPOINT ["/startup.sh"]
+
+# Default-Befehl, wird an den ENTRYPOINT übergeben
+CMD ["pnpm", "run", "dev"]

@@ -9,18 +9,39 @@ catalogs:
     '@types/node':
       specifier: ^22.13.9
       version: 22.13.9
+    cors:
+      specifier: ^2.8.5
+      version: 2.8.5
     express:
       specifier: ^4.21.2
       version: 4.21.2
+    helmet:
+      specifier: ^7.1.0
+      version: 7.2.0
+    morgan:
+      specifier: ^1.10.0
+      version: 1.10.0
     nats:
       specifier: ^2.29.2
       version: 2.29.2
+    pino:
+      specifier: ^8.19.0
+      version: 8.21.0
+    pino-pretty:
+      specifier: ^10.3.1
+      version: 10.3.1
+    slonik:
+      specifier: ^46.4.0
+      version: 46.4.0
     typescript:
       specifier: ^5.8.2
       version: 5.8.2
     typescript-slugify:
       specifier: ^1.0.1
       version: 1.0.1
+    zod:
+      specifier: ^3.22.4
+      version: 3.24.2
 
 importers:
 
@@ -28,13 +49,19 @@ importers:
     dependencies:
       '@slonik/migrator':
         specifier: ^0.12.0
-        version: 0.12.0(@types/node@22.13.9)(slonik@34.3.0(zod@3.24.2))
+        version: 0.12.0(@types/node@22.13.9)(slonik@46.4.0(zod@3.24.2))
       '@slonik/pg-driver':
         specifier: ^46.4.0
         version: 46.4.0(zod@3.24.2)
+      pino:
+        specifier: 'catalog:'
+        version: 8.21.0
       slonik-interceptor-preset:
         specifier: ^1.2.10
         version: 1.2.10
+      ts-node-dev:
+        specifier: ^2.0.0
+        version: 2.0.0(@types/node@22.13.9)(typescript@5.8.2)
       typescript-slugify:
         specifier: 'catalog:'
         version: 1.0.1
@@ -142,33 +169,48 @@ importers:
 
   services/library-service/api:
     dependencies:
-      '@dapr/dapr':
-        specifier: ^3.2.0
-        version: 3.5.2
       collectionizejs:
         specifier: ^0.3.0
         version: 0.3.0
+      cors:
+        specifier: 'catalog:'
+        version: 2.8.5
+      helmet:
+        specifier: 'catalog:'
+        version: 7.2.0
+      morgan:
+        specifier: 'catalog:'
+        version: 1.10.0
       nats:
         specifier: ^2.19.0
         version: 2.29.2
       pg:
         specifier: ^8.11.3
         version: 8.14.0
+      pino:
+        specifier: 'catalog:'
+        version: 8.21.0
+      pino-pretty:
+        specifier: 'catalog:'
+        version: 10.3.1
       reflect-metadata:
         specifier: ^0.2.1
         version: 0.2.2
+      slonik:
+        specifier: 'catalog:'
+        version: 46.4.0(zod@3.24.2)
+      slonik-interceptor-preset:
+        specifier: ^1.2.10
+        version: 1.2.10
       ts-proto:
         specifier: ^1.167.3
         version: 1.181.2
       tsx:
         specifier: ^4.7.0
         version: 4.19.3
-      typeorm:
-        specifier: ^0.3.20
-        version: 0.3.21(pg-query-stream@4.8.0(pg@8.14.0))(pg@8.14.0)(redis@4.7.0)(reflect-metadata@0.2.2)(ts-node@10.9.2(@types/node@20.17.24)(typescript@5.8.2))
-      yup:
-        specifier: ^1.3.3
-        version: 1.6.1
+      zod:
+        specifier: 'catalog:'
+        version: 3.24.2
     devDependencies:
       '@babel/core':
         specifier: ^7.23.9
@@ -218,6 +260,12 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.17.24)(typescript@5.8.2)
+      ts-node-dev:
+        specifier: ^2.0.0
+        version: 2.0.0(@types/node@20.17.24)(typescript@5.8.2)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
       typescript:
         specifier: 'catalog:'
         version: 5.8.2
@@ -2255,6 +2303,10 @@ packages:
     resolution: {integrity: sha512-dhqSDD9lHU/6FvIZ9KbXGmVK6IKr9ZskZtNOUvhlCiONlnqatu4FmAeRbxCfJJVuQ0NWfz6dAbibKQg19B7AmQ==}
     engines: {node: '>=8.0'}
 
+  get-stack-trace@3.1.1:
+    resolution: {integrity: sha512-E1rM+umbm9MlMp6zNSap+UI8VVWWmAoUxiAHp1Ron1FV2dM99mgMAHS1tGAGO/ceBjgOXz24GC47aLeNN1llrA==}
+    engines: {node: '>=18.0'}
+
   get-stream@6.0.1:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
@@ -3456,6 +3508,12 @@ packages:
     peerDependencies:
       zod: ^3
 
+  slonik@46.4.0:
+    resolution: {integrity: sha512-2CGTUww8iaxaQ/73sgC+2pQUDLAprAp278i50sY2QDvKLmwzdyIfFEkQIBVYI6WXhBZiuIShuaarTgjP1UxqzQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3
+
   sonic-boom@3.8.1:
     resolution: {integrity: sha512-y4Z8LCDBuum+PBP3lSV7RHrXscqksve/bi0as7mhwVnBW+/wUqKT/2Kb7um8yqcFy0duYbbPxzt89Zy2nOCaxg==}
 
@@ -3490,6 +3548,10 @@ packages:
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
+
+  stacktrace-parser@0.1.11:
+    resolution: {integrity: sha512-WjlahMgHmCJpqzU8bIBy4qtsZdU9lRlcZE3Lvyej6t4tuOuv1vk57OW3MBrj6hXBFx/nNoC9MPMTcr5YA7NQbg==}
+    engines: {node: '>=6'}
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -3677,6 +3739,10 @@ packages:
     resolution: {integrity: sha512-knJ8dtjn2Pd0c5ZGZG8z9DMiD4PUY8iGI9T9tb8DvGdWRMkLpf0WcPO7G+7cmbZyxvNTAG6ci3fybEaFgMZIvg==}
     hasBin: true
 
+  tsconfig-paths@4.2.0:
+    resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
+    engines: {node: '>=6'}
+
   tsconfig@7.0.0:
     resolution: {integrity: sha512-vZXmzPrL+EmC4T/4rVlT2jNVMWCi/O4DIiSj3UHg1OE5kCKbk4mfrXc6dZksLgRM/TZlKnousKH9bbTazUWRRw==}
 
@@ -3706,6 +3772,10 @@ packages:
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
+
+  type-fest@0.7.1:
+    resolution: {integrity: sha512-Ne2YiiGN8bmrmJJEuTWTLJR32nh/JdL1+PSicowtNb0WFpn59GK8/lfD61bVtzguz7b3PBt74nxpv/Pw5po5Rg==}
+    engines: {node: '>=8'}
 
   type-fest@2.19.0:
     resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
@@ -5188,10 +5258,10 @@ snapshots:
       '@slonik/types': 46.4.0(zod@3.24.2)
       zod: 3.24.2
 
-  '@slonik/migrator@0.12.0(@types/node@22.13.9)(slonik@34.3.0(zod@3.24.2))':
+  '@slonik/migrator@0.12.0(@types/node@22.13.9)(slonik@46.4.0(zod@3.24.2))':
     dependencies:
       '@rushstack/ts-command-line': 4.23.6(@types/node@22.13.9)
-      slonik: 34.3.0(zod@3.24.2)
+      slonik: 46.4.0(zod@3.24.2)
       umzug: 3.8.2(@types/node@22.13.9)
     transitivePeerDependencies:
       - '@types/node'
@@ -6139,6 +6209,10 @@ snapshots:
     dependencies:
       bluebird: 3.7.2
       source-map: 0.8.0-beta.0
+
+  get-stack-trace@3.1.1:
+    dependencies:
+      stacktrace-parser: 0.1.11
 
   get-stream@6.0.1: {}
 
@@ -7553,6 +7627,23 @@ snapshots:
     transitivePeerDependencies:
       - pg-native
 
+  slonik@46.4.0(zod@3.24.2):
+    dependencies:
+      '@slonik/driver': 46.4.0(zod@3.24.2)
+      '@slonik/errors': 46.4.0(zod@3.24.2)
+      '@slonik/pg-driver': 46.4.0(zod@3.24.2)
+      '@slonik/sql-tag': 46.4.0(zod@3.24.2)
+      '@slonik/utilities': 46.4.0(zod@3.24.2)
+      get-stack-trace: 3.1.1
+      iso8601-duration: 1.3.0
+      postgres-interval: 4.0.2
+      roarr: 7.21.1
+      serialize-error: 8.1.0
+      strict-event-emitter-types: 2.0.0
+      zod: 3.24.2
+    transitivePeerDependencies:
+      - pg-native
+
   sonic-boom@3.8.1:
     dependencies:
       atomic-sleep: 1.0.0
@@ -7584,6 +7675,10 @@ snapshots:
   stack-utils@2.0.6:
     dependencies:
       escape-string-regexp: 2.0.0
+
+  stacktrace-parser@0.1.11:
+    dependencies:
+      type-fest: 0.7.1
 
   statuses@2.0.1: {}
 
@@ -7774,6 +7869,24 @@ snapshots:
       - '@swc/wasm'
       - '@types/node'
 
+  ts-node-dev@2.0.0(@types/node@22.13.9)(typescript@5.8.2):
+    dependencies:
+      chokidar: 3.6.0
+      dynamic-dedupe: 0.3.0
+      minimist: 1.2.8
+      mkdirp: 1.0.4
+      resolve: 1.22.10
+      rimraf: 2.7.1
+      source-map-support: 0.5.21
+      tree-kill: 1.2.2
+      ts-node: 10.9.2(@types/node@22.13.9)(typescript@5.8.2)
+      tsconfig: 7.0.0
+      typescript: 5.8.2
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+
   ts-node@10.9.2(@types/node@20.17.24)(typescript@5.8.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
@@ -7826,6 +7939,12 @@ snapshots:
       ts-poet: 6.11.0
       ts-proto-descriptors: 1.16.0
 
+  tsconfig-paths@4.2.0:
+    dependencies:
+      json5: 2.2.3
+      minimist: 1.2.8
+      strip-bom: 3.0.0
+
   tsconfig@7.0.0:
     dependencies:
       '@types/strip-bom': 3.0.0
@@ -7851,6 +7970,8 @@ snapshots:
   type-fest@0.20.2: {}
 
   type-fest@0.21.3: {}
+
+  type-fest@0.7.1: {}
 
   type-fest@2.19.0: {}
 

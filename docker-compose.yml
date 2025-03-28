@@ -138,8 +138,10 @@ services:
       - "3014:3000"
     volumes:
       - ./services/library-service/api:/app/services/library-service/api
+      - node_modules_library:/app/services/library-service/api/node_modules
     networks:
       - bsk-network
+    # command wird automatisch an das ENTRYPOINT-Skript übergeben
     command: ["pnpm", "run", "dev"]
 
   bsk_frontend:
@@ -258,3 +260,4 @@ volumes:
   dbdata:
   dbdata2:
   node_modules_event:
+  node_modules_library:

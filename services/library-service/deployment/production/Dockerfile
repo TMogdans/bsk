@@ -1,14 +1,60 @@
-FROM node:21-alpine as builder
-WORKDIR /app
-COPY ../../api .
-RUN npm i
-RUN npm run build
+###
+# Build stage
+###
+FROM node:20-alpine AS builder
 
-FROM node:21-alpine as final
-RUN apk --no-cache -U upgrade
 WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY ../../api/package*.json .
-RUN npm i --only=production
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy package.json files for workspace
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Copy the service package.json
+COPY services/library-service/api/package.json ./services/library-service/api/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy the rest of the application
+COPY services/library-service ./services/library-service
+
+# Build the application
+WORKDIR /app/services/library-service/api
+RUN pnpm run build
+
+###
+# Production stage
+###
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy package.json files
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/services/library-service/api/package.json ./services/library-service/api/
+
+# Install production dependencies only
+RUN pnpm install --frozen-lockfile --prod
+
+# Copy built application
+COPY --from=builder /app/services/library-service/api/dist ./services/library-service/api/dist
+
+# Set working directory to service
+WORKDIR /app/services/library-service/api
+
+# Environment variables
+ENV NODE_ENV=production
+
+# Run as non-root user
+USER node
+
+# Expose port
 EXPOSE 3000
-CMD ["npm", "run", "start:migrate:prod"]
+
+# Start the application
+CMD ["node", "dist/index.js"]

@@ -5,14 +5,14 @@ meta {
 }
 
 post {
-  url: {{bsk-host}}/api/events
+  url: {{bsk-event-service}}/api/events
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "name": "Testevent",
+    "name": "Testevent III",
     "type": "fair",
     "begins_at": "2025-08-01",
     "ends_at": "2025-08-01",

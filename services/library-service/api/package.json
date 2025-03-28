@@ -1,5 +1,5 @@
 {
-  "name": "boardgame-service",
+  "name": "@bsk/library-service",
   "version": "1.0.0",
   "description": "This service is a library for board games",
   "main": "index.js",
@@ -7,13 +7,11 @@
     "start": "node dist/index.js",
     "build": "tsc --build src",
     "serve": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "jest --passWithNoTests --coverage",
     "test:watch": "jest --watch",
     "check_style": "npx prettier . --check",
-    "fix_style": "npx prettier . --write",
-    "typeorm": "typeorm-ts-node-esm",
-    "start:migrate:prod": "typeorm migration:run -d dist/data-source.js && node dist/index.js"
+    "fix_style": "npx prettier . --write"
   },
   "author": "Tobias Mogdans",
   "license": "MIT",
@@ -34,17 +32,24 @@
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@dapr/dapr": "^3.2.0",
     "collectionizejs": "^0.3.0",
+    "cors": "catalog:",
+    "helmet": "catalog:",
+    "morgan": "catalog:",
     "nats": "^2.19.0",
     "pg": "^8.11.3",
+    "pino": "catalog:",
+    "pino-pretty": "catalog:",
     "reflect-metadata": "^0.2.1",
+    "slonik": "catalog:",
+    "slonik-interceptor-preset": "^1.2.10",
     "ts-proto": "^1.167.3",
     "tsx": "^4.7.0",
-    "typeorm": "^0.3.20",
-    "yup": "^1.3.3"
+    "zod": "catalog:"
   }
 }
