@@ -1,0 +1,19 @@
+meta {
+  name: new mechanic
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{bsk-library-service}}/api/mechanics
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Push your luck",
+    "description": "Spieler können die Zufallschancen zu ihren Gunsten verändern",
+    "created_by": "00000000-0000-0000-0000-000000000000"
+  }
+}

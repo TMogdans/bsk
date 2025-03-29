@@ -1,0 +1,23 @@
+meta {
+  name: boardGame by id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{bsk-library-service}}/api/boardgames/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: f836338f-03e6-44e5-95c0-065b02a2f803
+}
+
+body:json {
+  {
+    "name": "Spiel des Jahres 2025",
+    "description": "Lorem Ipsum",
+    "created_by": "c58c6cf0-2839-43e3-9529-b82f5509bd67"
+  }
+}
