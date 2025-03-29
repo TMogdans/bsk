@@ -1,0 +1,23 @@
+meta {
+  name: update category
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{bsk-library-service}}/api/categories/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: a7529be8-f4ca-4f92-bab9-2969c6984730
+}
+
+body:json {
+  {
+    "name": "Escape",
+    "description": "Escape Room Game",
+    "created_by": "c58c6cf0-2839-43e3-9529-b82f5509bd67"
+  }
+}

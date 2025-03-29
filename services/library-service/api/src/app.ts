@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok', service: 'event-service', timestamp: new Date().toISOString() });
+  res.status(200).json({ status: 'ok', service: 'library-service', timestamp: new Date().toISOString() });
 });
 
 app.use('/api', awardRoutes);

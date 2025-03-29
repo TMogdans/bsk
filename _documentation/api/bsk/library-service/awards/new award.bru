@@ -1,0 +1,19 @@
+meta {
+  name: new award
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{bsk-library-service}}/api/awards
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Spiel des Jahres 2024",
+    "description": "Lorem Ipsum",
+    "created_by": "c58c6cf0-2839-43e3-9529-b82f5509bd67"
+  }
+}

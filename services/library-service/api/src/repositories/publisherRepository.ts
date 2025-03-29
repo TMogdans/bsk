@@ -47,11 +47,12 @@ export class PublisherRepository {
                                'id', bg.id,
                                'name', bg.name,
                                'description', bg.description,
-                               'minNumberOfPlayers', bg.min_number_of_players,
-                               'maxNumberOfPlayers', bg.max_number_of_players,
-                               'minPlayTimeMinutes', bg.min_play_time_minutes,
-                               'maxPlayTimeMinutes', bg.max_play_time_minutes,
-                               'minAge', bg.min_age,
+                               'min_number_of_players', bg.min_number_of_players,
+                               'max_number_of_players', bg.max_number_of_players,
+                               'min_play_time_minutes', bg.min_play_time_minutes,
+                               'max_play_time_minutes', bg.max_play_time_minutes,
+                               'min_age', bg.min_age,
+                               'year_published', bg.year_published,
                                'created_at', bg.created_at,
                                'updated_at', bg.updated_at
                            )

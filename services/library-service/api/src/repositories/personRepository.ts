@@ -70,17 +70,17 @@ export class PersonRepository {
                    COALESCE(
                        jsonb_agg(
                            DISTINCT jsonb_build_object(
-                               'id', bg_artists.board_game_id,
-                               'name', bg_artists_data.name,
-                               'description', bg_artists_data.description,
-                               'minNumberOfPlayers', bg_artists_data.min_number_of_players,
-                               'maxNumberOfPlayers', bg_artists_data.max_number_of_players,
-                               'minPlayTimeMinutes', bg_artists_data.min_play_time_minutes,
-                               'maxPlayTimeMinutes', bg_artists_data.max_play_time_minutes,
-                               'minAge', bg_artists_data.min_age,
-                               'role', 'artist',
-                               'created_at', bg_artists_data.created_at,
-                               'updated_at', bg_artists_data.updated_at
+                               'id', bg.id,
+                               'name', bg.name,
+                               'description', bg.description,
+                               'min_number_of_players', bg.min_number_of_players,
+                               'max_number_of_players', bg.max_number_of_players,
+                               'min_play_time_minutes', bg.min_play_time_minutes,
+                               'max_play_time_minutes', bg.max_play_time_minutes,
+                               'min_age', bg.min_age,
+                               'year_published', bg.year_published,
+                               'created_at', bg.created_at,
+                               'updated_at', bg.updated_at
                            )
                        ) FILTER (WHERE bg_artists.board_game_id IS NOT NULL),
                        '[]'::jsonb

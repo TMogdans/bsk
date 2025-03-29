@@ -2,6 +2,7 @@ import { Award, awardSchema } from "../schemas/awardSchema";
 import { getPool } from "../db/pool";
 import { createLogger } from "../utils/logger";
 import { createSqlTag } from "slonik";
+import { slugify } from "../utils/slugify";
 
 const logger = createLogger("AwardRepository");
 const sqlAwards = createSqlTag({
@@ -15,11 +16,14 @@ export class AwardRepository {
         logger.debug("Creating award");
         const pool = await getPool();
         
+        const slug = slugify(data.name);
+
         const result = await pool.one(sqlAwards.typeAlias("award")`
            INSERT INTO awards (
                 name, slug, description, created_by
             ) VALUES (
                 ${data.name},
+                ${slug},
                 ${data.description},
                 ${data.created_by}
             ) RETURNING *
@@ -49,10 +53,11 @@ export class AwardRepository {
                                'id', bg.id,
                                'name', bg.name,
                                'description', bg.description,
-                               'min_players', bg.min_players,
-                               'max_players', bg.max_players,
-                               'min_playtime', bg.min_playtime,
-                               'max_playtime', bg.max_playtime,
+                               'min_number_of_players', bg.min_number_of_players,
+                               'max_number_of_players', bg.max_number_of_players,
+                               'min_play_time_minutes', bg.min_play_time_minutes,
+                               'max_play_time_minutes', bg.max_play_time_minutes,
+                               'min_age', bg.min_age,
                                'year_published', bg.year_published,
                                'created_at', bg.created_at,
                                'updated_at', bg.updated_at
@@ -80,10 +85,13 @@ export class AwardRepository {
     async update(id: string, data: Partial<Omit<Award, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>>) {
         logger.debug("Updating award");
         const pool = await getPool();
+        const slug = slugify(data.name || "");
         const result = await pool.one(sqlAwards.typeAlias("award")`
             UPDATE awards SET
                 name = ${data.name},
-                description = ${data.description}
+                slug = ${slug},
+                description = ${data.description},
+                updated_at = NOW()
             WHERE id = ${id} AND deleted_at IS NULL RETURNING *
         `);
         return result;

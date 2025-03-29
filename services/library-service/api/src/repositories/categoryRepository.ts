@@ -11,14 +11,16 @@ const sqlCategories = createSqlTag({
 });
 
 export class CategoryRepository {
-    async create(data: Omit<Category, "id" | "createdAt" | "updatedAt" | "deletedAt">) {
+    async create(data: Omit<Category, "id" | "created_at" | "updated_at" | "deleted_at">) {
         logger.debug("Creating category");
         const pool = await getPool();
+
         const result = await pool.one(sqlCategories.typeAlias("category")`
-            INSERT INTO categories (name, description)
-            VALUES (${data.name}, ${data.description})
+            INSERT INTO categories (name, description, created_by)
+            VALUES (${data.name}, ${data.description}, ${data.created_by})
             RETURNING *
         `);
+
         return result;
     }    
     
@@ -43,10 +45,11 @@ export class CategoryRepository {
                                'id', bg.id,
                                'name', bg.name,
                                'description', bg.description,
-                               'min_players', bg.min_players,
-                               'max_players', bg.max_players,
-                               'min_playtime', bg.min_playtime,
-                               'max_playtime', bg.max_playtime,
+                               'min_number_of_players', bg.min_number_of_players,
+                               'max_number_of_players', bg.max_number_of_players,
+                               'min_play_time_minutes', bg.min_play_time_minutes,
+                               'max_play_time_minutes', bg.max_play_time_minutes,
+                               'min_age', bg.min_age,
                                'year_published', bg.year_published,
                                'created_at', bg.created_at,
                                'updated_at', bg.updated_at

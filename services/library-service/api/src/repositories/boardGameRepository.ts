@@ -22,7 +22,7 @@ export class BoardGameRepository {
         const slug = slugify(data.name);
         
         const result = await pool.one(sqlBoardgames.typeAlias("boardgame")`
-            INSERT INTO boardgames (
+            INSERT INTO board_games (
                 name, 
                 slug,
                 description, 
@@ -87,7 +87,7 @@ export class BoardGameRepository {
         logger.debug("Finding all board games");
         const pool = await getPool();
         const result = await pool.any(sqlBoardgames.typeAlias("boardgame")`
-            SELECT * FROM boardgames WHERE deleted_at IS NULL
+            SELECT * FROM board_games WHERE deleted_at IS NULL
         `);
         return result;
     }
@@ -96,7 +96,7 @@ export class BoardGameRepository {
         logger.debug("Finding board game by id");
         const pool = await getPool();
         const result = await pool.maybeOne(sqlBoardgames.typeAlias("boardgame")`
-            SELECT * FROM boardgames WHERE id = ${id} AND deleted_at IS NULL
+            SELECT * FROM board_games WHERE id = ${id} AND deleted_at IS NULL
         `);
         return result;
     }
@@ -105,7 +105,7 @@ export class BoardGameRepository {
         logger.debug("Finding soft deleted board games");
         const pool = await getPool();
         const result = await pool.any(sqlBoardgames.typeAlias("boardgame")`
-            SELECT * FROM boardgames WHERE deleted_at IS NOT NULL
+            SELECT * FROM board_games WHERE deleted_at IS NOT NULL
         `);
         return result;
     }
@@ -121,7 +121,7 @@ export class BoardGameRepository {
         }
         
         const result = await pool.one(sqlBoardgames.typeAlias("boardgame")`
-            UPDATE boardgames 
+            UPDATE board_games 
             SET
                 name = COALESCE(${data.name}, name),
                 slug = COALESCE(${slug}, slug),
@@ -172,7 +172,7 @@ export class BoardGameRepository {
         logger.debug("Soft deleting board game");
         const pool = await getPool();
         const result = await pool.one(sqlBoardgames.typeAlias("boardgame")`
-            UPDATE boardgames
+            UPDATE board_games
             SET deleted_at = NOW()
             WHERE id = ${id}
             RETURNING *
@@ -184,7 +184,7 @@ export class BoardGameRepository {
         logger.debug("Hard deleting board game");
         const pool = await getPool();
         const result = await pool.one(sqlBoardgames.typeAlias("boardgame")`
-            DELETE FROM boardgames
+            DELETE FROM board_games
             WHERE id = ${id}
             RETURNING *
         `);
@@ -195,7 +195,7 @@ export class BoardGameRepository {
         logger.debug("Restoring board game");
         const pool = await getPool();
         const result = await pool.one(sqlBoardgames.typeAlias("boardgame")`
-            UPDATE boardgames
+            UPDATE board_games
             SET deleted_at = NULL
             WHERE id = ${id}
             RETURNING *
@@ -207,7 +207,7 @@ export class BoardGameRepository {
         const pool = await getPool();
         // Vorhandene Einträge löschen
         await pool.query(sqlBoardgames.typeAlias("void")`
-            DELETE FROM boardgames_awards_awards WHERE "boardgameId" = ${boardGameId}
+            DELETE FROM board_games_awards_awards WHERE "boardgameId" = ${boardGameId}
         `);
         
         // Neue Einträge hinzufügen
@@ -222,12 +222,12 @@ export class BoardGameRepository {
     private async updateCategories(boardGameId: string, categoryIds: string[]) {
         const pool = await getPool();
         await pool.query(sqlBoardgames.typeAlias("void")`
-            DELETE FROM boardgames_categories_categories WHERE "boardgameId" = ${boardGameId}
+            DELETE FROM board_games_categories_categories WHERE "boardgameId" = ${boardGameId}
         `);
         
         for (const categoryId of categoryIds) {
             await pool.query(sqlBoardgames.typeAlias("void")`
-                INSERT INTO boardgames_categories_categories ("boardgameId", "categoryId")
+                INSERT INTO board_games_categories_categories ("boardgameId", "categoryId")
                 VALUES (${boardGameId}, ${categoryId})
             `);
         }
@@ -236,12 +236,12 @@ export class BoardGameRepository {
     private async updateMechanics(boardGameId: string, mechanicIds: string[]) {
         const pool = await getPool();
         await pool.query(sqlBoardgames.typeAlias("void")`
-            DELETE FROM boardgames_mechanics_mechanics WHERE "boardgameId" = ${boardGameId}
+            DELETE FROM board_games_mechanics_mechanics WHERE "boardgameId" = ${boardGameId}
         `);
         
         for (const mechanicId of mechanicIds) {
             await pool.query(sqlBoardgames.typeAlias("void")`
-                INSERT INTO boardgames_mechanics_mechanics ("boardgameId", "mechanicId")
+                INSERT INTO board_games_mechanics_mechanics ("boardgameId", "mechanicId")
                 VALUES (${boardGameId}, ${mechanicId})
             `);
         }
@@ -250,12 +250,12 @@ export class BoardGameRepository {
     private async updatePublishers(boardGameId: string, publisherIds: string[]) {
         const pool = await getPool();
         await pool.query(sqlBoardgames.typeAlias("void")`
-            DELETE FROM boardgames_publishers_publishers WHERE "boardgameId" = ${boardGameId}
+            DELETE FROM board_games_publishers_publishers WHERE "boardgameId" = ${boardGameId}
         `);
         
         for (const publisherId of publisherIds) {
             await pool.query(sqlBoardgames.typeAlias("void")`
-                INSERT INTO boardgames_publishers_publishers ("boardgameId", "publisherId")
+                INSERT INTO board_games_publishers_publishers ("boardgameId", "publisherId")
                 VALUES (${boardGameId}, ${publisherId})
             `);
         }

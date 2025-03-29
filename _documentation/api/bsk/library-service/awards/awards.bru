@@ -1,17 +1,13 @@
 meta {
-  name: award
+  name: awards
   type: http
-  seq: 5
+  seq: 1
 }
 
-delete {
-  url: {{bsk-library-service}}/api/awards/:id
+get {
+  url: {{bsk-library-service}}/api/awards
   body: none
   auth: inherit
-}
-
-params:path {
-  id: 463a886d-6b0e-47d3-a717-fd9dfe087a4b
 }
 
 body:json {

@@ -1,12 +1,12 @@
 meta {
-  name: award
+  name: update award
   type: http
-  seq: 5
+  seq: 4
 }
 
-delete {
+put {
   url: {{bsk-library-service}}/api/awards/:id
-  body: none
+  body: json
   auth: inherit
 }
 
@@ -16,7 +16,7 @@ params:path {
 
 body:json {
   {
-    "name": "Spiel des Jahres 2025",
+    "name": "Spiel des Jahres 2023",
     "description": "Lorem Ipsum",
     "created_by": "c58c6cf0-2839-43e3-9529-b82f5509bd67"
   }
